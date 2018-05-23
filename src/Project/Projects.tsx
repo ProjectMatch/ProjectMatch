@@ -1,8 +1,11 @@
 import * as React from 'react';
-import '../styles/Project.css';
+import { connect } from 'react-redux';
+// styles
+import './Project.css';
+// types
 import { State, Props, ProjectsState } from '../types/Projects.d';
 import { Store, ProjectsInheritedProps } from '../types/Redux';
-import { connect } from 'react-redux';
+// components
 import { ImageContainer } from './ImageContainer';
 import TagCategoryContainer from './TagContainer';
 import RolesContainer from './RolesContainer';

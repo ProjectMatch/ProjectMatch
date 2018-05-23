@@ -1,6 +1,7 @@
 import * as React from 'react';
-import '../styles/LandingImage.css';
 import { Link } from 'react-router-dom';
+import './LandingImage.css';
+
 class LandingImage extends React.Component {
   render() {
     return (

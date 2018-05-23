@@ -1,4 +1,4 @@
-import { Project } from './Projects.d';
+import { Project } from '../types/Projects.d';
 export interface State {}
 
 // Action

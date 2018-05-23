@@ -1,7 +1,15 @@
 /* tslint:disable */
 import * as React from 'react';
-import CommentBox from './CommentBox';
+import axios from 'axios';
+import config from '../.config';
 import { connect } from 'react-redux';
+// components
+import CommentBox from './CommentBox';
+// types
+import { Store } from '../types/Redux';
+import { Marker } from '../types/Marker';
+import { User } from '../types/User';
+// actions
 import {
   getMarkers,
   addMarker,
@@ -11,11 +19,6 @@ import {
   resolveMarker,
   deleteMarker
 } from '../actions/markerActions';
-import { Store } from '../types/Redux';
-import { Marker } from '../types/Marker';
-import { User } from '../types/User';
-import axios from 'axios';
-import config from '../.config';
 
 declare global {
   interface Window {

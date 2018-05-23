@@ -1,13 +1,17 @@
 import * as React from 'react';
-import '../styles/ProjectsPage.css';
-import { ProjectFilterState } from '../types/ProjectsFilter.d';
 import { connect, Dispatch } from 'react-redux';
+// styles
+import './ProjectsFilter';
+// components
+import FilterByCategoriesComponent from './FilterByCategoriesComponent';
+import FilterByTagsComponent from './FilterByTagsComponent';
+// types
+import { ProjectFilterState } from './ProjectsFilter.d';
+import { ProjectPageFilterProps, Store, Action } from '../types/Redux';
+// actions
 import { getProjects, searchProjects } from '../actions/projectActions';
 import { getTags } from '../actions/tagsActions';
 import { getCategories } from '../actions/categoryActions';
-import { ProjectPageFilterProps, Store, Action } from '../types/Redux';
-import FilterByCategoriesComponent from './FilterByCategoriesComponent';
-import FilterByTagsComponent from './FilterByTagsComponent';
 
 class ProjectsFilter extends React.Component<
   ProjectPageFilterProps,

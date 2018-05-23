@@ -1,14 +1,18 @@
 import * as React from 'react';
-import '../styles/SettingsPage.css';
-import { Store, SettingsPageProps } from '../types/Redux';
-import { State } from '../types/SettingsPage.d';
 import { connect } from 'react-redux';
-import { uploadProfileImage } from '../actions/userActions';
+// styles
+import './SettingsPage.css';
+// components
 import PublicProfile from './PublicProfile';
 import PersonalDetails from './PersonalDetails';
 import ProjectSettings from './ProjectSettings';
 import HeaderContainer from '../Header/HeaderContainer';
 import Footer from '../Footer/Footer';
+// types
+import { Store, SettingsPageProps } from '../types/Redux';
+import { State } from './SettingsPage.d';
+// actions
+import { uploadProfileImage } from '../actions/userActions';
 
 class SettingsPage extends React.Component<SettingsPageProps, State> {
   constructor(props: SettingsPageProps) {

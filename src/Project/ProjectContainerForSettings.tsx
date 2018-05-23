@@ -1,13 +1,18 @@
 import { Link } from 'react-router-dom';
 import * as React from 'react';
-import '../styles/Project.css';
-import { State } from '../types/Projects.d';
-import { Store, ProjectForEditProps } from '../types/Redux';
 import { connect } from 'react-redux';
-import { deleteProject } from '../actions/projectActions';
+// styles
+import './Project.css';
+// components
 import TagCategoryContainer from './TagContainer';
 import RolesContainer from './RolesContainer';
 import { EditImageContainer } from './ImageContainer';
+// types
+import { State } from '../types/Projects.d';
+import { Store, ProjectForEditProps } from '../types/Redux';
+// actions
+import { deleteProject } from '../actions/projectActions';
+
 class ProjectForEdit extends React.Component<ProjectForEditProps, State> {
   constructor(props: ProjectForEditProps) {
     super(props);

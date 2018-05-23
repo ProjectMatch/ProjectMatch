@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { Store, PersonalDetailsProps } from '../types/Redux';
-import { PersonalDetailsState } from '../types/PersonalDetails.d';
 import { connect } from 'react-redux';
+// types
+import { PersonalDetailsState } from './PersonalDetails.d';
+// actions
 import { userPrivateSettingsUpdate } from '../actions/userActions';
 
 class PersonalDetails extends React.Component<

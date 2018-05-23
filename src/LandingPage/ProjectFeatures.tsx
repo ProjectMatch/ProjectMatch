@@ -1,5 +1,5 @@
 import * as React from 'react';
-import '../styles/ProjectFeatures.css';
+import './ProjectFeatures.css';
 
 class ProjectFeatures extends React.Component {
   render() {

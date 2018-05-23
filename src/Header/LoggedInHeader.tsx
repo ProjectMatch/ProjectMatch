@@ -1,9 +1,12 @@
 import * as React from 'react';
-import '../styles/LoggedInHeader.css';
-import { LoggedInHeaderState } from '../types/LoggedInHeader.d';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+// style
+import './LoggedInHeader.css';
+// types
+import { LoggedInHeaderState } from './LoggedInHeader.d';
 import { Store, LoggedInHeaderProps } from '../types/Redux';
+// actions
 import { logout } from '../actions/userActions';
 import { getUserProjects } from '../actions/projectActions';
 
