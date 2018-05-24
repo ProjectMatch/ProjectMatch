@@ -51,23 +51,10 @@ module.exports = function(passport) {
         if (err) {
           return next(err);
         }
-        UserDetails.findOne(
-          {
-            username: user.username
-          },
-          function(err, userDetail) {
-            if (err) {
-              return res.json({
-                error: err
-              });
-            }
-            return res.json({
-              user: user,
-              userDetail: userDetail,
-              message: info.message
-            });
-          }
-        );
+        return res.json({
+          user: user,
+          message: info.message
+        });
       });
     })(req, res, next);
   });
