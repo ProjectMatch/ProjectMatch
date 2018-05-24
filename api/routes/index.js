@@ -106,30 +106,16 @@ module.exports = function(passport) {
               });
             } else if (user) {
               // existing user , send back existing user data
-              UserDetails.findOne(
-                {
-                  googleId: user.googleId
-                },
-                function(err, userDetail) {
-                  if (err) {
-                    return res.json({
-                      error: err
-                    });
-                  } else if (userDetail) {
-                    req.logIn(user, function(err) {
-                      if (err) {
-                        console.log(err);
-                        return next(err);
-                      }
-                      return res.json({
-                        user: user,
-                        userDetail: userDetail,
-                        message: 'Successfully logged in with Google'
-                      });
-                    });
-                  }
+              req.logIn(user, function(err) {
+                if (err) {
+                  console.log(err);
+                  return next(err);
                 }
-              );
+                return res.json({
+                  user: user,
+                  message: 'Successfully logged in with Google'
+                });
+              });
             } else {
               // user not found, make new user and userDetails collection
               var newUser = new User();
@@ -139,33 +125,21 @@ module.exports = function(passport) {
               newUser.profileImage = googlePayload.profilePic;
               newUser.googleId = googlePayload.userid;
               newUser.username =
-                googlePayload.given_name + '_' + googlePayload.family_name;
+                googlePayload.given_name[0] + '_' + googlePayload.family_name;
 
               // save the user
               newUser.save(function(err, user) {
                 if (err) {
                   throw err;
                 } else {
-                  var newUserDetails = new UserDetails({
-                    googleId: googlePayload.userid,
-                    username: newUser.username,
-                    _id: newUser._id
-                  });
-
-                  newUserDetails.save(function(err, userDetail) {
+                  // send back user and userDetails
+                  req.logIn(user, function(err) {
                     if (err) {
-                      throw err;
+                      return next(err);
                     }
-                    // send back user and userDetails
-                    req.logIn(user, function(err) {
-                      if (err) {
-                        return next(err);
-                      }
-                      return res.json({
-                        user: user,
-                        userDetail: userDetail,
-                        message: 'Sucessfully registered with Google'
-                      });
+                    return res.json({
+                      user: user,
+                      message: 'Sucessfully registered with Google'
                     });
                   });
                 }
