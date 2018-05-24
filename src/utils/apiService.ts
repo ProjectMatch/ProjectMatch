@@ -6,6 +6,28 @@ import { Tags } from '../types/Tags';
 import axios from 'axios';
 import config from '../.config';
 
+var userModel = function(user: any) {
+  return {
+    _id: user._id,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email: user.email,
+    username: user.username,
+    profileImage: user.profileImage,
+    location: user.location,
+    roles: user.roles,
+    description: user.description,
+    techstack: user.techstack,
+    projects: user.projects,
+    bookmarked: user.bookmarked,
+    linkedInLink: user.linkedInLink,
+    githubLink: user.githubLink,
+    portfolioLink: user.portfolioLink,
+    websiteLink: user.websiteLink,
+    twitterLink: user.twitterLink,
+    blogLink: user.blogLink
+  };
+};
 /* User */
 function login(email: string, password: string): Promise<User | string> {
   return new Promise((resolve, reject) => {
@@ -34,27 +56,7 @@ function login(email: string, password: string): Promise<User | string> {
         JSON.stringify(res);
         if (res.message === 'Successfully logged in') {
           var user = res.user;
-          var userDetails = res.userDetail;
-          resolve({
-            _id: user._id,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-            username: user.username,
-            profileImage: user.profileImage,
-            location: userDetails.location,
-            roles: userDetails.roles,
-            description: userDetails.description,
-            techstack: userDetails.techstack,
-            projects: userDetails.projects,
-            bookmarked: userDetails.bookmarked,
-            linkedInLink: userDetails.linkedInLink,
-            githubLink: userDetails.githubLink,
-            portfolioLink: userDetails.portfolioLink,
-            websiteLink: userDetails.websiteLink,
-            twitterLink: userDetails.twitterLink,
-            blogLink: userDetails.blogLink
-          });
+          resolve(userModel(user));
         } else {
           reject(res.error);
         }
@@ -88,27 +90,7 @@ function googleLogin(idToken: string): Promise<User | Error> {
           res.message === 'Sucessfully registered with Google'
         ) {
           var user = res.user;
-          var userDetails = res.userDetail;
-          resolve({
-            _id: user._id,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-            username: user.username,
-            profileImage: user.profileImage,
-            location: userDetails.location,
-            roles: userDetails.roles,
-            description: userDetails.description,
-            techstack: userDetails.techstack,
-            projects: userDetails.projects,
-            bookmarked: userDetails.bookmarked,
-            linkedInLink: userDetails.linkedInLink,
-            githubLink: userDetails.githubLink,
-            portfolioLink: userDetails.portfolioLink,
-            websiteLink: userDetails.websiteLink,
-            twitterLink: userDetails.twitterLink,
-            blogLink: userDetails.blogLink
-          });
+          resolve(userModel(user));
         } else {
           reject(res.error);
         }
@@ -149,27 +131,7 @@ function register(
         JSON.stringify(res);
         if (res.message === 'User Registration Succesful') {
           var user = res.user;
-          var userDetails = res.userDetail;
-          resolve({
-            _id: user._id,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-            username: user.username,
-            profileImage: user.profileImage,
-            location: userDetails.location,
-            roles: userDetails.roles,
-            description: userDetails.description,
-            techstack: userDetails.techstack,
-            projects: userDetails.projects,
-            bookmarked: userDetails.bookmarked,
-            linkedInLink: userDetails.linkedInLink,
-            githubLink: userDetails.githubLink,
-            portfolioLink: userDetails.portfolioLink,
-            websiteLink: userDetails.websiteLink,
-            twitterLink: userDetails.twitterLink,
-            blogLink: userDetails.blogLink
-          });
+          resolve(userModel(user));
         } else {
           reject(res.error);
         }
@@ -291,27 +253,7 @@ function userSettingsUpdate(
       .then(function(res: any) {
         if (res.message === 'Successfully updated user details') {
           var user = res.user;
-          var userDetails = res.userDetail;
-          resolve({
-            _id: user._id,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-            username: user.username,
-            profileImage: user.profileImage,
-            location: userDetails.location,
-            roles: userDetails.roles,
-            description: userDetails.description,
-            techstack: userDetails.techstack,
-            projects: userDetails.projects,
-            bookmarked: userDetails.bookmarked,
-            linkedInLink: userDetails.linkedInLink,
-            githubLink: userDetails.githubLink,
-            portfolioLink: userDetails.portfolioLink,
-            websiteLink: userDetails.websiteLink,
-            twitterLink: userDetails.twitterLink,
-            blogLink: userDetails.blogLink
-          });
+          resolve(userModel(user));
         } else {
           reject(res.error);
         }
@@ -354,27 +296,7 @@ function userPrivateSettingsUpdate(
       .then(function(res: any) {
         if (res.message === 'Successfully updated user personal details') {
           var user = res.user;
-          var userDetails = res.userDetail;
-          resolve({
-            _id: user._id,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-            username: user.username,
-            profileImage: user.profileImage,
-            location: userDetails.location,
-            roles: userDetails.roles,
-            description: userDetails.description,
-            techstack: userDetails.techstack,
-            projects: userDetails.projects,
-            bookmarked: userDetails.bookmarked,
-            linkedInLink: userDetails.linkedInLink,
-            githubLink: userDetails.githubLink,
-            portfolioLink: userDetails.portfolioLink,
-            websiteLink: userDetails.websiteLink,
-            twitterLink: userDetails.twitterLink,
-            blogLink: userDetails.blogLink
-          });
+          resolve(userModel(user));
         } else {
           reject(res.error);
         }
@@ -563,27 +485,7 @@ function uploadProfileImage(file: FileList, userId: string): Promise<User> {
         JSON.stringify(res);
         if (res.message === 'Successfully saved profile image') {
           var user = res.user;
-          var userDetails = res.userDetail;
-          resolve({
-            _id: user._id,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-            username: user.username,
-            profileImage: user.profileImage,
-            location: userDetails.location,
-            roles: userDetails.roles,
-            description: userDetails.description,
-            techstack: userDetails.techstack,
-            projects: userDetails.projects,
-            bookmarked: userDetails.bookmarked,
-            linkedInLink: userDetails.linkedInLink,
-            githubLink: userDetails.githubLink,
-            portfolioLink: userDetails.portfolioLink,
-            websiteLink: userDetails.websiteLink,
-            twitterLink: userDetails.twitterLink,
-            blogLink: userDetails.blogLink
-          });
+          resolve(userModel(user));
         } else {
           reject(res.error);
         }
