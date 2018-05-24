@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 var isAuthenticated = require('../utils/authentication');
 var User = require('../models/Users');
-var UserDetail = require('../models/UserDetails');
 
 module.exports = function(passport) {
   router.get('/:username/profile/picture', function(req, res) {
@@ -20,26 +19,14 @@ module.exports = function(passport) {
   });
 
   router.get('/:username/profile', function(req, res) {
-    UserDetail.findOne({ username: req.params.username }, function(
-      err,
-      details
-    ) {
+    User.findOne({ username: req.params.username }, function(err, user) {
       if (err) {
         res.status(404).send({
           error: 'Not Found: ' + err
         });
       } else {
-        // FIX ME: write a seperate function for this logic, shared with '/:username/profile/picture' route
-        User.findOne({ username: req.params.username }, function(err, user) {
-          if (err) {
-            res.status(404).send({
-              error: 'Not Found'
-            });
-          } else {
-            // FIX ME: send as a single object
-            res.json({ details, profileImage: user.profileImage });
-          }
-        });
+        // FIX ME: send as a single object
+        res.json({ user, profileImage: user.profileImage });
       }
     });
   });
