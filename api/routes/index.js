@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 var isAuthenticated = require('../utils/authentication');
 var User = require('../models/Users');
-var UserDetails = require('../models/UserDetails');
 const { OAuth2Client } = require('google-auth-library');
 
 module.exports = function(passport) {
@@ -26,20 +25,9 @@ module.exports = function(passport) {
           if (err) {
             return next(err);
           }
-          var newUserDetails = new UserDetails({
-            _id: user._id,
-            username: user.username
-          });
-          newUserDetails.save(function(err, userDetail) {
-            if (err) {
-              console.log('Error in saving newUserDetails: ' + err);
-              throw err;
-            }
-            return res.json({
-              user: user,
-              userDetail: userDetail,
-              message: info.message
-            });
+          return res.json({
+            user: user,
+            message: info.message
           });
         });
       }
