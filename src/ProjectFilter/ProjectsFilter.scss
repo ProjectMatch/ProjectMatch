@@ -1,49 +1,4 @@
-@import '_variables.scss';
-/*
-==========================
-TITLE
-==========================
-*/
-.projects-header-text {
-  color: $theme-blue;
-  font-size: 45px;
-  font-weight: 700;
-  text-align: center;
-  padding-top: 60px;
-  padding-bottom: 30px;
-}
-/*
-==========================
-SEARCH
-==========================
-*/
-.projects-search-form {
-  text-align: center;
-  padding-bottom: 60px;
-}
-
-.projects-search-box {
-  border: 1px solid $theme-blue;
-  width: 350px;
-  height: 50px;
-  color: $dark-grey;
-  padding: 5px;
-}
-
-.projects-search-box::placeholder {
-  color: $theme-blue;
-  padding: 5px;
-}
-
-.projects-search-btn {
-  border: none;
-  background-color: $theme-blue;
-  color: white;
-  width: 100px;
-  height: 50px;
-  font-weight: 700;
-  text-transform: uppercase;
-}
+@import '../styles/_variables.scss';
 /*
 ==========================
 PROJECT FILTERS
@@ -112,10 +67,10 @@ PROJECT FILTERS
 }
 
 /*
-==========================
-SUBMIT & CLEAR FILTER BUTTON
-==========================
-*/
+  ==========================
+  SUBMIT & CLEAR FILTER BUTTON
+  ==========================
+  */
 .project-filter-clear-btn,
 .project-filter-submit-btn {
   text-transform: uppercase;
@@ -136,10 +91,10 @@ SUBMIT & CLEAR FILTER BUTTON
   color: $attention-red;
 }
 /*
-==========================
-DROPDOWN SEARCH
-==========================
-*/
+  ==========================
+  DROPDOWN SEARCH
+  ==========================
+  */
 .project-filter-search-input-box {
   margin-bottom: 10px;
   min-width: 180px;
@@ -152,10 +107,10 @@ DROPDOWN SEARCH
   color: $light-grey;
 }
 /*
-==========================
-DROPDOWN BUTTON
-==========================
-*/
+  ==========================
+  DROPDOWN BUTTON
+  ==========================
+  */
 .project-filter-dropdown-btn {
   min-width: 180px;
   color: $dark-grey;
@@ -167,10 +122,10 @@ DROPDOWN BUTTON
   margin-right: 20px;
 }
 /*
-==========================
-SCROLLBAR
-==========================
-*/
+  ==========================
+  SCROLLBAR
+  ==========================
+  */
 
 .project-filter-dropdown-box::-webkit-scrollbar {
   width: 10px;
@@ -191,10 +146,10 @@ SCROLLBAR
 }
 
 /*
-==========================
-CHECKBOX STYLING
-==========================
-*/
+  ==========================
+  CHECKBOX STYLING
+  ==========================
+  */
 .checkboxContainer {
   display: block;
   position: relative;
@@ -262,10 +217,10 @@ CHECKBOX STYLING
 }
 
 /*
-==========================
-RADIO STYLING
-==========================
-*/
+  ==========================
+  RADIO STYLING
+  ==========================
+  */
 .radioContainer {
   display: block;
   position: relative;
@@ -330,10 +285,10 @@ RADIO STYLING
 }
 
 /*
-==========================
-TAGS
-==========================
-*/
+  ==========================
+  TAGS
+  ==========================
+  */
 .tagSearch {
   border: 1px solid $theme-blue;
   font-size: 12px;

@@ -1,9 +1,12 @@
 import * as React from 'react';
+// styles
+import './ProjectPortalPage.css';
+// components
 import HeaderContainer from '../Header/HeaderContainer';
 import About from './About';
 import Chat from './Chat';
 import Revisions from './Revisions';
-import '../styles/ProjectPortalPage.css';
+// utils
 import apiService from '../utils/apiService';
 
 interface ProjectPortalPageProps {

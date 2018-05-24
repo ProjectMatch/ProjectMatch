@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import * as React from 'react';
-import '../styles/Project.css';
+import './Project.css';
 
 export class ImageContainer extends React.Component<
   { project: any; projId: any },

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import '../styles/Project.css';
+import './Project.css';
 
 class TagCategoryContainer extends React.Component<{ project: any }, {}> {
   render() {

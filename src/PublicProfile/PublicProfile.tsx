@@ -1,16 +1,20 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
+import axios from 'axios';
+import config from '../.config';
+// styles
+import './PublicProfile.css';
+// components
 import Footer from '../Footer/Footer';
 import HeaderContainer from '../Header/HeaderContainer';
-import { Store, UserProfileProps } from '../types/Redux';
-import { connect } from 'react-redux';
-import { getProjects } from '../actions/projectActions';
-import '../styles/PublicProfile.css';
 import RolesCheckmarks from './RolesCheckmarks';
 import SkillLabel from './SkillLabel';
 import UserProjects from './UserProjects';
 import UserLinks from './UserLinks';
-import axios from 'axios';
-import config from '../.config';
+// types
+import { Store, UserProfileProps } from '../types/Redux';
+// actions
+import { getProjects } from '../actions/projectActions';
 
 interface UserProfileState {
   user: any;

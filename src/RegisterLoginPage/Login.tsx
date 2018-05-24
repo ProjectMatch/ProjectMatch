@@ -1,12 +1,17 @@
 import * as React from 'react';
-import '../styles/Register-Login.css';
-import { LoginState } from '../types/Login.d';
-import { LoginProps } from '../types/Redux';
 import { connect, Dispatch } from 'react-redux';
-import { login } from '../actions/userActions';
+// styles
+import './Register-Login.css';
+// component
 import GoogleSignIn from '../GoogleSignIn';
-import { showLoginWindow } from '../actions/appActions';
+// types
+import { LoginState } from './Login.d';
+import { LoginProps } from '../types/Redux';
 import { Store, Action } from '../types/Redux';
+// actions
+import { login } from '../actions/userActions';
+import { showLoginWindow } from '../actions/appActions';
+
 class Login extends React.Component<LoginProps, LoginState> {
   constructor(props: LoginProps) {
     super(props);

@@ -1,17 +1,19 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Store } from '../types/Redux';
-import { RegisterState } from '../types/Register.d';
+// styles
+import './Register-Login.css';
+// component
+import GoogleSignIn from '../GoogleSignIn';
+// types
+import { RegisterState } from './Register.d';
 import { RegisterProps } from '../types/Redux.d';
+// actions
 import { register } from '../actions/userActions';
 import {
   showRegisterWindow,
   completeRegistration
 } from '../actions/appActions';
-
-import GoogleSignIn from '../GoogleSignIn';
-
-import '../styles/Register-Login.css';
 
 class Register extends React.Component<RegisterProps, RegisterState> {
   constructor(props: RegisterProps) {

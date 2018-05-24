@@ -1,8 +1,11 @@
 import * as React from 'react';
-import '../styles/ReadyToTry.css';
 import { connect, Dispatch } from 'react-redux';
-import { showRegisterWindow } from '../actions/appActions';
+// styles
+import './ReadyToTry.css';
+// types
 import { Store, ReadyToTryProps, Action } from '../types/Redux';
+// actions
+import { showRegisterWindow } from '../actions/appActions';
 
 class ReadyToTry extends React.Component<ReadyToTryProps, {}> {
   constructor(props: ReadyToTryProps) {

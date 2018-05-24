@@ -1,10 +1,13 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+// components
 import Header from './Header';
 import LoggedInHeader from './LoggedInHeader';
-import { HeaderContainerProps } from '../types/HeaderContainer.d';
+// types
+import { HeaderContainerProps } from './HeaderContainer.d';
 import { Store, State } from '../types/Redux';
-import { Redirect } from 'react-router-dom';
+// actions
 import { completeRegistration } from '../actions/appActions';
 
 class HeaderContainer extends React.Component<HeaderContainerProps, State> {

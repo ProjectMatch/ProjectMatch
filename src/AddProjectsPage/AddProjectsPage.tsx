@@ -1,9 +1,21 @@
 import * as React from 'react';
-import Footer from '../Footer/Footer';
-import '../styles/AddProjectsPage.css';
-import HeaderContainer from '../Header/HeaderContainer';
-import { AddProjectState } from '../types/AddProjectsPage.d';
+import { Redirect } from 'react-router';
 import { connect } from 'react-redux';
+// styles
+import './AddProjectsPage.css';
+// components
+import Footer from '../Footer/Footer';
+import HeaderContainer from '../Header/HeaderContainer';
+import StatusOptionsComponent from './StatusOptionsComponent';
+import ChosenTeam from './ChosenTeam';
+import ChosenTags from './ChosenTags';
+import TagOptionsComponent from './TagOptionsComponent';
+import CategoriesOptionsComponent from './CategoriesOptionsComponent';
+import TeamOptionsComponent from './TeamOptionsComponent';
+// types
+import { AddProjectState } from './AddProjectsPage.d';
+import { Store, AddProjectProps } from '../types/Redux';
+// actions
 import {
   addOrUpdateProject,
   getOneProject,
@@ -12,14 +24,6 @@ import {
 import { getAllUsers } from '../actions/userActions';
 import { getTags } from '../actions/tagsActions';
 import { getCategories } from '../actions/categoryActions';
-import { Store, AddProjectProps } from '../types/Redux';
-import { Redirect } from 'react-router';
-import StatusOptionsComponent from './StatusOptionsComponent';
-import ChosenTeam from './ChosenTeam';
-import ChosenTags from './ChosenTags';
-import TagOptionsComponent from './TagOptionsComponent';
-import CategoriesOptionsComponent from './CategoriesOptionsComponent';
-import TeamOptionsComponent from './TeamOptionsComponent';
 
 class AddProjectsPage extends React.Component<
   AddProjectProps,

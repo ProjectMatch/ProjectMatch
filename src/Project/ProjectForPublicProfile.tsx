@@ -1,12 +1,16 @@
 import * as React from 'react';
-import '../styles/Project.css';
-import { State } from '../types/Projects.d';
-import { Store, ProjectForPublicProfileProps, Action } from '../types/Redux';
 import { connect, Dispatch } from 'react-redux';
-import { getProjects } from '../actions/projectActions';
+// styles
+import './Project.css';
+// component
 import TagCategoryContainer from './TagContainer';
 import RolesContainer from './RolesContainer';
 import { EditImageContainer } from './ImageContainer';
+// types
+import { State } from '../types/Projects.d';
+import { Store, ProjectForPublicProfileProps, Action } from '../types/Redux';
+// actions
+import { getProjects } from '../actions/projectActions';
 
 class ProjectForPublicProfile extends React.Component<
   ProjectForPublicProfileProps,

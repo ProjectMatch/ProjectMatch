@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
+// types
 import { Store, PublicProfileProps } from '../types/Redux';
-import { PublicProfileState } from '../types/PublicProfile.d';
+import { PublicProfileState } from './PublicProfile.d';
+// actions
 import { userSettingsUpdate } from '../actions/userActions';
 
 class PublicProfile extends React.Component<

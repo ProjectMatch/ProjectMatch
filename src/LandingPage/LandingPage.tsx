@@ -1,15 +1,16 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
+// components
 import HeaderContainer from '../Header/HeaderContainer';
 import Footer from '../Footer/Footer';
 import LandingImage from './LandingImage';
 import ProjectFeatures from './ProjectFeatures';
 import RecentProjects from './RecentProjects';
 import ReadyToTry from './ReadyToTry';
-import { LandingPageState } from '../types/LandingPage.d';
+// types
 import { Store, LandingPageProps } from '../types/Redux';
 
-class LandingPage extends React.Component<LandingPageProps, LandingPageState> {
+class LandingPage extends React.Component<LandingPageProps, {}> {
   render() {
     return (
       <div>

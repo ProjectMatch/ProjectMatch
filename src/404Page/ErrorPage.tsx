@@ -1,5 +1,5 @@
 import * as React from 'react';
-import '../styles/ErrorPage.css';
+import './ErrorPage.css';
 
 class ErrorPage extends React.Component<any, any> {
   // static contextTypes = {
