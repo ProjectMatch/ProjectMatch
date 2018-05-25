@@ -2,7 +2,6 @@ import * as React from 'react';
 // styles
 import './ProjectPortalPage.css';
 // components
-import HeaderContainer from '../Header/HeaderContainer';
 import About from './About';
 import Chat from './Chat';
 import Revisions from './Revisions';
@@ -45,7 +44,6 @@ class ProjectPortalPage extends React.Component<
     if (this.state.currentProject._id) {
       return (
         <div className="project-portal__container">
-          <HeaderContainer />
           <div className="project-portal__carousel__background">
             <div className="project-portal__carousel">
               <Revisions

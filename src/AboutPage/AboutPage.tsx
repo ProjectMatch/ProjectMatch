@@ -1,5 +1,4 @@
 import * as React from 'react';
-import HeaderContainer from '../Header/HeaderContainer';
 import Footer from '../Footer/Footer';
 import './AboutPage.css';
 
@@ -78,7 +77,6 @@ class AboutPage extends React.Component {
   render() {
     return (
       <div>
-        <HeaderContainer />
         <TeamContainer />
         <Footer />
       </div>

@@ -9,7 +9,6 @@ import './Redlines.css';
 import Toolbar from './Toolbar';
 import ImageLayer from './ImageLayer';
 import AnnotationLayer from './AnnotationLayer';
-import HeaderContainer from '../Header/HeaderContainer';
 
 interface RedlineProps {
   imageLink: string;
@@ -76,7 +75,6 @@ class Redline extends React.Component<RedlineProps, RedlineState> {
   render() {
     return (
       <React.Fragment>
-        <HeaderContainer />
         <div className="redline-container">
           <Toolbar
             isDisabled={this.shouldDisableToolBar()}
