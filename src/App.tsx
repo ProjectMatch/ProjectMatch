@@ -16,7 +16,7 @@ import ProjectPortalPage from './ProjectPortalPage';
 import { HYDRATE_USER } from './actions/actionTypes';
 import ErrorPage from './404Page/ErrorPage';
 import AboutPage from './AboutPage/AboutPage';
-
+import HeaderContainer from './Header/HeaderContainer';
 import config from './.config';
 
 if (config.env !== 'production') {
@@ -42,44 +42,50 @@ class App extends React.Component {
       <Provider store={store}>
         <div className="App">
           <Router>
-            <Switch>
-              <Route exact={true} path="/" component={LandingPage} />
-              <Route exact={true} path="/home" component={LandingPage} />
-              <Route exact={true} path="/projects" component={ProjectsPage} />
-              <Route
-                exact={true}
-                path="/projects/add"
-                component={AddProjectsPage}
-              />
-              <Route
-                exact={true}
-                path="/projects/:id"
-                component={ProjectPortalPage}
-              />
-              <Route
-                exact={true}
-                path="/projects/:projectId/revision/:revisionId"
-                component={Redline}
-              />
-              <Route
-                exact={true}
-                path="/projects/update/:id"
-                component={AddProjectsPage}
-              />
-              <Route
-                exact={true}
-                path="/user/settings"
-                component={SettingsPage}
-              />
-              <Route
-                exact={true}
-                path="/user/profile"
-                component={PublicProfile}
-              />
-              <Route path="/user/profile/:username" component={PublicProfile} />
-              <Route exact={true} path="/about" component={AboutPage} />
-              <Route exact={true} path="*" component={ErrorPage} />
-            </Switch>
+            <div>
+              <HeaderContainer />
+              <Switch>
+                <Route exact={true} path="/" component={LandingPage} />
+                <Route exact={true} path="/home" component={LandingPage} />
+                <Route exact={true} path="/projects" component={ProjectsPage} />
+                <Route
+                  exact={true}
+                  path="/projects/add"
+                  component={AddProjectsPage}
+                />
+                <Route
+                  exact={true}
+                  path="/projects/:id"
+                  component={ProjectPortalPage}
+                />
+                <Route
+                  exact={true}
+                  path="/projects/:projectId/revision/:revisionId"
+                  component={Redline}
+                />
+                <Route
+                  exact={true}
+                  path="/projects/update/:id"
+                  component={AddProjectsPage}
+                />
+                <Route
+                  exact={true}
+                  path="/user/settings"
+                  component={SettingsPage}
+                />
+                <Route
+                  exact={true}
+                  path="/user/profile"
+                  component={PublicProfile}
+                />
+                <Route
+                  path="/user/profile/:username"
+                  component={PublicProfile}
+                />
+                <Route exact={true} path="/about" component={AboutPage} />
+                <Route exact={true} path="*" component={ErrorPage} />
+              </Switch>
+            </div>
           </Router>
         </div>
       </Provider>

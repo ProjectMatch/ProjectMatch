@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 // components
-import HeaderContainer from '../Header/HeaderContainer';
 import Footer from '../Footer/Footer';
 import LandingImage from './LandingImage';
 import ProjectFeatures from './ProjectFeatures';
@@ -14,7 +13,6 @@ class LandingPage extends React.Component<LandingPageProps, {}> {
   render() {
     return (
       <div>
-        <HeaderContainer />
         <LandingImage />
         <ProjectFeatures />
         <RecentProjects />

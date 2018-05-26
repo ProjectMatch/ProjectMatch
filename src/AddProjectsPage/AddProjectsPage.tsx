@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import './AddProjectsPage.css';
 // components
 import Footer from '../Footer/Footer';
-import HeaderContainer from '../Header/HeaderContainer';
 import StatusOptionsComponent from './StatusOptionsComponent';
 import ChosenTeam from './ChosenTeam';
 import ChosenTags from './ChosenTags';
@@ -388,7 +387,6 @@ class AddProjectsPage extends React.Component<
 
     return (
       <div className="new-project-body" onClick={e => this.closeDropdown(e)}>
-        <HeaderContainer />
         <form className="new-project-container">
           <div className="box-1">
             <div className="box-1-a">

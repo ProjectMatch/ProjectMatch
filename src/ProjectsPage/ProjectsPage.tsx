@@ -4,7 +4,6 @@ import { connect, Dispatch } from 'react-redux';
 import './ProjectsPage.css';
 import '../Project/Project.css';
 // components
-import HeaderContainer from '../Header/HeaderContainer';
 import Footer from '../Footer/Footer';
 import Projects from '../Project/Projects';
 import ProjectsFilter from '../ProjectFilter/ProjectsFilter';
@@ -78,8 +77,6 @@ class ProjectsPage extends React.Component<ProjectPageProps, ProjectPageState> {
   render() {
     return (
       <div onClick={e => this.closeAllDropDown(e)}>
-        <HeaderContainer />
-
         <br />
 
         <div className="projects-header-text">Explore Projects</div>
