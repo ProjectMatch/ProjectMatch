@@ -170,12 +170,9 @@ class AddProjectsPage extends React.Component<
     var saveArrayToState = (stateName: any, array: any, elemById: string) => {
       if (array.includes(value.toLowerCase()) === false) {
         array.push(value.toLowerCase());
-        return this.setState({ [stateName]: array }, () => {
-          this.toggleDropdown(e, elemById);
-        });
-      } else {
-        this.toggleDropdown(e, elemById);
+        return this.setState({ [stateName]: array });
       }
+      this.toggleDropdown(e, elemById);
     };
 
     switch (name) {
