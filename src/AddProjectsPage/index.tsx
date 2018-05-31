@@ -130,7 +130,7 @@ class AddProjectsPage extends React.Component<
     return this.props.match.params;
   };
 
-  public toggleDropdown = (
+  toggleDropdown = (
     e: React.FormEvent<HTMLButtonElement> | React.FormEvent<HTMLInputElement>,
     elemById: string
   ) => {
@@ -163,7 +163,7 @@ class AddProjectsPage extends React.Component<
     });
   };
 
-  public onFormChange = (e: React.FormEvent<HTMLInputElement>): void | null => {
+  onFormChange = (e: React.FormEvent<HTMLInputElement>): void | null => {
     e.persist();
     var { name, value } = e.currentTarget;
 
@@ -214,7 +214,7 @@ class AddProjectsPage extends React.Component<
     }
   };
 
-  public handleOptionRemoval = (
+  handleOptionRemoval = (
     e: React.MouseEvent<HTMLButtonElement>,
     stateName: any,
     array: string[]
@@ -225,12 +225,12 @@ class AddProjectsPage extends React.Component<
     this.setState({ [stateName]: array });
   };
 
-  public onTextAreaFormChange(e: React.FormEvent<HTMLTextAreaElement>): void {
+  onTextAreaFormChange(e: React.FormEvent<HTMLTextAreaElement>): void {
     var { name, value } = e.currentTarget;
     this.setState({ [name]: value } as any);
   }
 
-  public handleSubmit = (e: React.FormEvent<HTMLButtonElement>): void => {
+  handleSubmit = (e: React.FormEvent<HTMLButtonElement>): void => {
     var title = document.getElementById('new-project-title') as any;
     var description = document.getElementById('new-project-description') as any;
 
@@ -287,12 +287,12 @@ class AddProjectsPage extends React.Component<
     });
   };
 
-  public handleImageText = (e: React.FormEvent<HTMLInputElement>): void => {
+  handleImageText = (e: React.FormEvent<HTMLInputElement>): void => {
     let files = e.currentTarget.files! as FileList;
     this.setState({ files: files } as any);
   };
 
-  public handleImageClear = (e: React.FormEvent<HTMLButtonElement>): void => {
+  handleImageClear = (e: React.FormEvent<HTMLButtonElement>): void => {
     const preview = document.getElementById('new-project-image-preview')!;
     while (preview.firstChild) {
       preview.removeChild(preview.firstChild);
@@ -301,7 +301,7 @@ class AddProjectsPage extends React.Component<
     e.preventDefault();
   };
 
-  public filter = (filterId: string, elemByName: string) => {
+  filter = (filterId: string, elemByName: string) => {
     var filter, inputOptions;
     filter = (document.getElementById(
       filterId
@@ -318,11 +318,11 @@ class AddProjectsPage extends React.Component<
     }
   };
 
-  public teamFilter = () => {
+  teamFilter = () => {
     this.filter('teamSearch', 'team');
   };
 
-  public tagFilter = (e: React.KeyboardEvent<HTMLInputElement>): void => {
+  tagFilter = (e: React.KeyboardEvent<HTMLInputElement>): void => {
     e.persist();
     this.filter('tagSearch', 'tags');
     if (e.keyCode === 13) {
@@ -339,11 +339,11 @@ class AddProjectsPage extends React.Component<
     }
   };
 
-  public categoryFilter = () => {
+  categoryFilter = () => {
     this.filter('categorySearch', 'category');
   };
 
-  public handleImageUpload = (e: React.FormEvent<HTMLButtonElement>): void => {
+  handleImageUpload = (e: React.FormEvent<HTMLButtonElement>): void => {
     // currently makes preview of images
     e.preventDefault();
     const preview = document.getElementById('new-project-image-preview')!;
