@@ -10,13 +10,13 @@ class ChosenTeam extends React.Component<{
     if (team.length === 0) {
       chosenTeam = null;
     } else {
-      if (team.length === 1) {
-        chosenTeam = (
-          <div className="tag-container" key={1}>
+      chosenTeam = team.map((teamMemeber: string, index: number) => {
+        return (
+          <div className="tag-container" key={index}>
             <input
               type="button"
               className="new-project-chosen-tag"
-              value={team}
+              value={teamMemeber}
             />
             <button
               type="button"
@@ -33,32 +33,7 @@ class ChosenTeam extends React.Component<{
             </button>
           </div>
         );
-      } else {
-        chosenTeam = team.map((teamMemeber: string, index: number) => {
-          return (
-            <div className="tag-container" key={index}>
-              <input
-                type="button"
-                className="new-project-chosen-tag"
-                value={teamMemeber}
-              />
-              <button
-                type="button"
-                className="remove-tag-btn"
-                onClick={e =>
-                  this.props.handleOptionRemoval(
-                    e,
-                    'team',
-                    Object.assign([], this.props.team)
-                  )
-                }
-              >
-                X
-              </button>
-            </div>
-          );
-        });
-      }
+      });
     }
     return chosenTeam;
   }
