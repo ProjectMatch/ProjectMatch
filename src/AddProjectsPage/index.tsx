@@ -178,39 +178,43 @@ class AddProjectsPage extends React.Component<
       }
     };
 
-    if (name === 'category') {
-      this.setState({
-        category: value,
-        categoryPlaceholder: value
-      } as any);
-      this.toggleDropdown(e, 'new-project-dropdown');
-    } else if (name === 'tags') {
-      saveArrayToState('tags', this.state.tags!.slice(), 'new-tags-dropdown');
-    } else if (name === 'team') {
-      saveArrayToState('team', this.state.team!.slice(), 'new-team-dropdown');
-    } else if (name === 'status') {
-      if (value === 'Active') {
-        this.setState({ status: true, statusPlaceholder: value });
-      } else {
-        this.setState({ status: false, statusPlaceholder: value });
-      }
-      this.toggleDropdown(e, 'new-status-dropdown');
-    } else if (name === 'roles') {
-      var arrayOfRoles: string[] = [];
-      var nodeList = Array.from(document.getElementsByName('roles'));
+    switch (name) {
+      case 'category':
+        this.setState({
+          category: value,
+          categoryPlaceholder: value
+        } as any);
+        this.toggleDropdown(e, 'new-project-dropdown');
+        break;
+      case 'tags':
+        saveArrayToState('tags', this.state.tags!.slice(), 'new-tags-dropdown');
+        break;
+      case 'team':
+        saveArrayToState('team', this.state.team!.slice(), 'new-team-dropdown');
+        break;
+      case 'status':
+        var newStatus = value === 'Active' ? true : false;
+        this.setState({ status: newStatus, statusPlaceholder: value });
+        this.toggleDropdown(e, 'new-status-dropdown');
+        break;
+      case 'roles':
+        var arrayOfRoles: string[] = [];
+        var nodeList = Array.from(document.getElementsByName('roles'));
 
-      if (document.getElementsByName('roles') === null) {
-        this.setState({ lookingFor: [] } as any);
-      } else {
-        nodeList.forEach(function(node: any) {
-          if (node.checked) {
-            arrayOfRoles.push(node.value);
-          }
-        });
-        this.setState({ lookingFor: arrayOfRoles } as any);
-      }
-    } else {
-      this.setState({ [name]: value } as any);
+        if (document.getElementsByName('roles') === null) {
+          this.setState({ lookingFor: [] } as any);
+        } else {
+          nodeList.forEach(function(node: any) {
+            if (node.checked) {
+              arrayOfRoles.push(node.value);
+            }
+          });
+          this.setState({ lookingFor: arrayOfRoles } as any);
+        }
+        break;
+      default:
+        this.setState({ [name]: value } as any);
+        break;
     }
   };
 
