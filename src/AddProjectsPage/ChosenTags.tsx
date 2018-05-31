@@ -6,34 +6,32 @@ class ChosenTags extends React.Component<{
 }> {
   render() {
     var chosenTags;
-    if (!this.props.tags) {
+    let tags = this.props.tags;
+    if (!tags || tags.slice().length === 0) {
       return null;
     }
+    // make copy of tags
+    tags = tags.slice();
 
-    let tags = this.props.tags.slice();
+    chosenTags = tags.map((tagName: string, index: number) => {
+      return (
+        <div className="tag-container" key={index}>
+          <input
+            type="button"
+            className="new-project-chosen-tag"
+            value={tagName}
+          />
+          <button
+            type="button"
+            className="remove-tag-btn"
+            onClick={e => this.props.handleOptionRemoval(e, 'tags', tags)}
+          >
+            X
+          </button>
+        </div>
+      );
+    });
 
-    if (tags.length === 0) {
-      chosenTags = null;
-    } else {
-      chosenTags = tags.map((tagName: string, index: number) => {
-        return (
-          <div className="tag-container" key={index}>
-            <input
-              type="button"
-              className="new-project-chosen-tag"
-              value={tagName}
-            />
-            <button
-              type="button"
-              className="remove-tag-btn"
-              onClick={e => this.props.handleOptionRemoval(e, 'tags', tags)}
-            >
-              X
-            </button>
-          </div>
-        );
-      });
-    }
     return <div className="array-of-tags">{chosenTags}</div>;
   }
 }
