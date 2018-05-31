@@ -179,17 +179,24 @@ class AddProjectsPage extends React.Component<
     });
   };
 
+  saveArrayToState = (stateName: any, array: any, value: string) => {
+    if (array.includes(value.toLowerCase()) === false) {
+      array.push(value.toLowerCase());
+      return this.setState({ [stateName]: array });
+    }
+  };
+
   onFormChange = (e: React.FormEvent<HTMLInputElement>): void | null => {
     e.persist();
     var { name, value } = e.currentTarget;
 
-    var saveArrayToState = (stateName: any, array: any, elemById: string) => {
-      if (array.includes(value.toLowerCase()) === false) {
-        array.push(value.toLowerCase());
-        return this.setState({ [stateName]: array });
-      }
-      this.toggleDropdown(e, elemById);
-    };
+    // var saveArrayToState = (stateName: any, array: any, elemById: string) => {
+    //   if (array.includes(value.toLowerCase()) === false) {
+    //     array.push(value.toLowerCase());
+    //     return this.setState({ [stateName]: array });
+    //   }
+    //   this.toggleDropdown(e, elemById);
+    // };
 
     switch (name) {
       case 'category':
@@ -200,10 +207,12 @@ class AddProjectsPage extends React.Component<
         this.toggleDropdown(e, 'new-project-dropdown');
         break;
       case 'tags':
-        saveArrayToState('tags', this.state.tags!.slice(), 'new-tags-dropdown');
+        this.saveArrayToState('tags', this.state.tags!.slice(), value);
+        this.toggleDropdown(e, 'new-tags-dropdown');
         break;
       case 'team':
-        saveArrayToState('team', this.state.team!.slice(), 'new-team-dropdown');
+        this.saveArrayToState('team', this.state.team!.slice(), value);
+        this.toggleDropdown(e, 'new-team-dropdown');
         break;
       case 'status':
         var newStatus = value === 'Active' ? true : false;
@@ -213,7 +222,6 @@ class AddProjectsPage extends React.Component<
       case 'roles':
         var arrayOfRoles: string[] = [];
         var nodeList = Array.from(document.getElementsByName('roles'));
-
         if (document.getElementsByName('roles') === null) {
           this.setState({ lookingFor: [] } as any);
         } else {
@@ -356,16 +364,10 @@ class AddProjectsPage extends React.Component<
     e.persist();
     this.filter('tagSearch', 'tags');
     if (e.keyCode === 13) {
-      var inputValue = (document.getElementById(
-        'tagSearch'
-      )! as HTMLInputElement).value;
-      var array = this.state.tags!.slice();
-      if (array.indexOf(inputValue.toLowerCase()) === -1) {
-        array.push(inputValue.toLowerCase());
-      }
-      this.setState({ tags: array }, () => {
-        this.toggleDropdown(e, 'new-tags-dropdown');
-      });
+      var value = (document.getElementById('tagSearch')! as HTMLInputElement)
+        .value;
+      this.saveArrayToState('tags', this.state.tags!.slice(), value);
+      this.toggleDropdown(e, 'new-tags-dropdown');
     }
   };
 
