@@ -109,21 +109,27 @@ class AddProjectsPage extends React.Component<
           files: null
         },
         () => {
-          // console.log(this.state);
-          // var doc: any;
-          // if (this.state.lookingFor === ['Programmer']) {
-          //   doc = document.getElementById('new-project-role-p')!;
-          //   doc.checked = true;
-          // } else if (this.state.lookingFor === ['Designer']) {
-          //   doc = document.getElementById('new-project-role-d')![0];
-          //   doc.checked = true;
-          // } else if (this.state.lookingFor!.indexOf('Programmer') !== -1
-          //   && this.state.lookingFor!.indexOf('Designer') !== -1) {
-          //   var d: HTMLInputElement = document.getElementById('new-project-role-d')![0];
-          //   var p: HTMLInputElement = document.getElementById('new-project-role-p')![0];
-          //   d.checked = true;
-          //   p.checked = true;
-          // }
+          console.log(this.state);
+          var p = document.getElementById(
+            'new-project-role-p'
+          )! as HTMLInputElement;
+          var d = document.getElementById(
+            'new-project-role-d'
+          )! as HTMLInputElement;
+          switch (this.state.lookingFor) {
+            case ['Programmer']:
+              p.checked = true;
+              break;
+            case ['Designer']:
+              d.checked = true;
+              break;
+            case []:
+              break;
+            default:
+              d.checked = true;
+              p.checked = true;
+              break;
+          }
         }
       );
     };
@@ -189,14 +195,6 @@ class AddProjectsPage extends React.Component<
   onFormChange = (e: React.FormEvent<HTMLInputElement>): void | null => {
     e.persist();
     var { name, value } = e.currentTarget;
-
-    // var saveArrayToState = (stateName: any, array: any, elemById: string) => {
-    //   if (array.includes(value.toLowerCase()) === false) {
-    //     array.push(value.toLowerCase());
-    //     return this.setState({ [stateName]: array });
-    //   }
-    //   this.toggleDropdown(e, elemById);
-    // };
 
     switch (name) {
       case 'category':
