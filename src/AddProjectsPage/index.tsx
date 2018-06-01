@@ -67,40 +67,25 @@ class AddProjectsPage extends React.Component<
       return this.props.getOneProject(id);
     };
 
+    // updates component state with currentProject's data
     var setState = () => {
       var project = this.props.currentProject!;
-      const {
-        name,
-        description,
-        dueDate,
-        team,
-        githubLink,
-        mockupLink,
-        liveLink,
-        lookingFor,
-        status,
-        category,
-        tags,
-        images,
-        contact,
-        creator
-      } = project;
       return this.setState(
         {
-          name: name,
-          description: description,
-          dueDate: dueDate !== null ? dueDate.slice(0, 10) : '',
-          team: team,
-          githubLink: githubLink,
-          mockupLink: mockupLink,
-          liveLink: liveLink,
-          lookingFor: lookingFor,
-          status: status,
-          category: category,
-          tags: tags,
-          images: images,
-          contact: contact,
-          creator: creator,
+          name: project.name,
+          description: project.description,
+          dueDate: project.dueDate !== null ? project.dueDate.slice(0, 10) : '',
+          team: project.team,
+          githubLink: project.githubLink,
+          mockupLink: project.mockupLink,
+          liveLink: project.liveLink,
+          lookingFor: project.lookingFor,
+          status: project.status,
+          category: project.category,
+          tags: project.tags,
+          images: project.images,
+          contact: project.contact,
+          creator: project.creator,
           categoryPlaceholder: 'Choose A Category',
           tagPlaceholder: 'Choose Some Tags',
           teamPlaceholder: 'Add Teammates',
@@ -109,7 +94,7 @@ class AddProjectsPage extends React.Component<
           files: null
         },
         () => {
-          console.log(this.state);
+          // toggles roles checkbox per lookingFor array
           var p = document.getElementById(
             'new-project-role-p'
           )! as HTMLInputElement;
@@ -124,6 +109,7 @@ class AddProjectsPage extends React.Component<
               d.checked = true;
               break;
             case []:
+              // in the case of an empty roles array, do nothing!
               break;
             default:
               d.checked = true;
@@ -135,15 +121,14 @@ class AddProjectsPage extends React.Component<
     };
 
     async function callProjectAssignToState() {
+      // call data of that one project
       await getProjectById();
+      // then update state with requested project data
       await setState();
     }
 
     // if there was an ID passed in with the url link
-    // call data of that one project
-    // update state with requested project data
     if (this.props.match.params.hasOwnProperty('id')) {
-      id = this.getURLParams().id;
       callProjectAssignToState();
     }
   }
@@ -185,6 +170,8 @@ class AddProjectsPage extends React.Component<
     });
   };
 
+  // adds value to array only if it doesnt already include it
+  // save to state
   saveArrayToState = (stateName: any, array: any, value: string) => {
     if (array.includes(value.toLowerCase()) === false) {
       array.push(value.toLowerCase());
@@ -218,11 +205,12 @@ class AddProjectsPage extends React.Component<
         this.toggleDropdown(e, 'new-status-dropdown');
         break;
       case 'roles':
-        var arrayOfRoles: string[] = [];
         var nodeList = Array.from(document.getElementsByName('roles'));
         if (document.getElementsByName('roles') === null) {
           this.setState({ lookingFor: [] } as any);
         } else {
+          var arrayOfRoles: string[] = [];
+          // checks to see if an of the 'roles' nodes are checked
           nodeList.forEach(function(node: any) {
             if (node.checked) {
               arrayOfRoles.push(node.value);
@@ -237,6 +225,7 @@ class AddProjectsPage extends React.Component<
     }
   };
 
+  // removes items such as tags or team members from the state array
   handleOptionRemoval = (
     e: React.MouseEvent<HTMLButtonElement>,
     stateName: any,
@@ -301,19 +290,24 @@ class AddProjectsPage extends React.Component<
         contact: contact,
         creator: this.props.user.username
       };
+      // if this is an existing project, passes in the corresponding _id
+      // the api will check to update or add the project according to whether
+      // an _id is passed in
       if (this.props.match.params.hasOwnProperty('id')) {
         projectToCreateOrUpdate = Object.assign({}, projectToCreateOrUpdate, {
           _id: this.props.currentProject._id
         });
       }
 
+      // passes in the project object with any images (files)
       this.props
         .addOrUpdateProject(projectToCreateOrUpdate, this.state.files)
         .then(() => {
+          // retrieves all projects, sorted by newest modified
           this.props
             .getProjects({ sort: { modifiedAt: -1 } }, null)
             .then(() => {
-              console.log(this.props.projects);
+              // redirects to the project portal
               this.setState({
                 shouldRedirect: true,
                 projIdRedirect: this.props.projects[0]._id
@@ -323,20 +317,7 @@ class AddProjectsPage extends React.Component<
     });
   };
 
-  handleImageText = (e: React.FormEvent<HTMLInputElement>): void => {
-    let files = e.currentTarget.files! as FileList;
-    this.setState({ files: files } as any);
-  };
-
-  handleImageClear = (e: React.FormEvent<HTMLButtonElement>): void => {
-    const preview = document.getElementById('new-project-image-preview')!;
-    while (preview.firstChild) {
-      preview.removeChild(preview.firstChild);
-    }
-    this.setState({ files: null });
-    e.preventDefault();
-  };
-
+  // filter search from a dropdown
   filter = (filterId: string, elemByName: string) => {
     var filter, inputOptions;
     filter = (document.getElementById(
@@ -361,6 +342,7 @@ class AddProjectsPage extends React.Component<
   tagFilter = (e: React.KeyboardEvent<HTMLInputElement>): void => {
     e.persist();
     this.filter('tagSearch', 'tags');
+    // on 'enter', adds new tag to array in state if it doesnt already exist
     if (e.keyCode === 13) {
       var value = (document.getElementById('tagSearch')! as HTMLInputElement)
         .value;
@@ -373,14 +355,30 @@ class AddProjectsPage extends React.Component<
     this.filter('categorySearch', 'category');
   };
 
-  handleImageUpload = (e: React.FormEvent<HTMLButtonElement>): void => {
+  // opens initial file window to select images from local computer
+  // saves files to state
+  handleImageInitialBtn = (e: React.FormEvent<HTMLInputElement>): void => {
+    let files = e.currentTarget.files! as FileList;
+    this.setState({ files: files } as any);
+  };
+
+  // clears images from image preview section and state
+  handleImageClear = (e: React.FormEvent<HTMLButtonElement>): void => {
+    const preview = document.getElementById('new-project-image-preview')!;
+    while (preview.firstChild) {
+      preview.removeChild(preview.firstChild);
+    }
+    this.setState({ files: null });
+    e.preventDefault();
+  };
+
+  // renders images in the preview area
+  handleImagePreview = (e: React.FormEvent<HTMLButtonElement>): void => {
     // currently makes preview of images
     e.preventDefault();
     const preview = document.getElementById('new-project-image-preview')!;
-
     function readAndPreview(file: File) {
       var reader = new FileReader();
-
       reader.addEventListener(
         'load',
         function() {
@@ -389,7 +387,6 @@ class AddProjectsPage extends React.Component<
           image.src = reader.result;
           image.width = 130;
           image.height = 70;
-
           preview.appendChild(image);
         },
         false
@@ -489,7 +486,7 @@ class AddProjectsPage extends React.Component<
                   />
                 </div>
               </div>
-            </div>{' '}
+            </div>
             {/* end of box 1 A */}
             <div className="box-1-b">
               <label
@@ -592,10 +589,11 @@ class AddProjectsPage extends React.Component<
                   handleOptionRemoval={this.handleOptionRemoval}
                 />
               </div>
-            </div>{' '}
+            </div>
             {/* end of box 1 B */}
-          </div>{' '}
+          </div>
           {/* end of box 1 */}
+
           <div className="box-2">
             <div className="new-project-max-width new-project-lookingFor">
               <label
@@ -653,12 +651,12 @@ class AddProjectsPage extends React.Component<
                 name="projectImages"
                 className="uploadImageBtn"
                 multiple={false}
-                onChange={this.handleImageText}
+                onChange={this.handleImageInitialBtn}
               />
               <button
                 className="upload-img-btn"
                 type="submit"
-                onClick={this.handleImageUpload}
+                onClick={this.handleImagePreview}
               >
                 Upload Images
               </button>
