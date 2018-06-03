@@ -61,40 +61,40 @@ class AddProjectsPage extends React.Component<
     this.props.getTags();
     this.props.getAllUsers();
 
-    var id: string;
-
-    var getProjectById = () => {
-      return this.props.getOneProject(id);
-    };
-
-    // updates component state with currentProject's data
-    var setState = () => {
-      var project = this.props.currentProject!;
-      return this.setState(
-        {
-          name: project.name,
-          description: project.description,
-          dueDate: project.dueDate !== null ? project.dueDate.slice(0, 10) : '',
-          team: project.team,
-          githubLink: project.githubLink,
-          mockupLink: project.mockupLink,
-          liveLink: project.liveLink,
-          lookingFor: project.lookingFor,
-          status: project.status,
-          category: project.category,
-          tags: project.tags,
-          images: project.images,
-          contact: project.contact,
-          creator: project.creator,
-          categoryPlaceholder: 'Choose A Category',
-          tagPlaceholder: 'Choose Some Tags',
-          teamPlaceholder: 'Add Teammates',
-          statusPlaceholder: 'Status of Project',
-          preview: null,
-          files: null
-        },
-        () => {
-          // toggles roles checkbox per lookingFor array
+    // if there was an ID passed in with the url link
+    if (this.props.match.params.hasOwnProperty('id')) {
+      // call data of that one project
+      this.props
+        .getOneProject(this.props.match.params.id)
+        // then update state with requested project data
+        .then(() => {
+          var project = this.props.currentProject!;
+          this.setState({
+            name: project.name,
+            description: project.description,
+            dueDate:
+              project.dueDate !== null ? project.dueDate.slice(0, 10) : '',
+            team: project.team,
+            githubLink: project.githubLink,
+            mockupLink: project.mockupLink,
+            liveLink: project.liveLink,
+            lookingFor: project.lookingFor,
+            status: project.status,
+            category: project.category,
+            tags: project.tags,
+            images: project.images,
+            contact: project.contact,
+            creator: project.creator,
+            categoryPlaceholder: 'Choose A Category',
+            tagPlaceholder: 'Choose Some Tags',
+            teamPlaceholder: 'Add Teammates',
+            statusPlaceholder: 'Status of Project',
+            preview: null,
+            files: null
+          });
+        })
+        // then toggles roles checkbox per project lookingFor array
+        .then(() => {
           var p = document.getElementById(
             'new-project-role-p'
           )! as HTMLInputElement;
@@ -116,20 +116,7 @@ class AddProjectsPage extends React.Component<
               p.checked = true;
               break;
           }
-        }
-      );
-    };
-
-    async function callProjectAssignToState() {
-      // call data of that one project
-      await getProjectById();
-      // then update state with requested project data
-      await setState();
-    }
-
-    // if there was an ID passed in with the url link
-    if (this.props.match.params.hasOwnProperty('id')) {
-      callProjectAssignToState();
+        });
     }
   }
 
