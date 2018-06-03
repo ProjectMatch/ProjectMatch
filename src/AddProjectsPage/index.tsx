@@ -248,32 +248,19 @@ class AddProjectsPage extends React.Component<
     });
 
     this.setState({ lookingFor: lookingForArray }, () => {
-      const {
-        name,
-        dueDate,
-        team,
-        githubLink,
-        mockupLink,
-        liveLink,
-        lookingFor,
-        status,
-        category,
-        tags,
-        contact
-      } = this.state;
       var projectToCreateOrUpdate = {
-        name: name,
+        name: this.state.name,
         description: this.state.description,
-        dueDate: dueDate,
-        team: team,
-        githubLink: githubLink,
-        mockupLink: mockupLink,
-        liveLink: liveLink,
-        lookingFor: lookingFor,
-        status: status,
-        category: category,
-        tags: tags,
-        contact: contact,
+        dueDate: this.state.dueDate,
+        team: this.state.team,
+        githubLink: this.state.githubLink,
+        mockupLink: this.state.mockupLink,
+        liveLink: this.state.liveLink,
+        lookingFor: this.state.lookingFor,
+        status: this.state.status,
+        category: this.state.category,
+        tags: this.state.tags,
+        contact: this.state.contact,
         creator: this.props.user.username
       };
       // if this is an existing project, passes in the corresponding _id
