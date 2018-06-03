@@ -351,26 +351,24 @@ class AddProjectsPage extends React.Component<
     // currently makes preview of images
     e.preventDefault();
     const preview = document.getElementById('new-project-image-preview')!;
-    function readAndPreview(file: File) {
-      var reader = new FileReader();
-      reader.addEventListener(
-        'load',
-        function() {
-          var image = new Image();
-          image.title = file.name;
-          image.src = reader.result;
-          image.width = 130;
-          image.height = 70;
-          preview.appendChild(image);
-        },
-        false
-      );
-      reader.readAsDataURL(file);
-    }
 
     if (this.state.files) {
       for (var i = 0; i < this.state.files.length; i++) {
-        readAndPreview(this.state.files[i]);
+        let file = this.state.files[i];
+        var reader = new FileReader();
+        reader.addEventListener(
+          'load',
+          function() {
+            var image = new Image();
+            image.title = file.name;
+            image.src = reader.result;
+            image.width = 130;
+            image.height = 70;
+            preview.appendChild(image);
+          },
+          false
+        );
+        reader.readAsDataURL(file);
       }
     }
   };
