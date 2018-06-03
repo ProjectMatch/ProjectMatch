@@ -158,11 +158,10 @@ class AddProjectsPage extends React.Component<
   };
 
   // adds value to array only if it doesnt already include it
-  // save to state
-  saveArrayToState = (stateName: any, array: any, value: string) => {
-    if (array.includes(value.toLowerCase()) === false) {
-      array.push(value.toLowerCase());
-      return this.setState({ [stateName]: array });
+  addValueToStateArray = (arrayName: string, value: string) => {
+    if (!this.state[arrayName].includes(value.toLowerCase())) {
+      var newArray = this.state[arrayName].concat([value]);
+      this.setState({ [arrayName]: newArray } as any);
     }
   };
 
@@ -179,11 +178,11 @@ class AddProjectsPage extends React.Component<
         this.toggleDropdown(e, 'new-project-dropdown');
         break;
       case 'tags':
-        this.saveArrayToState('tags', this.state.tags!.slice(), value);
+        this.addValueToStateArray('tags', value);
         this.toggleDropdown(e, 'new-tags-dropdown');
         break;
       case 'team':
-        this.saveArrayToState('team', this.state.team!.slice(), value);
+        this.addValueToStateArray('team', value);
         this.toggleDropdown(e, 'new-team-dropdown');
         break;
       case 'status':
@@ -333,7 +332,7 @@ class AddProjectsPage extends React.Component<
     if (e.keyCode === 13) {
       var value = (document.getElementById('tagSearch')! as HTMLInputElement)
         .value;
-      this.saveArrayToState('tags', this.state.tags!.slice(), value);
+      this.addValueToStateArray('tags', value);
       this.toggleDropdown(e, 'new-tags-dropdown');
     }
   };
