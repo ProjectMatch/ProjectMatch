@@ -315,8 +315,9 @@ class AddProjectsPage extends React.Component<
   tagFilter = (e: React.KeyboardEvent<HTMLInputElement>): void => {
     e.persist();
     this.filter('tagSearch', 'tags');
+    const ENTER_KEY = 13;
     // on 'enter', adds new tag to array in state if it doesnt already exist
-    if (e.keyCode === 13) {
+    if (e.keyCode === ENTER_KEY) {
       var value = (document.getElementById('tagSearch')! as HTMLInputElement)
         .value;
       this.addValueToStateArray('tags', value);
