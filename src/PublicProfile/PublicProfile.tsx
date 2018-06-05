@@ -6,7 +6,6 @@ import config from '../.config';
 import './PublicProfile.css';
 // components
 import Footer from '../Footer/Footer';
-import HeaderContainer from '../Header/HeaderContainer';
 import RolesCheckmarks from './RolesCheckmarks';
 import SkillLabel from './SkillLabel';
 import UserProjects from './UserProjects';
@@ -71,7 +70,6 @@ class PublicProfile extends React.Component<
   render() {
     return (
       <div>
-        <HeaderContainer />
         <div className="public-profile-container">
           <div className="public-profile-user-data">
             <img

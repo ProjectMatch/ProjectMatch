@@ -6,7 +6,6 @@ import './SettingsPage.css';
 import PublicProfile from './PublicProfile';
 import PersonalDetails from './PersonalDetails';
 import ProjectSettings from './ProjectSettings';
-import HeaderContainer from '../Header/HeaderContainer';
 import Footer from '../Footer/Footer';
 // types
 import { Store, SettingsPageProps } from '../types/Redux';
@@ -76,7 +75,6 @@ class SettingsPage extends React.Component<SettingsPageProps, State> {
   render() {
     return (
       <div>
-        <HeaderContainer />
         <div className="settings-container">
           <div className="settings-menu-div">
             {this.state.loaderVisible ? (
