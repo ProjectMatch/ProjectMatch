@@ -4,7 +4,6 @@ var isAuthenticated = require('../utils/authentication');
 var mongoose = require('mongoose');
 var mongoosePaginate = require('mongoose-paginate');
 var Project = require('../models/Projects');
-var UserDetails = require('../models/UserDetails');
 var Comment = require('../models/Comments');
 var Revision = require('../models/Revisions');
 var Marker = require('../models/Markers');
@@ -390,11 +389,11 @@ module.exports = function(passport) {
           res.status(409);
         } else {
           // add project to user
-          UserDetails.findOneAndUpdate(
+          User.findOneAndUpdate(
             { username: req.params.username },
             {
               $push: {
-                projects: mongoose.Types.ObjectId(req.params.prpojectId)
+                projects: mongoose.Types.ObjectId(rseq.params.prpojectId)
               }
             },
             function(err, user) {
