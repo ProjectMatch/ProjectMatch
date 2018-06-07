@@ -1,8 +1,6 @@
-const express = require('express');
-const router = express.Router();
 const Tags = require('../models/Tags');
 
-router.get('/', function(req, res) {
+function getTags(req, res) {
   return Tags.find({}, function(err, tags) {
     if (err) {
       return res.json({ error: 'Error getting tags: ' + err });
@@ -11,9 +9,9 @@ router.get('/', function(req, res) {
       return res.json({ tags: tags, message: 'Successfully retrieved tags' });
     }
   });
-});
+}
 
-router.get('/setup', function(req, res) {
+function setupTags(req, res) {
   const tagArray = [
     'web app',
     'mobile app',
@@ -61,6 +59,9 @@ router.get('/setup', function(req, res) {
   }
 
   mapThenSaveTags();
-});
+}
 
-module.exports = router;
+module.exports = {
+  getTags,
+  setupTags
+};
