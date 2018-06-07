@@ -6,17 +6,11 @@ const session = require('express-session');
 const passport = require('./passport');
 const morgan = require('morgan');
 const config = require('./utils/config');
-const mongoose = require('mongoose');
 const apiRouter = require('./apiRouter');
-
+const connect = require('./db');
 const app = express();
 
-mongoose.connect(config.db.mlab, {
-  server: {
-    reconnectTries: Number.MAX_VALUE,
-    reconnectInterval: 1000
-  }
-});
+connect();
 
 app.use(
   cors({
