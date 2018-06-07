@@ -5,6 +5,23 @@ const Revision = require('../models/Revisions');
 const Marker = require('../models/Markers');
 const User = require('../models/Users');
 const config = require('../utils/config');
+const Project = require('../models/Projects');
+const Tags = require('../models/Tags');
+
+function saveTag(tagName) {
+  Tags.findOne({ tagName: tagName }, function(err, tag) {
+    if (err) {
+      console.log('Error in retrieving tag: ' + err);
+    } else if (!tag) {
+      const newTag = new Tags({ tagName: tagName });
+      newTag.save(function(err) {
+        if (err) {
+          console.log('Error in saving tag: ' + err);
+        }
+      });
+    }
+  });
+}
 
 function getProjects(req, res) {
   const query = req.body.query;
@@ -374,6 +391,91 @@ function addUserToTeam(req, req) {
   );
 }
 
+function addProject(req, res) {
+  const newProject = new Project();
+
+  newProject.name = req.body.name;
+  newProject.description = req.body.description;
+  newProject.dueDate = req.body.dueDate;
+  newProject.team = req.body.team;
+  newProject.githubLink = req.body.githubLink;
+  newProject.mockupLink = req.body.mockupLink;
+  newProject.liveLink = req.body.liveLink;
+  newProject.lookingFor = req.body.lookingFor;
+  newProject.status = req.body.status;
+  newProject.category = req.body.category;
+  newProject.tags = req.body.tags;
+  newProject.contact = req.body.contact;
+  newProject.creator = req.body.creator;
+
+  newProject.save(function(err, project) {
+    if (err) {
+      res.json({ error: 'Error in saving project: ' + err });
+    } else {
+      if (project.tags) {
+        project.tags.forEach(tag => {
+          saveTag(tag);
+        });
+      }
+      res.json({
+        message: 'New project saved successfully',
+        newProject: project
+      });
+    }
+  });
+}
+
+function updateProject(req, res) {
+  const projectId = req.params.id;
+  const updateBody = req.body;
+  updateBody.modifiedAt = Date.now();
+  delete updateBody._id;
+  delete updateBody.images;
+
+  Project.findOneAndUpdate(
+    { _id: projectId },
+    updateBody,
+    { new: true },
+    function(err, project) {
+      if (err) {
+        return res.json({ error: err });
+      } else if (!project) {
+        return res.json({ error: 'Project does not exist: ' + err });
+      } else {
+        if (project.tags) {
+          project.tags.forEach(tag => {
+            saveTag(tag);
+          });
+        }
+        res.json({
+          project: project,
+          message: 'Project saved successfully'
+        });
+      }
+    }
+  );
+}
+
+function deleteProject(req, res) {
+  console.log(req.body.id);
+  Project.findByIdAndRemove(req.body.id, function(err, project) {
+    if (err || !project) {
+      res.json({ error: 'Error in deleting project: ' + err });
+    } else {
+      Project.find({}, function(err, projects) {
+        if (err || !projects) {
+          res.json({ error: 'Error in finding projects: ' + err });
+        } else {
+          res.json({
+            message: 'Project successfully deleted',
+            project: projects
+          });
+        }
+      });
+    }
+  });
+}
+
 module.exports = {
   getProjects,
   getProject,
@@ -390,5 +492,8 @@ module.exports = {
   updateMarker,
   addCommentToMarker,
   getCommentsForMarker,
-  addUserToTeam
+  addUserToTeam,
+  addProject,
+  updateproject,
+  deleteProject
 };
