@@ -1,13 +1,13 @@
-var express = require('express');
-var router = express.Router();
-var isAuthenticated = require('../utils/authentication');
-var User = require('../models/Users');
-var UserDetails = require('../models/UserDetails');
+const express = require('express');
+const router = express.Router();
+const isAuthenticated = require('../utils/authentication');
+const User = require('../models/Users');
+const UserDetails = require('../models/UserDetails');
 
 module.exports = function(passport) {
   router.post('/public', isAuthenticated, function(req, res) {
-    var userId = req.body.userId;
-    var updateObject = req.body;
+    const userId = req.body.userId;
+    const updateObject = req.body;
     delete updateObject.userId;
 
     User.findOne({ _id: userId }, function(err, user) {
@@ -39,8 +39,8 @@ module.exports = function(passport) {
   });
 
   router.post('/personal', isAuthenticated, function(req, res) {
-    var userId = req.body.userId;
-    var updateObject = req.body;
+    const userId = req.body.userId;
+    const updateObject = req.body;
     delete updateObject.userId;
     console.log(updateObject);
 
