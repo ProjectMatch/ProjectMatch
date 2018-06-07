@@ -7,7 +7,7 @@ const s3 = new AWS.S3();
 AWS.config.update(aws_secret);
 
 // GET for profile image
-//@parms should send "userName" as a query parameter
+//@parms "userName" as a query parameter
 //@returns aws url
 router.get('/profile', function(req, res) {
   console.log('got the request for profile');
@@ -27,7 +27,7 @@ router.get('/profile', function(req, res) {
 });
 
 // GET for project images
-//@parms should send "projectId" as a query parameter
+//@parms "projectId" as a query parameter
 //@returns aws urls
 router.get('/project', function(req, res) {
   console.log('got the request for project');
@@ -61,7 +61,6 @@ router.get('/project', function(req, res) {
           if (err) {
             return reject(err);
           }
-          //console.log('the url of the image is', url);
           urls.push(url);
         });
       }
@@ -74,7 +73,6 @@ router.get('/project', function(req, res) {
     });
   };
 
-  // calls asynch functions for
   getListObject
     .then(function(data) {
       geturlsArry(data).then(function(urls) {

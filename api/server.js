@@ -28,12 +28,6 @@ const userUpdateRoute = require('./routes/userUpdate')(passport);
 const multer = require('multer');
 const multerS3 = require('multer-s3');
 
-// // Connect to DB-Local:
-// NOTE: Uncomment below line if you want to save data locally
-// mongoose.connect(config.db.local);
-
-// Connect to DB-Cloud
-// NOTE: Uncomment below line if you want to save data in the cloud(Mlab)
 mongoose.connect(config.db.mlab, {
   server: {
     reconnectTries: Number.MAX_VALUE,
@@ -87,15 +81,12 @@ app.use('/api/upload/image', imageRoute);
 app.use('/api/download', downloadImagesRoute);
 app.use('/api/email', sendEmailRoute);
 
-/// catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
 
-// development error handler
-// will print stacktrace
 if (app.get('env') === 'development') {
   app.use(function(err, req, res, next) {
     res.status(err.status || 500);

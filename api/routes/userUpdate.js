@@ -53,7 +53,6 @@ module.exports = function(passport) {
       } else if (!user) {
         return res.json({ error: 'User ' + userId + 'does not exist' });
       } else {
-        // once loop is done, retrieve the userDetails again
         return UserDetails.findOne({ username: user.username }, function(
           err,
           userDetail

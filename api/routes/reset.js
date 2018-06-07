@@ -7,7 +7,6 @@ const User = require('../models/Users');
 
 // This method will trigged after the user clicked the email link
 router.get('/:token', function(req, res) {
-  // console.log('token is ', req.params)
   // Checks if the token present and token not expired
   User.findOne(
     { resetToken: req.params.token, resetTokenExpires: { $gt: Date.now() } },

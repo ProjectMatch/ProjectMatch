@@ -3,8 +3,6 @@ const router = express.Router();
 const Tags = require('../models/Tags');
 
 router.get('/', function(req, res) {
-  // retrieve all items in the tags collection. receive tagName and array of projects involved
-  console.log('retrieving tags');
   return Tags.find({}, function(err, tags) {
     if (err) {
       return res.json({ error: 'Error getting tags: ' + err });

@@ -8,7 +8,6 @@ const { OAuth2Client } = require('google-auth-library');
 module.exports = function(passport) {
   /* GET login page. */
   router.get('/', function(req, res) {
-    // Display the Login page with any flash message, if any
     res.send('Welcome to the index page');
   });
 
@@ -156,7 +155,6 @@ module.exports = function(passport) {
                 }
               );
             } else {
-              // user not found, make new user and userDetails collection
               const newUser = new User();
               newUser.firstName = googlePayload.given_name;
               newUser.lastName = googlePayload.family_name;
@@ -166,7 +164,6 @@ module.exports = function(passport) {
               newUser.username =
                 googlePayload.given_name + '_' + googlePayload.family_name;
 
-              // save the user
               newUser.save(function(err, user) {
                 if (err) {
                   throw err;
@@ -181,7 +178,7 @@ module.exports = function(passport) {
                     if (err) {
                       throw err;
                     }
-                    // send back user and userDetails
+
                     req.logIn(user, function(err) {
                       if (err) {
                         return next(err);

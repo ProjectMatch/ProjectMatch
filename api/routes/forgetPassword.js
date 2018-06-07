@@ -5,13 +5,11 @@ const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const User = require('../models/Users');
 
-// TODO: Should be implemented
 router.get('/', function(req, res) {
   res.send('Forget Password');
 });
 
 router.post('/', function(req, res) {
-  // To make async functions in the serease;
   async.waterfall(
     [
       // this first method will create 20 char token
@@ -40,7 +38,7 @@ router.post('/', function(req, res) {
       },
       // sends password reset link with token to user email
       /**
-       * NOTE: change the port & secure if we changed to secure HTTPS connection
+       * TODO: change the port & secure if we changed to secure HTTPS connection
        */
       function(token, user, done) {
         // connect to mail provider with auth
@@ -56,9 +54,6 @@ router.post('/', function(req, res) {
         });
 
         // creates mail body
-        /**
-         * NOTE: Change the text later
-         */
         const mailOptions = {
           to: user.email,
           from: 'password@projectmatch.com',

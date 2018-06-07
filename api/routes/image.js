@@ -45,7 +45,6 @@ router.post('/profile', function(req, res) {
   const uploadingHandler = upload.single('image');
   uploadingHandler(req, res, function(err) {
     if (err) {
-      // file not uploaded to aws
       console.log(err);
       return res.json({
         error: 'Profile Image Upload not successfull ' + err.message
@@ -108,7 +107,6 @@ router.post('/project', function(req, res) {
   const uploadingHandler = upload.single('image');
   uploadingHandler(req, res, function(err) {
     if (err) {
-      // file not uploaded to aws
       console.log(err);
       return res.json({
         error: 'Image Upload not successfull ' + err.message
@@ -176,7 +174,6 @@ router.post('/revision', function(req, res) {
       const uploadingHandler = upload.single('image');
       uploadingHandler(req, res, function(err) {
         if (err) {
-          // file not uploaded to aws
           return res.send({
             error: 'Image Upload not successfull ' + err.message
           });

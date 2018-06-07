@@ -4,7 +4,6 @@ const isAuthenticated = require('../utils/authentication');
 const Project = require('../models/Projects');
 
 module.exports = function(passport) {
-  // delete a single project by id
   router.delete('/', isAuthenticated, function(req, res) {
     console.log(req.body.id);
     Project.findByIdAndRemove(req.body.id, function(err, project) {

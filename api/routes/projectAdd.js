@@ -6,9 +6,7 @@ const Tags = require('../models/Tags');
 const User = require('../models/Users');
 
 module.exports = function(passport) {
-  // add projects
   router.post('/', isAuthenticated, function(req, res) {
-    // create new project
     const newProject = new Project();
 
     newProject.name = req.body.name;
@@ -29,7 +27,6 @@ module.exports = function(passport) {
       if (err) {
         res.json({ error: 'Error in saving project: ' + err });
       } else {
-        // check through array of tags and save new ones in collection
         if (project.tags) {
           project.tags.forEach(tag => {
             saveTag(tag);
