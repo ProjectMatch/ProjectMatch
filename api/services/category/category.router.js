@@ -3,6 +3,6 @@ const router = express.Router();
 const controller = require('./category.controller');
 
 router.get('/', controller.getCategories);
-router.get('/setup', controller.setupCategories);
+router.get('/add', controller.addCategory);
 
 module.exports = router;
