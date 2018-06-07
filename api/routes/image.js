@@ -12,8 +12,8 @@ const s3 = new AWS.S3();
 
 const Projects = require('../models/Projects');
 const User = require('../models/Users');
-const UserDetails = require('../models/UserDetails');
 const Revisions = require('../models/Revisions');
+
 /**
  * FOR USER
  */
@@ -61,25 +61,12 @@ router.post('/profile', function(req, res) {
               error: 'Error in saving image urls to user: ' + err
             });
           } else {
-            UserDetails.findOne(
-              {
-                username: user.username
-              },
-              function(err, userDetail) {
-                if (err || !userDetail) {
-                  return res.json({
-                    error: 'Error in retreiving userDetails'
-                  });
-                } else {
-                  return res.json({
-                    user: user,
-                    userDetail: userDetail,
-                    imageURL: req.file.location,
-                    message: 'Successfully saved profile image'
-                  });
-                }
-              }
-            );
+            delete user.password;
+            return res.json({
+              user,
+              imageURL: req.file.location,
+              message: 'Successfully saved profile image'
+            });
           }
         }
       );

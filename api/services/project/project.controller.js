@@ -1,5 +1,4 @@
 const Project = require('../models/Projects');
-const UserDetails = require('../models/UserDetails');
 const Comment = require('../models/Comments');
 const Revision = require('../models/Revisions');
 const Marker = require('../models/Markers');
@@ -370,7 +369,7 @@ function addUserToTeam(req, req) {
         console.log(err);
         res.status(409);
       } else {
-        UserDetails.findOneAndUpdate(
+        User.findOneAndUpdate(
           { username: req.params.username },
           {
             $push: {

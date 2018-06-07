@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const isAuthenticated = require('../utils/authentication');
 const User = require('../models/Users');
-const UserDetails = require('../models/UserDetails');
 const { OAuth2Client } = require('google-auth-library');
 
 module.exports = function(passport) {
@@ -25,13 +24,13 @@ module.exports = function(passport) {
           if (err) {
             return next(err);
           }
-          const newUserDetails = new UserDetails({
+          const newUser = new User({
             _id: user._id,
             username: user.username
           });
-          newUserDetails.save(function(err, userDetail) {
+          newUser.save(function(err, userDetail) {
             if (err) {
-              console.log('Error in saving newUserDetails: ' + err);
+              console.log('Error in saving newUser: ' + err);
               throw err;
             }
             return res.json({
@@ -62,7 +61,7 @@ module.exports = function(passport) {
         if (err) {
           return next(err);
         }
-        UserDetails.findOne(
+        User.findOne(
           {
             username: user.username
           },
@@ -129,31 +128,11 @@ module.exports = function(passport) {
                 error: err
               });
             } else if (user) {
-              // existing user , send back existing user data
-              UserDetails.findOne(
-                {
-                  googleId: user.googleId
-                },
-                function(err, userDetail) {
-                  if (err) {
-                    return res.json({
-                      error: err
-                    });
-                  } else if (userDetail) {
-                    req.logIn(user, function(err) {
-                      if (err) {
-                        console.log(err);
-                        return next(err);
-                      }
-                      return res.json({
-                        user: user,
-                        userDetail: userDetail,
-                        message: 'Successfully logged in with Google'
-                      });
-                    });
-                  }
-                }
-              );
+              delete user.password;
+              return res.json({
+                user,
+                message: 'Successfully logged in with Google'
+              });
             } else {
               const newUser = new User();
               newUser.firstName = googlePayload.given_name;
@@ -168,13 +147,13 @@ module.exports = function(passport) {
                 if (err) {
                   throw err;
                 } else {
-                  const newUserDetails = new UserDetails({
+                  const newUser = new User({
                     googleId: googlePayload.userid,
                     username: newUser.username,
                     _id: newUser._id
                   });
 
-                  newUserDetails.save(function(err, userDetail) {
+                  newUser.save(function(err, userDetail) {
                     if (err) {
                       throw err;
                     }
