@@ -1,5 +1,20 @@
 const User = require('../models/Users');
 
+function getUsers(req, res) {
+  return User.find({}, function(err, users) {
+    if (err) {
+      return res.json({
+        error: 'Error in retrieving users: ' + err
+      });
+    } else {
+      return res.json({
+        users: users,
+        message: 'Successfully retrieved all users'
+      });
+    }
+  });
+}
+
 function getProfileImage(req, res) {
   User.findOne({ username: req.params.username }, function(err, user) {
     if (err) {
@@ -142,6 +157,7 @@ function updatePrivateDetails(req, res) {
 }
 
 module.exports = {
+  getUsers,
   getProfileImage,
   getProfile,
   deactivateUser,
