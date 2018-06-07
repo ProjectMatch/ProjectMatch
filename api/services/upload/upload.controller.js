@@ -1,22 +1,11 @@
-const express = require('express');
-
 const multer = require('multer');
 const multerS3 = require('multer-s3');
-// credentials from aws
 const aws_secret = require('../utils/s3_config.json');
-const router = express.Router();
 const AWS = require('aws-sdk');
-
 AWS.config.update(aws_secret);
 const s3 = new AWS.S3();
 
-/**
- * FOR USER
- */
-// Saves image to the /profile folder in the 'project-match' bucket
-// usage is post to /api/upload/profile?fileName=USERNAME
-// Html form should contain the image key "profile"
-router.post('/profile', function(req, res) {
+function uploadUserImage(req, res) {
   const upload = multer({
     storage: multerS3({
       s3: s3,
@@ -39,15 +28,9 @@ router.post('/profile', function(req, res) {
       res.json({ message: 'Uploaded profile image successfully' });
     }
   });
-});
+}
 
-/**
- * FOR PROJECT
- */
-// Saves MULTIPLE images to the /project folder in the 'project-match' bucket
-// usage is post to /api/upload/project?projectId=PROJECTID
-// Html form should contain the image key "projectImages"
-router.post('/project', function(req, res) {
+function uploadProjectImage(req, res) {
   const upload = multer({
     storage: multerS3({
       s3: s3,
@@ -84,6 +67,9 @@ router.post('/project', function(req, res) {
       res.json({ message: 'Uploaded project image successfully' });
     }
   });
-});
+}
 
-module.exports = router;
+module.exports = {
+  uploadUserImage,
+  uploadProjectImage
+};
