@@ -1,12 +1,9 @@
-const express = require('express');
 const mongoose = require('mongoose');
 const multer = require('multer');
 const multerS3 = require('multer-s3');
-// credentials from aws
-const aws_secret = require('../utils/s3_config.json');
-const router = express.Router();
-const AWS = require('aws-sdk');
 
+const AWS = require('aws-sdk');
+const aws_secret = require('../utils/s3_config.json');
 AWS.config.update(aws_secret);
 const s3 = new AWS.S3();
 
@@ -14,19 +11,7 @@ const Projects = require('../models/Projects');
 const User = require('../models/Users');
 const Revisions = require('../models/Revisions');
 
-/**
- * FOR USER
- */
-// Saves image to the /profile folder in the 'project-match' bucket
-// usage is post to /api/upload/profile?userName=USERNAME
-// Html form should contain the image key "image"
-/**
- * Retruns imageUrl if success
- * {
-    "imageURL": "https://project-match.s3.amazonaws.com/profile/chingu2"
-}
- */
-router.post('/profile', function(req, res) {
+function uploadProfileImage(req, res) {
   console.log('Posting to profile');
   let fileName = req.query.userName;
   console.log(fileName);
@@ -72,10 +57,9 @@ router.post('/profile', function(req, res) {
       );
     }
   });
-});
+}
 
-// NOTE: Should have "projectId"
-router.post('/project', function(req, res) {
+function uploadProjectImage(req, res) {
   console.log('Posting to project');
   let fileName = req.query.projectId;
   console.log(fileName);
@@ -124,10 +108,9 @@ router.post('/project', function(req, res) {
       );
     }
   });
-});
+}
 
-// NOTE: Should have "revisionId"
-router.post('/revision', function(req, res) {
+function uploadRevisionImage(req, res) {
   console.log('Posting to revision');
 
   const revision = new Revisions({
@@ -191,6 +174,10 @@ router.post('/revision', function(req, res) {
       });
     }
   });
-});
+}
 
-module.exports = router;
+module.exports = {
+  uploadProfileImage,
+  uploadProjectImage,
+  uploadRevisionImage
+};
