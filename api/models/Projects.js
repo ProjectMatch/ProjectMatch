@@ -1,7 +1,7 @@
-const Mongoose = require('mongoose');
+const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate');
 
-const Schema = Mongoose.Schema;
+const Schema = mongoose.Schema;
 const ProjectSchema = new Schema({
   name: { type: String },
   creator: { type: String }, // XXX: may want to use Users ref
@@ -25,6 +25,6 @@ const ProjectSchema = new Schema({
   revisions: [{ type: Schema.Types.ObjectId, ref: 'Revisions' }]
 });
 ProjectSchema.plugin(mongoosePaginate);
-const Projects = Mongoose.model('Projects', ProjectSchema);
+const Projects = mongoose.model('Projects', ProjectSchema);
 
 module.exports = Projects;

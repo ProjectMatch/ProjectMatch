@@ -1,6 +1,6 @@
-const Mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-const Schema = Mongoose.Schema;
+const Schema = mongoose.Schema;
 const CommentsSchema = new Schema({
   project: { type: Schema.Types.ObjectId, ref: 'Projects' },
   marker: { type: Schema.Types.ObjectId, ref: 'Markers' },
@@ -8,6 +8,6 @@ const CommentsSchema = new Schema({
   comment: { type: String },
   createdAt: { type: Date, default: Date.now }
 });
-const Comments = Mongoose.model('Comments', CommentsSchema);
+const Comments = mongoose.model('Comments', CommentsSchema);
 
 module.exports = Comments;

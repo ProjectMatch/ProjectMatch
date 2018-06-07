@@ -1,6 +1,6 @@
-const Mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-const Schema = Mongoose.Schema;
+const Schema = mongoose.Schema;
 const RevisionSchema = new Schema({
   revisionNumber: { type: String },
   finalVersion: { type: Boolean, default: false },
@@ -11,6 +11,6 @@ const RevisionSchema = new Schema({
   project: { type: Schema.Types.ObjectId, ref: 'Projects' },
   description: { type: String, default: '' }
 });
-const Revisions = Mongoose.model('Revisions', RevisionSchema);
+const Revisions = mongoose.model('Revisions', RevisionSchema);
 
 module.exports = Revisions;
