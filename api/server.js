@@ -3,11 +3,10 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const session = require('express-session');
-const passport = require('passport');
+const passport = require('./passport');
 const morgan = require('morgan');
 const config = require('./utils/config');
 const mongoose = require('mongoose');
-const initPassport = require('./passport/init');
 const apiRouter = require('./apiRouter');
 
 const app = express();
@@ -43,10 +42,8 @@ app.use(
   })
 );
 
-// Initialize Passport
 app.use(passport.initialize());
 app.use(passport.session());
-initPassport(passport);
 
 // Router
 app.use('/api', apiRouter);
