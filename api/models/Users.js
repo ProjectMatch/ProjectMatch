@@ -1,6 +1,8 @@
-var Mongoose = require('mongoose');
+const Mongoose = require('mongoose');
+const bcrypt = require('bcrypt-nodejs');
 
 const Schema = Mongoose.Schema;
+
 const UserSchema = new Schema({
   firstName: { type: String },
   lastName: { type: String },
@@ -25,6 +27,13 @@ const UserSchema = new Schema({
   twitterLink: { type: String, default: '' },
   blogLink: { type: String, default: '' }
 });
+
+UserSchema.pre('save', function(next) {
+  const hash = bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
+  this.password = hash;
+  next();
+});
+
 const Users = Mongoose.model('Users', UserSchema);
 
 module.exports = Users;
