@@ -14,10 +14,14 @@ function getCategories(req, res) {
 }
 
 function addCategory(name) {
-  const newCategory = new Categories({ categoryName: name });
+  const newCategory = new Categories({ name });
   newCategory.save(function(err) {
     if (err) {
       res.json({ error: 'Error in saving category: ' + category });
+    } else {
+      return res.json({
+        message: 'Successfully added category'
+      });
     }
   });
 }
