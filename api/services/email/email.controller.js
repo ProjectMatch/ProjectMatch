@@ -1,11 +1,9 @@
-const express = require('express');
-const router = express.Router();
 const nodemailer = require('nodemailer');
 const Project = require('../models/Projects');
 const User = require('../models/Users');
 const config = require('../utils/config');
 
-router.post('/', function(req, res) {
+function sendRequestToJoinTeam(req, res) {
   const link = req.body.link;
   const sender = req.body.username;
   const projectName = req.body.projectName;
@@ -61,6 +59,8 @@ router.post('/', function(req, res) {
       );
     }
   });
-});
+}
 
-module.exports = router;
+module.exports = {
+  sendRequestToJoinTeam
+};
