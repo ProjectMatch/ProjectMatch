@@ -13,7 +13,8 @@ function getCategories(req, res) {
   });
 }
 
-function addCategory(name) {
+function addCategory(req, res) {
+  const name = req.body.name;
   const newCategory = new Categories({ name });
   newCategory.save(function(err) {
     if (err) {
