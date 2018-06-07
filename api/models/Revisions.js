@@ -1,8 +1,7 @@
-var Mongoose = require('mongoose');
+const Mongoose = require('mongoose');
 
-var Schema = Mongoose.Schema;
-
-var RevisionSchema = new Schema({
+const Schema = Mongoose.Schema;
+const RevisionSchema = new Schema({
   revisionNumber: { type: String },
   finalVersion: { type: Boolean, default: false },
   imageURL: { type: String, default: '' },
@@ -12,7 +11,6 @@ var RevisionSchema = new Schema({
   project: { type: Schema.Types.ObjectId, ref: 'Projects' },
   description: { type: String, default: '' }
 });
-
-var Revisions = Mongoose.model('Revisions', RevisionSchema);
+const Revisions = Mongoose.model('Revisions', RevisionSchema);
 
 module.exports = Revisions;

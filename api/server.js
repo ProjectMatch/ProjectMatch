@@ -1,5 +1,5 @@
 const express = require('express');
-var path = require('path');
+const path = require('path');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
@@ -10,23 +10,23 @@ const config = require('./utils/config');
 const app = express();
 const mongoose = require('mongoose');
 const initPassport = require('./passport/init');
-var routes = require('./routes/index')(passport);
-var forgetPasswordRout = require('./routes/forgetPassword');
-var passwordResetRout = require('./routes/reset');
-var projectsRoute = require('./routes/project')(passport);
-var projectsAddRoute = require('./routes/project_add')(passport);
-var projectsUpdateRoute = require('./routes/project_update')(passport);
-var projectsDeleteRoute = require('./routes/project_delete')(passport);
-var tagRoute = require('./routes/tag');
-var categoryRoute = require('./routes/category');
-var uploadImagesRoute = require('./routes/upload');
-var downloadImagesRoute = require('./routes/download');
-var imageRoute = require('./routes/image');
-var sendEmailRoute = require('./routes/sendEmail');
-var userRoute = require('./routes/users')(passport);
-var userUpdateRoute = require('./routes/user_update')(passport);
-var multer = require('multer');
-var multerS3 = require('multer-s3');
+const routes = require('./routes/index')(passport);
+const forgetPasswordRout = require('./routes/forgetPassword');
+const passwordResetRout = require('./routes/reset');
+const projectsRoute = require('./routes/project')(passport);
+const projectsAddRoute = require('./routes/project_add')(passport);
+const projectsUpdateRoute = require('./routes/project_update')(passport);
+const projectsDeleteRoute = require('./routes/project_delete')(passport);
+const tagRoute = require('./routes/tag');
+const categoryRoute = require('./routes/category');
+const uploadImagesRoute = require('./routes/upload');
+const downloadImagesRoute = require('./routes/download');
+const imageRoute = require('./routes/image');
+const sendEmailRoute = require('./routes/sendEmail');
+const userRoute = require('./routes/users')(passport);
+const userUpdateRoute = require('./routes/user_update')(passport);
+const multer = require('multer');
+const multerS3 = require('multer-s3');
 
 // // Connect to DB-Local:
 // NOTE: Uncomment below line if you want to save data locally
@@ -36,9 +36,7 @@ var multerS3 = require('multer-s3');
 // NOTE: Uncomment below line if you want to save data in the cloud(Mlab)
 mongoose.connect(config.db.mlab, {
   server: {
-    // sets how many times to try reconnecting
     reconnectTries: Number.MAX_VALUE,
-    // sets the delay between every retry (milliseconds)
     reconnectInterval: 1000
   }
 });

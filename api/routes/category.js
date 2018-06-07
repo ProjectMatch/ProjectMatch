@@ -1,9 +1,9 @@
-var express = require('express');
-var router = express.Router();
-var Categories = require('../models/Categories');
+const express = require('express');
+const Categories = require('../models/Categories');
+
+const router = express.Router();
 
 router.get('/', function(req, res) {
-  // retrieve all items in the categories collection. receive tagName and array of projects involved
   return Categories.find({}, function(err, categories) {
     if (err) {
       return res.json({ error: 'Error getting categories: ' + err });
@@ -17,7 +17,7 @@ router.get('/', function(req, res) {
 });
 
 router.get('/setup', function(req, res) {
-  var categoryArray = [
+  const categoryArray = [
     'Educational',
     'Fun',
     'News & Weather',
@@ -32,7 +32,7 @@ router.get('/setup', function(req, res) {
   ];
 
   saveNewCategories = categoryName => {
-    var newCategory = new Categories({ categoryName: categoryName });
+    const newCategory = new Categories({ categoryName: categoryName });
     newCategory.save(function(err) {
       if (err) {
         res.json({ error: 'Error in saving category: ' + category });

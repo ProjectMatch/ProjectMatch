@@ -1,16 +1,16 @@
-var express = require('express');
-var router = express.Router();
-var nodemailer = require('nodemailer');
-var Project = require('../models/Projects');
-var User = require('../models/Users');
-var config = require('../utils/config');
+const express = require('express');
+const router = express.Router();
+const nodemailer = require('nodemailer');
+const Project = require('../models/Projects');
+const User = require('../models/Users');
+const config = require('../utils/config');
 
 router.post('/', function(req, res) {
-  let link = req.body.link;
-  let sender = req.body.username;
-  let projectName = req.body.projectName;
-  let projectId = req.body.projectId;
-  let interestedParty = req.body.username;
+  const link = req.body.link;
+  const sender = req.body.username;
+  const projectName = req.body.projectName;
+  const projectId = req.body.projectId;
+  const interestedParty = req.body.username;
 
   Project.findById(projectId, function(err, project) {
     if (err) {
@@ -24,9 +24,9 @@ router.post('/', function(req, res) {
           if (err) {
             res.send(409);
           } else {
-            var to = user.email;
+            const to = user.email;
 
-            let smtpTransport = nodemailer.createTransport({
+            const smtpTransport = nodemailer.createTransport({
               host: 'smtp.sendgrid.net',
               port: 587,
               secure: false, // true for 465, false for other ports
@@ -37,7 +37,7 @@ router.post('/', function(req, res) {
               }
             });
 
-            var mailOptions = {
+            const mailOptions = {
               to: to,
               from: 'join_request@projectmatch.me',
               subject: 'Project Match - Join Request',

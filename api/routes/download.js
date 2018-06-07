@@ -1,9 +1,10 @@
-var express = require('express');
-var aws_secret = require('../utils/s3_config.json');
-var AWS = require('aws-sdk');
-var router = express.Router();
+const express = require('express');
+const aws_secret = require('../utils/s3_config.json');
+const AWS = require('aws-sdk');
+const router = express.Router();
+const s3 = new AWS.S3();
+
 AWS.config.update(aws_secret);
-var s3 = new AWS.S3();
 
 // GET for profile image
 //@parms should send "userName" as a query parameter
@@ -11,7 +12,7 @@ var s3 = new AWS.S3();
 router.get('/profile', function(req, res) {
   console.log('got the request for profile');
 
-  var urlParams = {
+  const urlParams = {
     Bucket: 'project-match',
     Key: 'profile/' + req.query.userName
   };
@@ -31,9 +32,9 @@ router.get('/profile', function(req, res) {
 router.get('/project', function(req, res) {
   console.log('got the request for project');
 
-  var getListObject = new Promise(function(resolve, reject) {
+  const getListObject = new Promise(function(resolve, reject) {
     console.log('getListObject()');
-    var params = {
+    const params = {
       Bucket: 'project-match',
       Delimiter: '/',
       Prefix: 'project/' + req.query.projectId + '/'
@@ -48,14 +49,14 @@ router.get('/project', function(req, res) {
     });
   });
 
-  var geturlsArry = function(data) {
+  const geturlsArry = function(data) {
     return new Promise(function(resolve, reject) {
       console.log('geturlsArry()');
 
-      var urls = [];
+      const urls = [];
 
-      for (var i = 0; i < data.length; i++) {
-        var urlParams = { Bucket: 'project-match', Key: data[i].Key };
+      for (const i = 0; i < data.length; i++) {
+        const urlParams = { Bucket: 'project-match', Key: data[i].Key };
         s3.getSignedUrl('getObject', urlParams, function(err, url) {
           if (err) {
             return reject(err);

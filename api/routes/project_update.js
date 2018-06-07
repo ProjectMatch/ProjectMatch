@@ -1,15 +1,15 @@
-var express = require('express');
-var router = express.Router();
-var isAuthenticated = require('../utils/authentication');
-var Project = require('../models/Projects');
-var Tags = require('../models/Tags');
-var User = require('../models/Users');
+const express = require('express');
+const router = express.Router();
+const isAuthenticated = require('../utils/authentication');
+const Project = require('../models/Projects');
+const Tags = require('../models/Tags');
+const User = require('../models/Users');
 
 module.exports = function(passport) {
   // update project
   router.post('/:id', isAuthenticated, function(req, res) {
-    var projectId = req.params.id;
-    var updateBody = req.body;
+    const projectId = req.params.id;
+    const updateBody = req.body;
     updateBody.modifiedAt = Date.now();
     delete updateBody._id;
     delete updateBody.images;
@@ -47,7 +47,7 @@ saveTag = tagName => {
     if (err) {
       console.log('Error in retrieving tag: ' + err);
     } else if (!tag) {
-      var newTag = new Tags({ tagName: tagName });
+      const newTag = new Tags({ tagName: tagName });
       newTag.save(function(err) {
         if (err) {
           console.log('Error in saving tag: ' + err);

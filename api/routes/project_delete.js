@@ -1,7 +1,7 @@
-var express = require('express');
-var router = express.Router();
-var isAuthenticated = require('../utils/authentication');
-var Project = require('../models/Projects');
+const express = require('express');
+const router = express.Router();
+const isAuthenticated = require('../utils/authentication');
+const Project = require('../models/Projects');
 
 module.exports = function(passport) {
   // delete a single project by id

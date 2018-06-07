@@ -1,14 +1,14 @@
-var express = require('express');
+const express = require('express');
 
-var multer = require('multer');
-var multerS3 = require('multer-s3');
+const multer = require('multer');
+const multerS3 = require('multer-s3');
 // credentials from aws
-var aws_secret = require('../utils/s3_config.json');
-var router = express.Router();
-var AWS = require('aws-sdk');
+const aws_secret = require('../utils/s3_config.json');
+const router = express.Router();
+const AWS = require('aws-sdk');
 
 AWS.config.update(aws_secret);
-var s3 = new AWS.S3();
+const s3 = new AWS.S3();
 
 /**
  * FOR USER
@@ -17,7 +17,7 @@ var s3 = new AWS.S3();
 // usage is post to /api/upload/profile?fileName=USERNAME
 // Html form should contain the image key "profile"
 router.post('/profile', function(req, res) {
-  var upload = multer({
+  const upload = multer({
     storage: multerS3({
       s3: s3,
       bucket: 'project-match/profile',
@@ -28,7 +28,7 @@ router.post('/profile', function(req, res) {
     })
   });
 
-  var uploadingHandler = upload.single('profile');
+  const uploadingHandler = upload.single('profile');
   uploadingHandler(req, res, function(err) {
     if (err) {
       // file not uploaded to aws
@@ -48,7 +48,7 @@ router.post('/profile', function(req, res) {
 // usage is post to /api/upload/project?projectId=PROJECTID
 // Html form should contain the image key "projectImages"
 router.post('/project', function(req, res) {
-  var upload = multer({
+  const upload = multer({
     storage: multerS3({
       s3: s3,
       bucket: 'project-match/project/' + req.query.projectId,
@@ -58,7 +58,7 @@ router.post('/project', function(req, res) {
         cb(null, { fieldName: file.fieldname });
       },
       key: function(req, file, cb) {
-        var name = Date.now().toString();
+        const name = Date.now().toString();
         switch (file.mimetype) {
           case 'image/jpeg':
             name += '.jpeg';
@@ -71,7 +71,7 @@ router.post('/project', function(req, res) {
   });
 
   // .array uploads multiple images
-  var uploadingHandler = upload.array('projectImages');
+  const uploadingHandler = upload.array('projectImages');
 
   uploadingHandler(req, res, function(err) {
     if (err) {

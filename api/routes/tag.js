@@ -1,6 +1,6 @@
-var express = require('express');
-var router = express.Router();
-var Tags = require('../models/Tags');
+const express = require('express');
+const router = express.Router();
+const Tags = require('../models/Tags');
 
 router.get('/', function(req, res) {
   // retrieve all items in the tags collection. receive tagName and array of projects involved
@@ -16,7 +16,7 @@ router.get('/', function(req, res) {
 });
 
 router.get('/setup', function(req, res) {
-  var tagArray = [
+  const tagArray = [
     'web app',
     'mobile app',
     'machine learning',
@@ -41,7 +41,7 @@ router.get('/setup', function(req, res) {
   ];
 
   saveNewTag = tagName => {
-    var newTag = new Tags({ tagName: tagName });
+    const newTag = new Tags({ tagName: tagName });
     newTag.save(function(err) {
       if (err) {
         console.log('Error in saving tag: ' + err);
