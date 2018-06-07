@@ -1,2 +1,2 @@
-const imageRouter = require('./auth.router');
+const imageRouter = require('./image.router');
 module.exports = imageRouter;
