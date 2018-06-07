@@ -3,6 +3,25 @@ const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const User = require('../models/Users');
 
+function tokenIsExpired(req, res) {
+  // Checks if the token present and token not expired
+  User.findOne(
+    { resetToken: req.params.token, resetTokenExpires: { $gt: Date.now() } },
+    function(err, user) {
+      if (!user) {
+        console.log('error', 'Password reset token is invalid or has expired.');
+        return done({
+          error: 'Password reset token is invalid or has expired.'
+        });
+      }
+      // TODO: Should Create a reset page to give new password
+      delete user.password;
+      console.log({ user: user });
+      res.send({ user: user });
+    }
+  );
+}
+
 function resetPassword(req, res) {
   async.waterfall(
     [
@@ -79,4 +98,4 @@ function resetPassword(req, res) {
   );
 }
 
-module.exports = { resetPassword };
+module.exports = { resetPassword, tokenIsExpired };
