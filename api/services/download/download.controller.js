@@ -1,15 +1,9 @@
-const express = require('express');
 const aws_secret = require('../utils/s3_config.json');
 const AWS = require('aws-sdk');
-const router = express.Router();
+AWS.config.update(aws_secret);
 const s3 = new AWS.S3();
 
-AWS.config.update(aws_secret);
-
-// GET for profile image
-//@parms "userName" as a query parameter
-//@returns aws url
-router.get('/profile', function(req, res) {
+function getProfileImage(req, res) {
   console.log('got the request for profile');
 
   const urlParams = {
@@ -24,12 +18,9 @@ router.get('/profile', function(req, res) {
     console.log('the url of the image is', url);
     res.json({ url: url, message: 'Successfully retrieved profile image URL' });
   });
-});
+}
 
-// GET for project images
-//@parms "projectId" as a query parameter
-//@returns aws urls
-router.get('/project', function(req, res) {
+function getProjectImages(req, res) {
   console.log('got the request for project');
 
   const getListObject = new Promise(function(resolve, reject) {
@@ -85,6 +76,9 @@ router.get('/project', function(req, res) {
     .catch(function(err) {
       res.json({ error: err });
     });
-});
+}
 
-module.exports = router;
+module.exports = {
+  getProfileImage,
+  getProjectImages
+};
