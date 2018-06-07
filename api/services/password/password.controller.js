@@ -1,15 +1,9 @@
-const express = require('express');
-const router = express.Router();
 const async = require('async');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const User = require('../models/Users');
 
-router.get('/', function(req, res) {
-  res.send('Forget Password');
-});
-
-router.post('/', function(req, res) {
+function resetPassword(req, res) {
   async.waterfall(
     [
       // this first method will create 20 char token
@@ -83,5 +77,6 @@ router.post('/', function(req, res) {
       res.send('Password reset successfull');
     }
   );
-});
-module.exports = router;
+}
+
+module.exports = { resetPassword };
