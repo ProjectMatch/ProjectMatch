@@ -56,40 +56,39 @@ function signup(req, res) {
   );
 }
 
+async function verifyOAuthToken(client, clientId, idToken) {
+  // REF: https://developers.google.com/identity/sign-in/web/backend-auth
+  const ticket = await client.verifyIdToken({
+    idToken: idToken,
+    audience: clientId
+  });
+
+  const payload = ticket.getPayload();
+
+  const userid = payload['sub'];
+  const email = payload['email'];
+  const givenName = payload['given_name'];
+  const familyName = payload['family_name'];
+  const profilePic = payload['picture'];
+  const username = givenName + '_' + familyName;
+
+  return {
+    userid,
+    email,
+    givenName,
+    familyName,
+    profilePic,
+    username
+  };
+}
+
 function googleSignin(req, res) {
   const CLIENT_ID =
     '634604962663-247j6obodp1clln54de1469euufj6vdj.apps.googleusercontent.com';
   const client = new OAuth2Client(CLIENT_ID);
+  const idToken = req.body.idToken;
 
-  let idToken = req.body.idToken;
-
-  // https://developers.google.com/identity/sign-in/web/backend-auth
-  // verify tokenID
-  async function verify() {
-    const ticket = await client.verifyIdToken({
-      idToken: idToken,
-      audience: CLIENT_ID
-    });
-    let payload = ticket.getPayload();
-    let userid = payload['sub'];
-    let email = payload['email'];
-    let given_name = payload['given_name'];
-    let family_name = payload['family_name'];
-    let profilePic = payload['picture'];
-    let username = given_name + '_' + family_name;
-
-    let returnedObject = {
-      userid: userid,
-      email: email,
-      given_name: given_name,
-      family_name: family_name,
-      profilePic: profilePic,
-      username: username
-    };
-    return returnedObject;
-  }
-  // verify token ID
-  verify()
+  verifyOAuthToken(client, CLIENT_ID, idToken)
     .then(function(googlePayload) {
       return User.findOne(
         {
@@ -97,8 +96,9 @@ function googleSignin(req, res) {
         },
         function(err, user) {
           if (err) {
+            console.error(err);
             return res.json({
-              error: err
+              message: 'Google sign in error'
             });
           } else if (user) {
             delete user.password;
@@ -108,39 +108,24 @@ function googleSignin(req, res) {
             });
           } else {
             const newUser = new User();
-            newUser.firstName = googlePayload.given_name;
-            newUser.lastName = googlePayload.family_name;
+            newUser.firstName = googlePayload.givenName;
+            newUser.lastName = googlePayload.familyName;
             newUser.email = googlePayload.email;
             newUser.profileImage = googlePayload.profilePic;
             newUser.googleId = googlePayload.userid;
             newUser.username =
-              googlePayload.given_name + '_' + googlePayload.family_name;
+              googlePayload.givenName + '_' + googlePayload.familyName;
 
             newUser.save(function(err, user) {
               if (err) {
                 throw err;
               } else {
-                const newUser = new User({
-                  googleId: googlePayload.userid,
-                  username: newUser.username,
-                  _id: newUser._id
-                });
+                req.login(newUser);
+                delete user.password;
 
-                newUser.save(function(err, userDetail) {
-                  if (err) {
-                    throw err;
-                  }
-
-                  req.logIn(user, function(err) {
-                    if (err) {
-                      return next(err);
-                    }
-                    return res.json({
-                      user: user,
-                      userDetail: userDetail,
-                      message: 'Sucessfully registered with Google'
-                    });
-                  });
+                return res.json({
+                  user,
+                  message: 'Successfully signed up with Google.'
                 });
               }
             });
