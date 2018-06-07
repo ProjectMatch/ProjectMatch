@@ -1,74 +1,59 @@
+const passport = require('../../passport');
 const User = require('../models/Users');
 const { OAuth2Client } = require('google-auth-library');
 
-function signup(req, res) {
-  passport.authenticate('signup', function(err, user, info) {
-    if (err) {
-      return next(err);
-    } else if (!user) {
-      return res.json({
-        error: info.message
-      });
-    } else {
-      req.logIn(user, function(err) {
-        if (err) {
-          return next(err);
-        }
-        const newUser = new User({
-          _id: user._id,
-          username: user.username
-        });
-        newUser.save(function(err, userDetail) {
-          if (err) {
-            console.log('Error in saving newUser: ' + err);
-            throw err;
-          }
-          return res.json({
-            user: user,
-            userDetail: userDetail,
-            message: info.message
-          });
-        });
-      });
-    }
-  })(req, res, next);
+function login(req, res) {
+  res.json({
+    message: 'Successfully logged in.'
+  });
 }
 
-function login(req, res) {
-  passport.authenticate('login', function(err, user, info) {
-    if (err) {
-      return res.json({
-        error: err
-      });
-    }
-    if (!user) {
-      return res.json({
-        message: info.message
-      });
-    }
-    req.logIn(user, function(err) {
+function logout(req, res) {
+  req.logout();
+  res.json({
+    message: 'Successfully logged out.'
+  });
+}
+
+function signup(req, res) {
+  User.findOne(
+    { $or: [{ email: req.body.email }, { username: req.body.username }] },
+    function(err, user) {
       if (err) {
-        return next(err);
+        console.error(err);
+        res.json({
+          message: 'Error signing up.'
+        });
       }
-      User.findOne(
-        {
-          username: user.username
-        },
-        function(err, userDetail) {
+      if (user) {
+        res.json({
+          message: 'User already exists with this email or username.'
+        });
+      } else {
+        const newUser = new User();
+        newUser.username = req.body.username;
+        newUser.password = req.body.password;
+        newUser.email = req.body.email;
+        newUser.firstName = req.body.firstName;
+        newUser.lastName = req.body.lastName;
+
+        newUser.save(function(err, newUser) {
           if (err) {
-            return res.json({
-              error: err
-            });
+            throw err;
           }
+
+          req.login(newUser);
+
+          delete newUser.password;
+
           return res.json({
-            user: user,
-            userDetail: userDetail,
-            message: info.message
+            user: newUser,
+            message: 'Successfully signed up.'
           });
-        }
-      );
-    });
-  })(req, res, next);
+        });
+      }
+    }
+  );
 }
 
 function googleSignin(req, res) {
@@ -164,13 +149,6 @@ function googleSignin(req, res) {
       );
     })
     .catch(console.error);
-}
-
-function logout(req, res) {
-  req.logout();
-  res.json({
-    message: 'Successfully Logged Out'
-  });
 }
 
 module.exports = {
