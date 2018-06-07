@@ -1,5 +1,4 @@
 const express = require('express');
-const path = require('path');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
@@ -7,26 +6,11 @@ const session = require('express-session');
 const passport = require('passport');
 const morgan = require('morgan');
 const config = require('./utils/config');
-const app = express();
 const mongoose = require('mongoose');
 const initPassport = require('./passport/init');
-const routes = require('./routes/index')(passport);
-const forgetPasswordRout = require('./routes/forgetPassword');
-const passwordResetRout = require('./routes/reset');
-const projectsRoute = require('./routes/project')(passport);
-const projectsAddRoute = require('./routes/projectAdd')(passport);
-const projectsUpdateRoute = require('./routes/projectUpdate')(passport);
-const projectsDeleteRoute = require('./routes/projectDelete')(passport);
-const tagRoute = require('./routes/tag');
-const categoryRoute = require('./routes/category');
-const uploadImagesRoute = require('./routes/upload');
-const downloadImagesRoute = require('./routes/download');
-const imageRoute = require('./routes/image');
-const sendEmailRoute = require('./routes/sendEmail');
-const userRoute = require('./routes/users')(passport);
-const userUpdateRoute = require('./routes/userUpdate')(passport);
-const multer = require('multer');
-const multerS3 = require('multer-s3');
+const apiRouter = require('./apiRouter');
+
+const app = express();
 
 mongoose.connect(config.db.mlab, {
   server: {
@@ -46,7 +30,6 @@ app.use(
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public')));
 app.use(cookieParser());
 app.use(
   session({
@@ -65,27 +48,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 initPassport(passport);
 
-// for using routs
-app.use('/api', routes);
-app.use('/api/forgot', forgetPasswordRout);
-app.use('/api/reset', passwordResetRout);
-app.use('/api/user/update', userUpdateRoute);
-app.use('/api/user', userRoute);
-app.use('/api/projects/tags', tagRoute);
-app.use('/api/projects/categories', categoryRoute);
-app.use('/api/projects', projectsRoute);
-app.use('/api/projects/add', projectsAddRoute);
-app.use('/api/projects/update', projectsUpdateRoute);
-app.use('/api/projects/delete', projectsDeleteRoute);
-app.use('/api/upload/image', imageRoute);
-app.use('/api/download', downloadImagesRoute);
-app.use('/api/email', sendEmailRoute);
-
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
-});
+// Router
+app.use('/api', apiRouter);
 
 if (app.get('env') === 'development') {
   app.use(function(err, req, res, next) {
