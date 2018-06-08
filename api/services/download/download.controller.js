@@ -17,13 +17,34 @@ function getProfileImage(req, res) {
   });
 }
 
+function getURLArray(data) {
+  return new Promise(function(resolve, reject) {
+    const urls = [];
+
+    for (let i = 0; i < data.length; i++) {
+      let urlParams = { Bucket: 'project-match', Key: data[i].Key };
+      s3.getSignedUrl('getObject', urlParams, function(err, url) {
+        if (err) {
+          return reject(err);
+        }
+        urls.push(url);
+      });
+    }
+
+    if (urls.length === data.length) {
+      resolve(urls);
+    }
+  });
+}
+
 function getProjectImages(req, res) {
-  const getListPromise = new Promise(function(resolve, reject) {
+  const getDataFromBucket = new Promise(function(resolve, reject) {
     const params = {
       Bucket: 'project-match',
       Delimiter: '/',
       Prefix: 'project/' + req.query.projectId + '/'
     };
+
     s3.listObjects(params, function(err, data) {
       if (err) {
         reject(err);
@@ -32,27 +53,7 @@ function getProjectImages(req, res) {
     });
   });
 
-  const getURLArray = function(data) {
-    return new Promise(function(resolve, reject) {
-      const urls = [];
-
-      for (let i = 0; i < data.length; i++) {
-        let urlParams = { Bucket: 'project-match', Key: data[i].Key };
-        s3.getSignedUrl('getObject', urlParams, function(err, url) {
-          if (err) {
-            return reject(err);
-          }
-          urls.push(url);
-        });
-      }
-
-      if (urls.length === data.length) {
-        resolve(urls);
-      }
-    });
-  };
-
-  getListPromise
+  getDataFromBucket
     .then(function(data) {
       getURLArray(data).then(function(urls) {
         res.json({
