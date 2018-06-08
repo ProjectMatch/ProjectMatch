@@ -1,7 +1,9 @@
 const User = require('../models/Users');
 
 function getUsers(req, res) {
-  return User.find({}, function(err, users) {
+  const conditions = {};
+
+  return User.find(conditions, function(err, users) {
     if (err) {
       return res.json({
         error: 'Error in retrieving users: ' + err
@@ -16,7 +18,9 @@ function getUsers(req, res) {
 }
 
 function getProfileImage(req, res) {
-  User.findOne({ username: req.params.username }, function(err, user) {
+  const conditions = { username: req.params.username };
+
+  User.findOne(conditions, function(err, user) {
     if (err) {
       res.status(404).send({
         error: 'Not Found'
@@ -30,7 +34,9 @@ function getProfileImage(req, res) {
 }
 
 function getProfile(req, res) {
-  User.findOne({ username: req.params.username }, function(err, user) {
+  const conditions = { username: req.params.username };
+
+  User.findOne(conditions, function(err, user) {
     if (err) {
       res.status(404).send({
         error: 'Not Found: ' + err
@@ -45,76 +51,64 @@ function getProfile(req, res) {
   });
 }
 
-// TODO: REVIEW
 function deactivateUser(req, res) {
-  passport.authenticate('deactivateUser', function(err, user, info) {
+  const update = {
+    status: false
+  };
+  const conditions = {
+    username: req.username
+  };
+
+  User.findOneAndUpdate(conditions, update, function(err, user) {
     if (err) {
-      return res.json({ error: err });
+      res.json({ error: err });
     }
-    if (!user) {
-      return res.json({ message: info.message });
-    }
-    if (user) {
-      User.findOneAndUpdate(
-        { username: user.username },
-        { status: false },
-        function(err, user) {
-          if (err) {
-            res.json({ error: err });
-          }
-          return res.json({
-            user: user,
-            message: 'Successfully deactivated user'
-          });
-        }
-      );
-    }
-  })(req, res, next);
+    delete user.password;
+    return res.json({
+      user,
+      message: 'Successfully deactivated user'
+    });
+  });
 }
 
 function reactivateUser(req, res) {
-  User.findOneAndUpdate(
-    { username: req.user.username },
-    { status: true },
-    function(err, user) {
-      // In case of any error, return using the done method
-      if (err) {
-        return res.json({ error: err });
-      }
-      return res.json({
-        user: user,
-        message: 'Successfully re-activated user'
-      });
-    }
-  );
-}
+  const conditions = {
+    username: req.user.username
+  };
+  const update = {
+    status: true
+  };
 
-// TODO: REVIEW
-function deleteUser(req, res) {
-  passport.authenticate('deleteUser', function(err, user, info) {
+  User.findOneAndUpdate(conditions, update, function(err, user) {
     if (err) {
       return res.json({ error: err });
     }
-    if (!user) {
-      return res.json({ message: info.message });
-    }
-    User.findOneAndRemove({ username: user.username }, function(err, user) {
-      if (err) {
-        return res.json({ error: err });
-      }
-      return res.json({ message: 'Successfully deleted user' });
+    return res.json({
+      user: user,
+      message: 'Successfully re-activated user'
     });
-  })(req, res, next);
+  });
+}
+
+function deleteUser(req, res) {
+  const conditions = { username: user.username };
+
+  User.findOneAndRemove(conditions, function(err, user) {
+    if (err) {
+      return res.json({ error: err });
+    }
+    return res.json({ message: 'Successfully deleted user' });
+  });
 }
 
 function updatePublicDetails(req, res) {
   const userId = req.body.userId;
-  const updateObject = req.body;
-  delete updateObject.userId;
+  const update = req.body;
+  delete update.userId;
 
   User.findOneAndUpdate(
     { username: user.username },
-    updateObject,
+    update,
     { new: true },
     function(err, userDetail) {
       if (err) {
@@ -134,14 +128,11 @@ function updatePublicDetails(req, res) {
 
 function updatePrivateDetails(req, res) {
   const userId = req.body.userId;
-  const updateObject = req.body;
-  delete updateObject.userId;
-  console.log(updateObject);
+  const update = req.body;
+  const options = { new: true };
+  delete update.userId;
 
-  User.findByIdAndUpdate(userId, updateObject, { new: true }, function(
-    err,
-    user
-  ) {
+  User.findByIdAndUpdate(userId, update, options, function(err, user) {
     if (err) {
       return res.json({ error: err });
     } else if (!user) {
