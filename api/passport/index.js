@@ -1,10 +1,11 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const User = require('../models/Users');
+const bCrypt = require('bcrypt-nodejs');
 
-const isValidPassword = function(user, password) {
-  return bCrypt.compareSync(password, user.password);
-};
+function isValidPassword(password, hash) {
+  return bCrypt.compareSync(password, hash);
+}
 
 passport.serializeUser(function(user, done) {
   done(null, user.id);
@@ -31,7 +32,7 @@ passport.use(
         if (!user) {
           return done(null, false, { message: 'Incorrect username.' });
         }
-        if (isValidPassword(user.password, password)) {
+        if (!isValidPassword(password, user.password)) {
           return done(null, false, { message: 'Incorrect password.' });
         }
         return done(null, user);
