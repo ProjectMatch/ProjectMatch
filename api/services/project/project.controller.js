@@ -492,6 +492,6 @@ module.exports = {
   getCommentsForMarker,
   addUserToTeam,
   addProject,
-  updateproject,
+  updateProject,
   deleteProject
 };
