@@ -5,7 +5,7 @@ const isAuthenticated = require('../../utils/auth');
 
 router.post('/', controller.getProjects);
 router.get('/:id', controller.getProject);
-router.get('/:id/team', conroller.getProjectTeamMembers);
+router.get('/:id/team', controller.getProjectTeamMembers);
 router.get('/:id/team/thumbnails', controller.getTeamThumbnails);
 router.post('/:id/comment', controller.addCommentToProject);
 router.get('/:id/comments', controller.getCommentsForProject);
