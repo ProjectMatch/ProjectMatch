@@ -42,7 +42,11 @@ function signup(req, res) {
             throw err;
           }
 
-          req.login(newUser);
+          req.login(newUser, function(err) {
+            if (err) {
+              res.sendStatus(500);
+            }
+          });
 
           delete newUser.password;
 
