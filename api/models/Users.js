@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt-nodejs');
+const bCrypt = require('bcrypt-nodejs');
 
 const Schema = mongoose.Schema;
 
@@ -29,7 +29,7 @@ const UserSchema = new Schema({
 });
 
 UserSchema.pre('save', function(next) {
-  const hash = bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
+  const hash = bCrypt.hashSync(this.password, bCrypt.genSaltSync(10), null);
   this.password = hash;
   next();
 });
