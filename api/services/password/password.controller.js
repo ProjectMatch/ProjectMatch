@@ -1,7 +1,7 @@
 const async = require('async');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
-const User = require('../models/Users');
+const User = require('../../models/Users');
 
 function tokenIsExpired(req, res) {
   // Checks if the token present and token not expired

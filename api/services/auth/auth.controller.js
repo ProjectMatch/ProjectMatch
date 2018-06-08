@@ -1,5 +1,5 @@
 const passport = require('../../passport');
-const User = require('../models/Users');
+const User = require('../../models/Users');
 const { OAuth2Client } = require('google-auth-library');
 
 function login(req, res) {

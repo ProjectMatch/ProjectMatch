@@ -8,7 +8,7 @@ AWS.config.update(aws_secret);
 const s3 = new AWS.S3();
 
 const Projects = require('../models/Projects');
-const User = require('../models/Users');
+const User = require('../../models/Users');
 const Revisions = require('../models/Revisions');
 
 function uploadProfileImage(req, res) {

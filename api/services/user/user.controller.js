@@ -1,4 +1,4 @@
-const User = require('../models/Users');
+const User = require('../../models/Users');
 
 function getUsers(req, res) {
   const conditions = {};

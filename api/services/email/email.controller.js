@@ -1,6 +1,6 @@
 const nodemailer = require('nodemailer');
 const Project = require('../models/Projects');
-const User = require('../models/Users');
+const User = require('../../models/Users');
 const config = require('../utils/config');
 
 const SMTP_HOST = 'smtp.sendgrid.net';
