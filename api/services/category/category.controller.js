@@ -1,7 +1,9 @@
 const Categories = require('../models/Categories');
 
 function getCategories(req, res) {
-  return Categories.find({}, function(err, categories) {
+  const conditions = {};
+
+  return Categories.find(conditions, function(err, categories) {
     if (err) {
       return res.json({ error: 'Error getting categories: ' + err });
     } else {
@@ -15,6 +17,7 @@ function getCategories(req, res) {
 
 function addCategory(req, res) {
   const name = req.body.name;
+
   const newCategory = new Categories({ name });
   newCategory.save(function(err) {
     if (err) {
