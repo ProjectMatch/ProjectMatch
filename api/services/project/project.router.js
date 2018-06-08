@@ -3,7 +3,7 @@ const router = express.Router();
 const controller = require('./project.controller');
 const isAuthenticated = require('../../utils/auth');
 
-router.post('/', controller.getProjects);
+router.get('/', controller.getProjects);
 router.get('/:id', controller.getProject);
 router.get('/:id/team', controller.getProjectTeamMembers);
 router.get('/:id/team/thumbnails', controller.getTeamThumbnails);
