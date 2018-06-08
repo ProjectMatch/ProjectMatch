@@ -26,9 +26,7 @@ router.get(
 );
 router.get('/:projectId/accept/:username', controller.addUserToTeam);
 router.post('/add', isAuthenticated, controller.addProject);
-router.post('/update/:id', isAuthenticated, controller.updateproject);
+router.post('/update/:id', isAuthenticated, controller.updateProject);
 router.delete('/delete', isAuthenticated, controller.deleteProject);
-
-return router;
 
 module.exports = router;

@@ -1,4 +1,4 @@
-const aws_secret = require('../utils/s3_config.json');
+const aws_secret = require('../../utils/s3_config.json');
 const AWS = require('aws-sdk');
 AWS.config.update(aws_secret);
 const s3 = new AWS.S3();

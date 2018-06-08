@@ -3,13 +3,13 @@ const multer = require('multer');
 const multerS3 = require('multer-s3');
 
 const AWS = require('aws-sdk');
-const aws_secret = require('../utils/s3_config.json');
+const aws_secret = require('../../utils/s3_config.json');
 AWS.config.update(aws_secret);
 const s3 = new AWS.S3();
 
-const Projects = require('../models/Projects');
+const Projects = require('../../models/Projects');
 const User = require('../../models/Users');
-const Revisions = require('../models/Revisions');
+const Revisions = require('../../models/Revisions');
 
 function uploadProfileImage(req, res) {
   console.log('Posting to profile');

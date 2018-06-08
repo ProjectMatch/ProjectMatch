@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
+const config = require('./config');
 
 const connect = () => {
-  return mongoose.connect(config.db.mlab, {
+  return mongoose.connect(config.db.url, {
     server: {
       reconnectTries: Number.MAX_VALUE,
       reconnectInterval: 1000
