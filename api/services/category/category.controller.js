@@ -1,4 +1,4 @@
-const Categories = require('../models/Categories');
+const Categories = require('../../models/Categories');
 
 function getCategories(req, res) {
   const conditions = {};

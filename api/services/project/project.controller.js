@@ -1,11 +1,10 @@
-const Project = require('../models/Projects');
-const Comment = require('../models/Comments');
-const Revision = require('../models/Revisions');
-const Marker = require('../models/Markers');
+const Project = require('../../models/Projects');
+const Comment = require('../../models/Comments');
+const Revision = require('../../models/Revisions');
+const Marker = require('../../models/Markers');
 const User = require('../../models/Users');
-const config = require('../utils/config');
-const Project = require('../models/Projects');
-const Tags = require('../models/Tags');
+const config = require('../../utils/config');
+const Tags = require('../../models/Tags');
 
 function saveTag(tagName) {
   Tags.findOne({ tagName: tagName }, function(err, tag) {

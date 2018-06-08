@@ -1,4 +1,4 @@
-const Tags = require('../models/Tags');
+const Tags = require('../../models/Tags');
 
 function getTags(req, res) {
   return Tags.find({}, function(err, tags) {
