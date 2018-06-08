@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const controller = require('./project.controller');
-const isAuthenticated = require('../utils/auth');
+const isAuthenticated = require('../../utils/auth');
 
 router.post('/', controller.getProjects);
 router.get('/:id', controller.getProject);
