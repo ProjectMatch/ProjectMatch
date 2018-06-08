@@ -58,16 +58,17 @@ function sendEmailRequest(err, res, user, info) {
 }
 
 function sendRequestToJoinTeam(req, res) {
-  Project.findById(projectId, function(err, project) {
+  const id = req.params.projectId;
+
+  Project.findById(id, function(err, project) {
     if (err) {
       res.send(409);
     } else {
-      User.findOne(
-        {
-          username: project.creator
-        },
-        sendEmailRequest(err, res, user, req.body)
-      );
+      const conditions = {
+        username: project.creator
+      };
+
+      User.findOne(conditions, sendEmailRequest(err, res, user, req.body));
     }
   });
 }
