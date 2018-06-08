@@ -8,4 +8,4 @@ router.post('/login', passport.authenticate('local'), controller.login);
 router.post('/googlelogin', controller.googleSignin);
 router.get('/logout', controller.logout);
 
-return router;
+module.exports = router;
