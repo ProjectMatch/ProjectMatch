@@ -92,30 +92,6 @@ class AddProjectsPage extends React.Component<
             preview: null,
             files: null
           });
-        })
-        // then toggles roles checkbox per project lookingFor array
-        .then(() => {
-          var p = document.getElementById(
-            'new-project-role-p'
-          )! as HTMLInputElement;
-          var d = document.getElementById(
-            'new-project-role-d'
-          )! as HTMLInputElement;
-          switch (this.state.lookingFor) {
-            case ['Programmer']:
-              p.checked = true;
-              break;
-            case ['Designer']:
-              d.checked = true;
-              break;
-            case []:
-              // in the case of an empty roles array, do nothing!
-              break;
-            default:
-              d.checked = true;
-              p.checked = true;
-              break;
-          }
         });
     }
   }
@@ -191,19 +167,15 @@ class AddProjectsPage extends React.Component<
         this.toggleDropdown(e, 'new-status-dropdown');
         break;
       case 'roles':
-        var nodeList = Array.from(document.getElementsByName('roles'));
-        if (document.getElementsByName('roles') === null) {
-          this.setState({ lookingFor: [] } as any);
+        var rolesArray = this.state.lookingFor;
+        var updatedRolesArray;
+        if (rolesArray!.includes(value)) {
+          rolesArray!.splice(rolesArray!.indexOf(value), 1);
+          updatedRolesArray = rolesArray;
         } else {
-          var arrayOfRoles: string[] = [];
-          // checks to see if an of the 'roles' nodes are checked
-          nodeList.forEach(function(node: any) {
-            if (node.checked) {
-              arrayOfRoles.push(node.value);
-            }
-          });
-          this.setState({ lookingFor: arrayOfRoles } as any);
+          updatedRolesArray = rolesArray!.concat(value);
         }
+        this.setState({ lookingFor: updatedRolesArray });
         break;
       default:
         this.setState({ [name]: value } as any);
@@ -229,65 +201,48 @@ class AddProjectsPage extends React.Component<
   }
 
   handleSubmit = (e: React.FormEvent<HTMLButtonElement>): void => {
-    var title = document.getElementById('new-project-title') as any;
-    var description = document.getElementById('new-project-description') as any;
-
-    if (title.value === '' && description.value === '') {
-      alert('Title and Description are required 😉');
+    if (this.state.name === '' && this.state.description === '') {
+      alert('Project Name & Description are required 😉');
       return;
     }
 
-    var elemList = document.getElementsByClassName('new-project-roles');
-    var elements = [].filter.call(elemList, function(elem: any) {
-      return elem.checked;
-    });
+    var projectToCreateOrUpdate = {
+      name: this.state.name,
+      description: this.state.description,
+      dueDate: this.state.dueDate,
+      team: this.state.team,
+      githubLink: this.state.githubLink,
+      mockupLink: this.state.mockupLink,
+      liveLink: this.state.liveLink,
+      lookingFor: this.state.lookingFor,
+      status: this.state.status,
+      category: this.state.category,
+      tags: this.state.tags,
+      contact: this.state.contact,
+      creator: this.props.user.username
+    };
+    // if this is an existing project, passes in the corresponding _id
+    // the api will check to update or add the project according to whether
+    // an _id is passed in
+    if (this.props.match.params.hasOwnProperty('id')) {
+      projectToCreateOrUpdate = Object.assign({}, projectToCreateOrUpdate, {
+        _id: this.props.currentProject._id
+      });
+    }
 
-    var lookingForArray: string[] = [];
-    elements.forEach(function(elem: any) {
-      lookingForArray.push(elem.value);
-    });
-
-    this.setState({ lookingFor: lookingForArray }, () => {
-      var projectToCreateOrUpdate = {
-        name: this.state.name,
-        description: this.state.description,
-        dueDate: this.state.dueDate,
-        team: this.state.team,
-        githubLink: this.state.githubLink,
-        mockupLink: this.state.mockupLink,
-        liveLink: this.state.liveLink,
-        lookingFor: this.state.lookingFor,
-        status: this.state.status,
-        category: this.state.category,
-        tags: this.state.tags,
-        contact: this.state.contact,
-        creator: this.props.user.username
-      };
-      // if this is an existing project, passes in the corresponding _id
-      // the api will check to update or add the project according to whether
-      // an _id is passed in
-      if (this.props.match.params.hasOwnProperty('id')) {
-        projectToCreateOrUpdate = Object.assign({}, projectToCreateOrUpdate, {
-          _id: this.props.currentProject._id
+    // passes in the project object with any images (files)
+    this.props
+      .addOrUpdateProject(projectToCreateOrUpdate, this.state.files)
+      .then(() => {
+        // retrieves all projects, sorted by newest modified
+        this.props.getProjects({ sort: { modifiedAt: -1 } }, null).then(() => {
+          // redirects to the project portal
+          this.setState({
+            shouldRedirect: true,
+            projIdRedirect: this.props.projects[0]._id
+          });
         });
-      }
-
-      // passes in the project object with any images (files)
-      this.props
-        .addOrUpdateProject(projectToCreateOrUpdate, this.state.files)
-        .then(() => {
-          // retrieves all projects, sorted by newest modified
-          this.props
-            .getProjects({ sort: { modifiedAt: -1 } }, null)
-            .then(() => {
-              // redirects to the project portal
-              this.setState({
-                shouldRedirect: true,
-                projIdRedirect: this.props.projects[0]._id
-              });
-            });
-        });
-    });
+      });
   };
 
   // filter search from a dropdown
@@ -588,6 +543,8 @@ class AddProjectsPage extends React.Component<
                       name="roles"
                       value="Programmer"
                       id="new-project-role-p"
+                      checked={this.state.lookingFor!.includes('Programmer')}
+                      onChange={e => this.onFormChange(e)}
                     />
                     <span className="checkmark" />
                   </label>
@@ -605,6 +562,8 @@ class AddProjectsPage extends React.Component<
                       name="roles"
                       value="Designer"
                       id="new-project-role-d"
+                      checked={this.state.lookingFor!.includes('Designer')}
+                      onChange={e => this.onFormChange(e)}
                     />
                     <span className="checkmark" />
                   </label>
