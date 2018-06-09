@@ -4,14 +4,12 @@ class ChosenTags extends React.Component<{
   tags: any;
   handleOptionRemoval: any;
 }> {
-  render() {
-    var chosenTags;
+  renderChosenTags() {
     let tags = this.props.tags;
     if (!tags || tags.length === 0) {
       return null;
     }
-
-    chosenTags = tags.map((tagName: string, index: number) => {
+    var chosenTags = tags.map((tagName: string, index: number) => {
       return (
         <div className="tag-container" key={index}>
           <input
@@ -29,7 +27,11 @@ class ChosenTags extends React.Component<{
         </div>
       );
     });
+    return chosenTags;
+  }
 
+  render() {
+    var chosenTags = this.renderChosenTags();
     return <div className="array-of-tags">{chosenTags}</div>;
   }
 }
