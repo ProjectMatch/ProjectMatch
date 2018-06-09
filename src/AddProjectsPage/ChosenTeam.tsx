@@ -4,9 +4,9 @@ class ChosenTeam extends React.Component<{
   team: any;
   handleOptionRemoval: any;
 }> {
-  render() {
+  renderChosenTeam() {
     let chosenTeam;
-    let team = Object.assign([], this.props.team);
+    let team = this.props.team;
     if (team.length === 0) {
       chosenTeam = null;
     } else {
@@ -36,6 +36,10 @@ class ChosenTeam extends React.Component<{
       });
     }
     return chosenTeam;
+  }
+  render() {
+    var chosenTeam = this.renderChosenTeam();
+    return <React.Fragment>{chosenTeam}</React.Fragment>;
   }
 }
 
