@@ -7,11 +7,9 @@ class ChosenTags extends React.Component<{
   render() {
     var chosenTags;
     let tags = this.props.tags;
-    if (!tags || tags.slice().length === 0) {
+    if (!tags || tags.length === 0) {
       return null;
     }
-    // make copy of tags
-    tags = tags.slice();
 
     chosenTags = tags.map((tagName: string, index: number) => {
       return (
