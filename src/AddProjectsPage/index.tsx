@@ -96,10 +96,6 @@ class AddProjectsPage extends React.Component<
     }
   }
 
-  getURLParams = () => {
-    return this.props.match.params;
-  };
-
   // adds value to array only if it doesnt already include it
   addValueToStateArray = (arrayName: string, value: string) => {
     if (!this.state[arrayName].includes(value.toLowerCase())) {
