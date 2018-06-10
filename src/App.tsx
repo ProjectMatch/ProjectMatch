@@ -8,7 +8,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import LandingPage from './LandingPage/LandingPage';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import ProjectsPage from './ProjectsPage/ProjectsPage';
-import AddProjectsPage from './AddProjectsPage/index';
+import AddProjectsPage from './AddProjectsPage';
 import SettingsPage from './UserProfileAndSettingsPage/SettingsPage';
 import PublicProfile from './PublicProfile/PublicProfile';
 import Redline from './Redline';
