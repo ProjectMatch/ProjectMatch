@@ -100,39 +100,6 @@ class AddProjectsPage extends React.Component<
     return this.props.match.params;
   };
 
-  toggleDropdown = (
-    e: React.FormEvent<HTMLButtonElement> | React.FormEvent<HTMLInputElement>,
-    elemById: string
-  ) => {
-    e.preventDefault();
-    var doc = document.getElementById(elemById)!;
-    doc.classList.toggle('new-project-show');
-  };
-
-  closeDropdown = (e: React.MouseEvent<HTMLDivElement>) => {
-    var arrayOfWindows = [
-      'new-team-dropdown',
-      'new-tags-dropdown',
-      'new-project-dropdown',
-      'new-status-dropdown'
-    ];
-    arrayOfWindows.forEach((elemById: string) => {
-      if (
-        document
-          .getElementById(elemById)!
-          .classList.contains('new-project-show') &&
-        document.activeElement !== document.getElementById('teamSearch') &&
-        document.activeElement !== document.getElementById('categorySearch') &&
-        document.activeElement !== document.getElementById('tagSearch') &&
-        document.activeElement !==
-          document.getElementById(elemById)!.previousElementSibling
-      ) {
-        var doc = document.getElementById(elemById)!;
-        doc.classList.remove('new-project-show');
-      }
-    });
-  };
-
   // adds value to array only if it doesnt already include it
   addValueToStateArray = (arrayName: string, value: string) => {
     if (!this.state[arrayName].includes(value.toLowerCase())) {
@@ -151,20 +118,16 @@ class AddProjectsPage extends React.Component<
           category: value,
           categoryPlaceholder: value
         } as any);
-        this.toggleDropdown(e, 'new-project-dropdown');
         break;
       case 'tags':
         this.addValueToStateArray('tags', value);
-        this.toggleDropdown(e, 'new-tags-dropdown');
         break;
       case 'team':
         this.addValueToStateArray('team', value);
-        this.toggleDropdown(e, 'new-team-dropdown');
         break;
       case 'status':
         var newStatus = value === 'Active' ? true : false;
         this.setState({ status: newStatus, statusPlaceholder: value });
-        this.toggleDropdown(e, 'new-status-dropdown');
         break;
       case 'roles':
         var rolesArray = this.state.lookingFor;
@@ -276,7 +239,6 @@ class AddProjectsPage extends React.Component<
       var value = (document.getElementById('tagSearch')! as HTMLInputElement)
         .value;
       this.addValueToStateArray('tags', value);
-      this.toggleDropdown(e, 'new-tags-dropdown');
     }
   };
 
@@ -340,7 +302,7 @@ class AddProjectsPage extends React.Component<
     }
 
     return (
-      <div className="new-project-body" onClick={e => this.closeDropdown(e)}>
+      <div className="new-project-body">
         <form className="new-project-container">
           <div className="box-1">
             <div className="box-1-a">
@@ -389,23 +351,21 @@ class AddProjectsPage extends React.Component<
                 <label className="newProjectSubText" htmlFor="new-project-team">
                   Team
                 </label>
-                <button
-                  onClick={e => this.toggleDropdown(e, 'new-team-dropdown')}
-                  className="new-project-dropdown-btn"
-                >
+                <div className="new-project-team-dropdown-btn">
                   {this.state.teamPlaceholder}
-                </button>
-                <div
-                  id="new-team-dropdown"
-                  className="new-project-category-content"
-                >
-                  <TeamOptionsComponent
-                    allUsers={this.props.allUsers}
-                    user={this.props.user}
-                    onFormChange={this.onFormChange}
-                    teamFilter={this.teamFilter}
-                  />
+                  <div
+                    id="new-team-dropdown"
+                    className="new-project-category-content"
+                  >
+                    <TeamOptionsComponent
+                      allUsers={this.props.allUsers}
+                      user={this.props.user}
+                      onFormChange={this.onFormChange}
+                      teamFilter={this.teamFilter}
+                    />
+                  </div>
                 </div>
+
                 <div className="array-of-tags">
                   <ChosenTeam
                     team={this.state.team}
@@ -468,23 +428,20 @@ class AddProjectsPage extends React.Component<
                 >
                   Category
                 </label>
-                <button
-                  onClick={e => this.toggleDropdown(e, 'new-project-dropdown')}
-                  className="new-project-dropdown-btn"
-                >
+                <div className="new-project-category-dropdown-btn">
                   {this.state.category !== ''
                     ? this.state.category
                     : this.state.categoryPlaceholder}
-                </button>
-                <div
-                  id="new-project-dropdown"
-                  className="new-project-category-content"
-                >
-                  <CategoriesOptionsComponent
-                    categories={this.props.categories}
-                    onFormChange={this.onFormChange}
-                    categoryFilter={this.categoryFilter}
-                  />
+                  <div
+                    id="new-project-dropdown"
+                    className="new-project-category-content"
+                  >
+                    <CategoriesOptionsComponent
+                      categories={this.props.categories}
+                      onFormChange={this.onFormChange}
+                      categoryFilter={this.categoryFilter}
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -495,21 +452,18 @@ class AddProjectsPage extends React.Component<
                 >
                   Tags
                 </label>
-                <button
-                  onClick={e => this.toggleDropdown(e, 'new-tags-dropdown')}
-                  className="new-project-dropdown-btn"
-                >
+                <div className="new-project-tags-dropdown-btn">
                   {this.state.tagPlaceholder}
-                </button>
-                <div
-                  id="new-tags-dropdown"
-                  className="new-project-category-content"
-                >
-                  <TagOptionsComponent
-                    formChange={this.onFormChange}
-                    tags={this.props.tags}
-                    tagFilter={this.tagFilter}
-                  />
+                  <div
+                    id="new-tags-dropdown"
+                    className="new-project-category-content"
+                  >
+                    <TagOptionsComponent
+                      formChange={this.onFormChange}
+                      tags={this.props.tags}
+                      tagFilter={this.tagFilter}
+                    />
+                  </div>
                 </div>
                 <ChosenTags
                   tags={this.state.tags}
@@ -609,18 +563,15 @@ class AddProjectsPage extends React.Component<
               <label className="newProjectSubText" htmlFor="new-project-status">
                 Status
               </label>
-              <button
-                onClick={e => this.toggleDropdown(e, 'new-status-dropdown')}
-                className="new-project-dropdown-btn"
-              >
+              <button className="new-project-status-dropdown-btn">
                 {this.state.statusPlaceholder}
+                <div
+                  id="new-status-dropdown"
+                  className="new-project-category-content"
+                >
+                  <StatusOptionsComponent onFormChange={this.onFormChange} />
+                </div>
               </button>
-              <div
-                id="new-status-dropdown"
-                className="new-project-category-content"
-              >
-                <StatusOptionsComponent onFormChange={this.onFormChange} />
-              </div>
             </div>
 
             <button
