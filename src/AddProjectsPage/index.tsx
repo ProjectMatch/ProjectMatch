@@ -11,6 +11,7 @@ import ChosenTags from './ChosenTags';
 import TagOptionsComponent from './TagOptionsComponent';
 import CategoriesOptionsComponent from './CategoriesOptionsComponent';
 import TeamOptionsComponent from './TeamOptionsComponent';
+import ImagePreview from './ImagePreview';
 // types
 import { AddProjectState } from './AddProjectsPage.d';
 import { Store, AddProjectProps } from '../types/Redux';
@@ -251,39 +252,8 @@ class AddProjectsPage extends React.Component<
 
   // clears images from image preview section and state
   handleImageClear = (e: React.FormEvent<HTMLButtonElement>): void => {
-    const preview = document.getElementById('new-project-image-preview')!;
-    while (preview.firstChild) {
-      preview.removeChild(preview.firstChild);
-    }
     this.setState({ files: null });
     e.preventDefault();
-  };
-
-  // renders images in the preview area
-  handleImagePreview = (e: React.FormEvent<HTMLButtonElement>): void => {
-    // currently makes preview of images
-    e.preventDefault();
-    const preview = document.getElementById('new-project-image-preview')!;
-
-    if (this.state.files) {
-      for (var i = 0; i < this.state.files.length; i++) {
-        let file = this.state.files[i];
-        var reader = new FileReader();
-        reader.addEventListener(
-          'load',
-          function() {
-            var image = new Image();
-            image.title = file.name;
-            image.src = reader.result;
-            image.width = 130;
-            image.height = 70;
-            preview.appendChild(image);
-          },
-          false
-        );
-        reader.readAsDataURL(file);
-      }
-    }
   };
 
   render() {
@@ -535,24 +505,13 @@ class AddProjectsPage extends React.Component<
                 onChange={this.handleImageInitialBtn}
               />
               <button
-                className="upload-img-btn"
-                type="submit"
-                onClick={this.handleImagePreview}
-              >
-                Upload Images
-              </button>
-              <button
                 className="upload-img-delete-btn"
                 type="submit"
                 onClick={this.handleImageClear}
               >
-                Clear Images
+                Clear Image
               </button>
-
-              <div id="new-project-image-loader">{this.state.preview}</div>
-              <div id="new-project-image-preview">
-                {/* image preview container */}
-              </div>
+              <ImagePreview files={this.state.files} />
             </div>
 
             <div className="new-project-status">
