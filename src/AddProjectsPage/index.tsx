@@ -125,15 +125,15 @@ class AddProjectsPage extends React.Component<
         this.setState({ status: newStatus, statusPlaceholder: value });
         break;
       case 'roles':
-        var rolesArray = this.state.lookingFor;
+        var rolesArray = new Set(this.state.lookingFor);
         var updatedRolesArray;
-        if (rolesArray!.includes(value)) {
-          rolesArray!.splice(rolesArray!.indexOf(value), 1);
+        if (rolesArray.has(value)) {
+          rolesArray.delete(value);
           updatedRolesArray = rolesArray;
         } else {
-          updatedRolesArray = rolesArray!.concat(value);
+          updatedRolesArray = rolesArray.add(value);
         }
-        this.setState({ lookingFor: updatedRolesArray });
+        this.setState({ lookingFor: Array.from(updatedRolesArray) });
         break;
       default:
         this.setState({ [name]: value } as any);
