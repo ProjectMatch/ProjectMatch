@@ -518,7 +518,7 @@ class AddProjectsPage extends React.Component<
               <label className="newProjectSubText" htmlFor="new-project-status">
                 Status
               </label>
-              <button className="new-project-status-dropdown-btn">
+              <div className="new-project-status-dropdown-btn">
                 {this.state.statusPlaceholder}
                 <div
                   id="new-status-dropdown"
@@ -526,7 +526,7 @@ class AddProjectsPage extends React.Component<
                 >
                   <StatusOptionsComponent onFormChange={this.onFormChange} />
                 </div>
-              </button>
+              </div>
             </div>
 
             <button
