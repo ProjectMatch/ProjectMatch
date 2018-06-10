@@ -10,25 +10,29 @@ class ImagePreview extends React.Component<
       imageSrc: ''
     };
   }
-  renderImages = () => {
+
+  componentDidUpdate(prevProps: any) {
+    if (this.props.files !== prevProps.files) {
+      this.readImages();
+    }
+  }
+
+  readImages = () => {
     var files = this.props.files;
     if (files) {
-      for (var i = 0; i < files.length; i++) {
-        let file = files[i];
-        var reader = new FileReader();
-        reader.addEventListener(
-          'load',
-          () => {
-            this.setState({ imageSrc: reader.result });
-          },
-          false
-        );
-        reader.readAsDataURL(file);
-      }
+      var reader = new FileReader();
+      var handler = () => {
+        console.log('in handler');
+        this.setState({ imageSrc: reader.result });
+        console.log('removing event listener');
+        reader.removeEventListener('load', handler, false);
+      };
+      reader.addEventListener('load', handler, false);
+      reader.readAsDataURL(files[0]);
     }
   };
+
   render() {
-    this.renderImages();
     return (
       <div id="new-project-image-preview">
         {this.props.files ? (
