@@ -99,10 +99,8 @@ class AddProjectsPage extends React.Component<
 
   // adds value to array only if it doesnt already include it
   addValueToStateArray = (arrayName: string, value: string) => {
-    if (!this.state[arrayName].includes(value.toLowerCase())) {
-      var newArray = this.state[arrayName].concat([value]);
-      this.setState({ [arrayName]: newArray } as any);
-    }
+    var newSet = new Set(this.state[arrayName]);
+    this.setState({ [arrayName]: Array.from(newSet.add(value)) } as any);
   };
 
   onFormChange = (e: React.FormEvent<HTMLInputElement>): void | null => {
