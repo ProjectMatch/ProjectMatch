@@ -2,7 +2,7 @@ import * as React from 'react';
 
 class ChosenTags extends React.Component<{
   tags: any;
-  handleOptionRemoval: any;
+  handleItemRemoval: any;
 }> {
   renderChosenTags() {
     let tags = this.props.tags;
@@ -20,7 +20,7 @@ class ChosenTags extends React.Component<{
           <button
             type="button"
             className="remove-tag-btn"
-            onClick={e => this.props.handleOptionRemoval(e, 'tags', tags)}
+            onClick={e => this.props.handleItemRemoval(e, 'tags', tags)}
           >
             X
           </button>

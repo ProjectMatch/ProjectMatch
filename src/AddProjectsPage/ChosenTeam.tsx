@@ -2,7 +2,7 @@ import * as React from 'react';
 
 class ChosenTeam extends React.Component<{
   team: any;
-  handleOptionRemoval: any;
+  handleItemRemoval: any;
 }> {
   renderChosenTeam() {
     let chosenTeam;
@@ -22,7 +22,7 @@ class ChosenTeam extends React.Component<{
               type="button"
               className="remove-tag-btn"
               onClick={e =>
-                this.props.handleOptionRemoval(
+                this.props.handleItemRemoval(
                   e,
                   'team',
                   Object.assign([], this.props.team)

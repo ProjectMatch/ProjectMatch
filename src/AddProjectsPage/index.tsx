@@ -142,7 +142,7 @@ class AddProjectsPage extends React.Component<
   };
 
   // removes items such as tags or team members from the state array
-  handleOptionRemoval = (
+  handleItemRemoval = (
     e: React.MouseEvent<HTMLButtonElement>,
     stateName: any,
     array: string[]
@@ -333,7 +333,7 @@ class AddProjectsPage extends React.Component<
                 <div className="array-of-tags">
                   <ChosenTeam
                     team={this.state.team}
-                    handleOptionRemoval={this.handleOptionRemoval}
+                    handleItemRemoval={this.handleItemRemoval}
                   />
                 </div>
               </div>
@@ -431,7 +431,7 @@ class AddProjectsPage extends React.Component<
                 </div>
                 <ChosenTags
                   tags={this.state.tags}
-                  handleOptionRemoval={this.handleOptionRemoval}
+                  handleItemRemoval={this.handleItemRemoval}
                 />
               </div>
             </div>
