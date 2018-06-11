@@ -5,7 +5,7 @@ class ChosenTags extends React.Component<{
   handleItemRemoval: any;
 }> {
   renderChosenTags() {
-    let tags = this.props.tags;
+    let tags = Array.from(this.props.tags);
     if (!tags || tags.length === 0) {
       return null;
     }
@@ -20,7 +20,7 @@ class ChosenTags extends React.Component<{
           <button
             type="button"
             className="remove-tag-btn"
-            onClick={e => this.props.handleItemRemoval(e, 'tags', tags)}
+            onClick={e => this.props.handleItemRemoval(e, 'tags')}
           >
             X
           </button>

@@ -22,9 +22,7 @@ class ImagePreview extends React.Component<
     if (files) {
       var reader = new FileReader();
       var handler = () => {
-        console.log('in handler');
         this.setState({ imageSrc: reader.result });
-        console.log('removing event listener');
         reader.removeEventListener('load', handler, false);
       };
       reader.addEventListener('load', handler, false);

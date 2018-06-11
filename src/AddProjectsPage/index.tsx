@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 // styles
 import './AddProjectsPage.css';
 // components
-import Footer from '../Footer/Footer';
 import StatusOptionsComponent from './StatusOptionsComponent';
 import ChosenTeam from './ChosenTeam';
 import ChosenTags from './ChosenTags';
@@ -37,15 +36,15 @@ class AddProjectsPage extends React.Component<
       name: '',
       description: '',
       dueDate: '',
-      team: [],
+      team: new Set(),
       githubLink: '',
       mockupLink: '',
       liveLink: '',
-      lookingFor: [],
+      lookingFor: new Set(),
       status: true,
       category: '',
-      tags: [],
-      images: [],
+      tags: new Set(),
+      images: new Set(),
       contact: '',
       creator: '',
       categoryPlaceholder: 'Choose A Category',
@@ -75,15 +74,15 @@ class AddProjectsPage extends React.Component<
             description: project.description,
             dueDate:
               project.dueDate !== null ? project.dueDate.slice(0, 10) : '',
-            team: project.team,
+            team: new Set(project.team),
             githubLink: project.githubLink,
             mockupLink: project.mockupLink,
             liveLink: project.liveLink,
-            lookingFor: project.lookingFor,
+            lookingFor: new Set(project.lookingFor),
             status: project.status,
             category: project.category,
-            tags: project.tags,
-            images: project.images,
+            tags: new Set(project.tags),
+            images: new Set(project.images),
             contact: project.contact,
             creator: project.creator,
             categoryPlaceholder: 'Choose A Category',
@@ -98,9 +97,8 @@ class AddProjectsPage extends React.Component<
   }
 
   // adds value to array only if it doesnt already include it
-  addValueToStateArray = (arrayName: string, value: string) => {
-    var newSet = new Set(this.state[arrayName]);
-    this.setState({ [arrayName]: Array.from(newSet.add(value)) } as any);
+  addValueToSet = (setName: string, value: string) => {
+    this.setState({ [setName]: this.state[setName].add(value) } as any);
   };
 
   onFormChange = (e: React.FormEvent<HTMLInputElement>): void | null => {
@@ -115,25 +113,25 @@ class AddProjectsPage extends React.Component<
         } as any);
         break;
       case 'tags':
-        this.addValueToStateArray('tags', value);
+        this.addValueToSet('tags', value);
         break;
       case 'team':
-        this.addValueToStateArray('team', value);
+        this.addValueToSet('team', value);
         break;
       case 'status':
         var newStatus = value === 'Active' ? true : false;
         this.setState({ status: newStatus, statusPlaceholder: value });
         break;
       case 'roles':
-        var rolesArray = new Set(this.state.lookingFor);
+        var rolesSet = this.state.lookingFor;
         var updatedRolesArray;
-        if (rolesArray.has(value)) {
-          rolesArray.delete(value);
-          updatedRolesArray = rolesArray;
+        if (rolesSet!.has(value)) {
+          rolesSet!.delete(value);
+          updatedRolesArray = rolesSet;
         } else {
-          updatedRolesArray = rolesArray.add(value);
+          updatedRolesArray = rolesSet!.add(value);
         }
-        this.setState({ lookingFor: Array.from(updatedRolesArray) });
+        this.setState({ lookingFor: updatedRolesArray });
         break;
       default:
         this.setState({ [name]: value } as any);
@@ -144,13 +142,11 @@ class AddProjectsPage extends React.Component<
   // removes items such as tags or team members from the state array
   handleItemRemoval = (
     e: React.MouseEvent<HTMLButtonElement>,
-    stateName: any,
-    array: string[]
+    stateName: any
   ): void => {
     let { value } = e.currentTarget.previousElementSibling as HTMLInputElement;
-    var index = array.indexOf(value);
-    array.splice(index, 1);
-    this.setState({ [stateName]: array });
+    this.state[stateName].delete(value);
+    this.setState({ [stateName]: this.state[stateName] });
   };
 
   onTextAreaFormChange(e: React.FormEvent<HTMLTextAreaElement>): void {
@@ -168,14 +164,14 @@ class AddProjectsPage extends React.Component<
       name: this.state.name,
       description: this.state.description,
       dueDate: this.state.dueDate,
-      team: this.state.team,
+      team: Array.from(this.state.team!),
       githubLink: this.state.githubLink,
       mockupLink: this.state.mockupLink,
       liveLink: this.state.liveLink,
-      lookingFor: this.state.lookingFor,
+      lookingFor: Array.from(this.state.lookingFor!),
       status: this.state.status,
       category: this.state.category,
-      tags: this.state.tags,
+      tags: Array.from(this.state.tags!),
       contact: this.state.contact,
       creator: this.props.user.username
     };
@@ -233,7 +229,7 @@ class AddProjectsPage extends React.Component<
     if (e.keyCode === ENTER_KEY) {
       var value = (document.getElementById('tagSearch')! as HTMLInputElement)
         .value;
-      this.addValueToStateArray('tags', value);
+      this.addValueToSet('tags', value);
     }
   };
 
@@ -243,13 +239,13 @@ class AddProjectsPage extends React.Component<
 
   // opens initial file window to select images from local computer
   // saves files to state
-  handleImageInitialBtn = (e: React.FormEvent<HTMLInputElement>): void => {
+  selectLocalImages = (e: React.FormEvent<HTMLInputElement>): void => {
     let files = e.currentTarget.files! as FileList;
     this.setState({ files: files } as any);
   };
 
   // clears images from image preview section and state
-  handleImageClear = (e: React.FormEvent<HTMLButtonElement>): void => {
+  clearImages = (e: React.FormEvent<HTMLButtonElement>): void => {
     this.setState({ files: null });
     e.preventDefault();
   };
@@ -330,12 +326,10 @@ class AddProjectsPage extends React.Component<
                   </div>
                 </div>
 
-                <div className="array-of-tags">
-                  <ChosenTeam
-                    team={this.state.team}
-                    handleItemRemoval={this.handleItemRemoval}
-                  />
-                </div>
+                <ChosenTeam
+                  team={this.state.team}
+                  handleItemRemoval={this.handleItemRemoval}
+                />
               </div>
             </div>
             {/* end of box 1 A */}
@@ -461,7 +455,7 @@ class AddProjectsPage extends React.Component<
                       name="roles"
                       value="Programmer"
                       id="new-project-role-p"
-                      checked={this.state.lookingFor!.includes('Programmer')}
+                      checked={this.state.lookingFor!.has('Programmer')}
                       onChange={e => this.onFormChange(e)}
                     />
                     <span className="checkmark" />
@@ -480,7 +474,7 @@ class AddProjectsPage extends React.Component<
                       name="roles"
                       value="Designer"
                       id="new-project-role-d"
-                      checked={this.state.lookingFor!.includes('Designer')}
+                      checked={this.state.lookingFor!.has('Designer')}
                       onChange={e => this.onFormChange(e)}
                     />
                     <span className="checkmark" />
@@ -500,12 +494,12 @@ class AddProjectsPage extends React.Component<
                 name="projectImages"
                 className="uploadImageBtn"
                 multiple={false}
-                onChange={this.handleImageInitialBtn}
+                onChange={this.selectLocalImages}
               />
               <button
                 className="upload-img-delete-btn"
                 type="submit"
-                onClick={this.handleImageClear}
+                onClick={this.clearImages}
               >
                 Clear Image
               </button>
@@ -537,7 +531,6 @@ class AddProjectsPage extends React.Component<
           </div>
           {/* end of box 2 */}
         </form>
-        <Footer />
       </div>
     );
   }
