@@ -8,6 +8,8 @@ GRID
 
 .new-project-body {
   @include html-body-fontfamily;
+  background-color: $pale-grey;
+  height: calc(100vh - 57px);
 }
 
 .new-project-container {
@@ -15,26 +17,27 @@ GRID
   font-family: $font;
   margin: 0 auto;
   margin-top: calc(50vh - 352px);
-  margin-bottom: calc(50vh - 352px);
   display: grid;
   grid-template-columns: repeat(auto-fill, 1fr);
   grid-template-rows: auto;
-  grid-template-areas: '. a a a b b .';
+  grid-template-areas: 'a a a b b';
   grid-gap: 10px;
 }
 
 .box-1 {
-  width: 85%;
+  background-color: white;
   grid-area: a;
   margin: 0 auto;
   padding: 30px;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-areas: 'c d';
+  grid-gap: 30px;
   border: 1px solid $light-grey;
 }
 
 .box-2 {
+  background-color: white;
   margin: 0 auto;
   padding: 30px;
   grid-area: b;
@@ -49,7 +52,6 @@ GRID
 .box-1-b {
   margin: 0 auto;
   grid-area: d;
-  padding-left: 30px;
 }
 
 .new-project-checkbox-container {
