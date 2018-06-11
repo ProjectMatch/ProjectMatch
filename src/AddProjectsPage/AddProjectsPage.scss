@@ -9,7 +9,7 @@ GRID
 .new-project-body {
   @include html-body-fontfamily;
   background-color: $pale-grey;
-  height: calc(100vh - 57px);
+  min-height: calc(100vh - 57px);
 }
 
 .new-project-container {
@@ -95,7 +95,7 @@ INPUT & TEXTAREA
   height: 25px;
   color: $dark-grey;
   padding: 5px;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   border: 1px solid $light-grey;
 }
 
@@ -105,7 +105,7 @@ textarea {
 }
 
 .new-project-textarea {
-  min-height: 96px;
+  min-height: 106px;
   max-width: 250px;
   min-width: 250px;
 }
@@ -121,7 +121,7 @@ DROPDOWNS
   height: 35px;
   padding: 5px;
   color: $dark-grey;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   width: 260px;
 }
 
@@ -361,4 +361,16 @@ IMAGE PREVIEW
   height: 160px;
   object-fit: cover;
   box-shadow: $box-shadow;
+}
+
+/*
+==========================
+MEDIA QUERIES
+==========================
+*/
+@media all and (max-height: 750px) and (min-height: 0px) {
+  .new-project-container {
+    margin: 0 auto;
+    margin-top: 50px;
+  }
 }
