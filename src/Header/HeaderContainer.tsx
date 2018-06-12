@@ -6,27 +6,35 @@ import Header from './Header';
 import LoggedInHeader from './LoggedInHeader';
 // types
 import { HeaderContainerProps } from './HeaderContainer.d';
-import { Store, State } from '../types/Redux';
+import { Store } from '../types/Redux';
 // actions
 import { completeRegistration } from '../actions/appActions';
 
-class HeaderContainer extends React.Component<HeaderContainerProps, State> {
+class HeaderContainer extends React.Component<
+  HeaderContainerProps,
+  { isUserLoggedIn: boolean }
+> {
   constructor(props: HeaderContainerProps) {
     super(props);
+    this.state = {
+      isUserLoggedIn: false
+    };
+  }
+  componentDidMount() {
+    if (this.props.user.email) {
+      this.setState({ isUserLoggedIn: true });
+    }
   }
   render() {
-    let isUserLoggedIn = false;
-    if (this.props.user.email) {
-      isUserLoggedIn = true;
-    }
     if (this.props.justRegistered) {
       this.props.completeRegistration();
       return <Redirect to="/user/settings" />;
-    } else {
-      return (
-        <div>{isUserLoggedIn === true ? <LoggedInHeader /> : <Header />}</div>
-      );
     }
+    return (
+      <div>
+        {this.state.isUserLoggedIn === true ? <LoggedInHeader /> : <Header />}
+      </div>
+    );
   }
 }
 
