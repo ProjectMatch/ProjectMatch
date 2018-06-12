@@ -6,7 +6,6 @@ class LoggedInHeaderSub1080 extends React.Component<
   {
     userProjects: any;
     user: any;
-    toggleSettingsDropdown: any;
     logout: any;
   },
   {}
@@ -30,11 +29,8 @@ class LoggedInHeaderSub1080 extends React.Component<
           </div>
         </div>
         <div className="logged-in-header-container-right">
-          <div className="logged-in-header-profileImageDiv">
-            <button
-              onClick={e => this.props.toggleSettingsDropdown(e)}
-              className="logged-in-header-profileImageButton"
-            >
+          <div className="logged-in-header-profileImageDiv sub-1080">
+            <div className="logged-in-header-profileImageButton">
               <img
                 className="profileImage"
                 src={
@@ -43,22 +39,22 @@ class LoggedInHeaderSub1080 extends React.Component<
                     : require('../assets/blank image.png')
                 }
               />
-            </button>
-            <div
-              className="headerOptionsDropdown"
-              id="headerOptionsDropdwn-sub1080"
-            >
-              <Link to="/projects/add" className="headerOptionsDropdownText">
-                Create New Project
-              </Link>
-              <Link className="headerOptionsDropdownText" to="/user/settings">
-                User Settings
-              </Link>
               <div
-                className="headerOptionsDropdownText lineAbove"
-                onClick={this.props.logout}
+                className="headerOptionsDropdown"
+                id="headerOptionsDropdwn-sub1080"
               >
-                Log Out
+                <Link to="/projects/add" className="headerOptionsDropdownText">
+                  Create New Project
+                </Link>
+                <Link className="headerOptionsDropdownText" to="/user/settings">
+                  User Settings
+                </Link>
+                <div
+                  className="headerOptionsDropdownText lineAbove"
+                  onClick={this.props.logout}
+                >
+                  Log Out
+                </div>
               </div>
             </div>
           </div>

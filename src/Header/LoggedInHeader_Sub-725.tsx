@@ -6,7 +6,6 @@ class LoggedInHeaderSub725 extends React.Component<
   {
     userProjects: any;
     user: any;
-    toggleSettingsDropdown: any;
     logout: any;
   },
   {}
@@ -18,11 +17,8 @@ class LoggedInHeaderSub725 extends React.Component<
           project match
         </Link>
         <div className="logged-in-header-container-right">
-          <div className="logged-in-header-profileImageDiv">
-            <button
-              onClick={e => this.props.toggleSettingsDropdown(e)}
-              className="logged-in-header-profileImageButton"
-            >
+          <div className="logged-in-header-profileImageDiv sub-725">
+            <div className="logged-in-header-profileImageButton">
               <img
                 className="profileImage"
                 src={
@@ -31,29 +27,29 @@ class LoggedInHeaderSub725 extends React.Component<
                     : require('../assets/blank image.png')
                 }
               />
-            </button>
-            <div
-              className="headerOptionsDropdown"
-              id="headerOptionsDropdwn-sub1080"
-            >
-              <Link to="/projects/add" className="headerOptionsDropdownText">
-                Create New Project
-              </Link>
-              <Link className="headerOptionsDropdownText" to="/user/settings">
-                User Settings
-              </Link>
-              <Link className="headerOptionsDropdownText" to="/user/profile">
-                {'Public Profile'}
-              </Link>
-              <div className="dropdown-content">
-                <div className="dropdown-content-title">Project Portals</div>
-                <ProjectLinks userProjects={this.props.userProjects} />
-              </div>
               <div
-                className="headerOptionsDropdownText lineAbove"
-                onClick={this.props.logout}
+                className="headerOptionsDropdown"
+                id="headerOptionsDropdwn-sub725"
               >
-                Log Out
+                <Link to="/projects/add" className="headerOptionsDropdownText">
+                  Create New Project
+                </Link>
+                <Link className="headerOptionsDropdownText" to="/user/settings">
+                  User Settings
+                </Link>
+                <Link className="headerOptionsDropdownText" to="/user/profile">
+                  {'Public Profile'}
+                </Link>
+                <div className="dropdown-content">
+                  <div className="dropdown-content-title">Project Portals</div>
+                  <ProjectLinks userProjects={this.props.userProjects} />
+                </div>
+                <div
+                  className="headerOptionsDropdownText lineAbove"
+                  onClick={this.props.logout}
+                >
+                  Log Out
+                </div>
               </div>
             </div>
           </div>

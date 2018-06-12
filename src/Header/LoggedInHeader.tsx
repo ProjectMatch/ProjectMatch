@@ -33,30 +33,22 @@ class LoggedInHeader extends React.Component<
     this.props.logout();
   };
 
-  toggleSettingsDropdown(e: React.MouseEvent<HTMLButtonElement>): void {
-    var doc = e.currentTarget.nextElementSibling!;
-    doc.classList.toggle('new-project-show');
-  }
-
   render() {
     return (
       <div className="logged-in-container-blue">
         <LoggedInHeader1080
           userProjects={this.props.userProjects}
           user={this.props.user}
-          toggleSettingsDropdown={this.toggleSettingsDropdown}
           logout={this.logout}
         />
         <LoggedInHeaderSub1080
           userProjects={this.props.userProjects}
           user={this.props.user}
-          toggleSettingsDropdown={this.toggleSettingsDropdown}
           logout={this.logout}
         />
         <LoggedInHeaderSub725
           userProjects={this.props.userProjects}
           user={this.props.user}
-          toggleSettingsDropdown={this.toggleSettingsDropdown}
           logout={this.logout}
         />
       </div>

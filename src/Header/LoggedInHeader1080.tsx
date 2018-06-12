@@ -6,7 +6,6 @@ class LoggedInHeader1080 extends React.Component<
   {
     userProjects: any;
     user: any;
-    toggleSettingsDropdown: any;
     logout: any;
   },
   {}
@@ -33,11 +32,8 @@ class LoggedInHeader1080 extends React.Component<
           <Link to="/projects/add" className="logged-in-header-createButton">
             CREATE NEW PROJECT
           </Link>
-          <div className="logged-in-header-profileImageDiv">
-            <button
-              onClick={e => this.props.toggleSettingsDropdown(e)}
-              className="logged-in-header-profileImageButton"
-            >
+          <div className="logged-in-header-profileImageDiv header-1080">
+            <div className="logged-in-header-profileImageButton">
               <img
                 className="profileImage"
                 src={
@@ -46,16 +42,16 @@ class LoggedInHeader1080 extends React.Component<
                     : require('../assets/blank image.png')
                 }
               />
-            </button>
-            <div className="headerOptionsDropdown" id="headerOptionsDropdwn">
-              <Link className="headerOptionsDropdownText" to="/user/settings">
-                User Settings
-              </Link>
-              <div
-                className="headerOptionsDropdownText lineAbove"
-                onClick={this.props.logout}
-              >
-                Log Out
+              <div className="headerOptionsDropdown" id="headerOptionsDropdwn">
+                <Link className="headerOptionsDropdownText" to="/user/settings">
+                  User Settings
+                </Link>
+                <div
+                  className="headerOptionsDropdownText lineAbove"
+                  onClick={this.props.logout}
+                >
+                  Log Out
+                </div>
               </div>
             </div>
           </div>
