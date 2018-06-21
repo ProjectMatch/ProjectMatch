@@ -146,7 +146,7 @@ class AddProjectsPage extends React.Component<
   ): void => {
     let { value } = e.currentTarget.previousElementSibling as HTMLInputElement;
     this.state[stateName].delete(value);
-    this.setState({ [stateName]: this.state[stateName] });
+    this.setState({ [stateName]: this.state[stateName] } as any);
   };
 
   onTextAreaFormChange(e: React.FormEvent<HTMLTextAreaElement>): void {
