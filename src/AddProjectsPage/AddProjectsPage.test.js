@@ -1,7 +1,14 @@
-import React from 'react';
+import * as React from 'react';
 import { mount, shallow } from 'enzyme';
 import AddProjectsPage from './index';
+import * as Enzyme from 'enzyme';
+import * as Adapter from 'enzyme-adapter-react-16';
 
+Enzyme.configure({
+  adapter: new Adapter()
+});
+
+// store stub
 describe('>>>AddProjectsPage Container', () => {
   it('renders without crashing', () => {
     shallow(<AddProjectsPage />);
