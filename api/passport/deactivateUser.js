@@ -1,8 +1,12 @@
-var LocalStrategy = require('passport-local').Strategy;
-var User = require('../models/Users');
-var bCrypt = require('bcrypt-nodejs');
+const LocalStrategy = require('passport-local').Strategy;
+const User = require('../models/Users');
+const bCrypt = require('bcrypt-nodejs');
 
 module.exports = function(passport) {
+  const isValidPassword = function(user, password) {
+    return bCrypt.compareSync(password, user.password);
+  };
+
   passport.use(
     'deactivateUser',
     new LocalStrategy(
@@ -13,13 +17,11 @@ module.exports = function(passport) {
       },
       function(req, username, password, done) {
         findAndVerifyUser = function() {
-          // check for username and password, before doing FindOneAndUpdate() callback
           User.findOne({ username: username }, function(err, user) {
             if (err) return done(err);
             if (!user) {
               return done(null, false, { message: user + ' not found' });
             }
-            // User exists but wrong password, log the error
             if (!isValidPassword(user, password)) {
               return done(null, false, { message: 'Invalid Password' });
             }
@@ -32,8 +34,4 @@ module.exports = function(passport) {
       }
     )
   );
-
-  var isValidPassword = function(user, password) {
-    return bCrypt.compareSync(password, user.password);
-  };
 };

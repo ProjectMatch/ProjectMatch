@@ -1,9 +1,8 @@
-// Require Mongoose Schema to Make Mongoose Object
-var Mongoose = require('mongoose');
-var mongoosePaginate = require('mongoose-paginate');
-var Schema = Mongoose.Schema;
+const Mongoose = require('mongoose');
+const mongoosePaginate = require('mongoose-paginate');
 
-var ProjectSchema = new Schema({
+const Schema = Mongoose.Schema;
+const ProjectSchema = new Schema({
   name: { type: String },
   creator: { type: String }, // XXX: may want to use Users ref
   githubLink: { type: String },
@@ -25,11 +24,7 @@ var ProjectSchema = new Schema({
   modifiedAt: { type: Date, default: Date.now },
   revisions: [{ type: Schema.Types.ObjectId, ref: 'Revisions' }]
 });
-
 ProjectSchema.plugin(mongoosePaginate);
+const Projects = Mongoose.model('Projects', ProjectSchema);
 
-// This will creates database named "Projects" in the Database
-var Projects = Mongoose.model('Projects', ProjectSchema);
-
-// We are making available it to other files
 module.exports = Projects;

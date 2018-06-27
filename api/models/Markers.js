@@ -1,8 +1,7 @@
-var Mongoose = require('mongoose');
+const Mongoose = require('mongoose');
 
-var Schema = Mongoose.Schema;
-
-var MarkerSchema = new Schema({
+const Schema = Mongoose.Schema;
+const MarkerSchema = new Schema({
   type: { type: String }, // rectangle or circle
   creator: { type: String },
   createdAt: { type: Date, default: Date.now() },
@@ -14,7 +13,6 @@ var MarkerSchema = new Schema({
   height: { type: Number },
   isResolved: { type: Boolean, default: false }
 });
-
-var Markers = Mongoose.model('Markers', MarkerSchema);
+const Markers = Mongoose.model('Markers', MarkerSchema);
 
 module.exports = Markers;

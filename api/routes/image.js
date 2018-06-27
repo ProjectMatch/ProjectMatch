@@ -1,19 +1,19 @@
-var express = require('express');
-var mongoose = require('mongoose');
-var multer = require('multer');
-var multerS3 = require('multer-s3');
+const express = require('express');
+const mongoose = require('mongoose');
+const multer = require('multer');
+const multerS3 = require('multer-s3');
 // credentials from aws
-var aws_secret = require('../utils/s3_config.json');
-var router = express.Router();
-var AWS = require('aws-sdk');
+const aws_secret = require('../utils/s3_config.json');
+const router = express.Router();
+const AWS = require('aws-sdk');
 
 AWS.config.update(aws_secret);
-var s3 = new AWS.S3();
+const s3 = new AWS.S3();
 
-var Projects = require('../models/Projects');
-var User = require('../models/Users');
-var UserDetails = require('../models/UserDetails');
-var Revisions = require('../models/Revisions');
+const Projects = require('../models/Projects');
+const User = require('../models/Users');
+const UserDetails = require('../models/UserDetails');
+const Revisions = require('../models/Revisions');
 /**
  * FOR USER
  */
@@ -30,7 +30,7 @@ router.post('/profile', function(req, res) {
   console.log('Posting to profile');
   let fileName = req.query.userName;
   console.log(fileName);
-  var upload = multer({
+  const upload = multer({
     storage: multerS3({
       s3: s3,
       bucket: 'project-match/profile',
@@ -42,7 +42,7 @@ router.post('/profile', function(req, res) {
     })
   });
 
-  var uploadingHandler = upload.single('image');
+  const uploadingHandler = upload.single('image');
   uploadingHandler(req, res, function(err) {
     if (err) {
       // file not uploaded to aws
@@ -93,7 +93,7 @@ router.post('/project', function(req, res) {
   console.log('Posting to project');
   let fileName = req.query.projectId;
   console.log(fileName);
-  var upload = multer({
+  const upload = multer({
     storage: multerS3({
       s3: s3,
       bucket: 'project-match/project',
@@ -105,7 +105,7 @@ router.post('/project', function(req, res) {
     })
   });
 
-  var uploadingHandler = upload.single('image');
+  const uploadingHandler = upload.single('image');
   uploadingHandler(req, res, function(err) {
     if (err) {
       // file not uploaded to aws
@@ -145,7 +145,7 @@ router.post('/project', function(req, res) {
 router.post('/revision', function(req, res) {
   console.log('Posting to revision');
 
-  var revision = new Revisions({
+  const revision = new Revisions({
     revisionNumber: req.query.revisionNumber,
     creator: req.query.user,
     project: mongoose.Types.ObjectId(req.query.projectId)
@@ -160,7 +160,7 @@ router.post('/revision', function(req, res) {
 
       console.log('type of filename', typeof fileName);
 
-      var upload = multer({
+      const upload = multer({
         storage: multerS3({
           s3: s3,
           bucket: 'project-match/revision',
@@ -173,7 +173,7 @@ router.post('/revision', function(req, res) {
         })
       });
 
-      var uploadingHandler = upload.single('image');
+      const uploadingHandler = upload.single('image');
       uploadingHandler(req, res, function(err) {
         if (err) {
           // file not uploaded to aws

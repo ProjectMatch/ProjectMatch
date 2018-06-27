@@ -1,15 +1,7 @@
-/* This is The User Details Schema For MongoDB and Mongoose
- * It contain fields for id, location,roles,
- * description,techstack,projects,projects_bookmarked,
- */
-// Require Mongose ORM
-var Mongoose = require('mongoose');
-// Require Mongoose Schema to Make Mongoose Object
-var Schema = Mongoose.Schema;
+const Mongoose = require('mongoose');
 
-// Lets create Schema Object
-// The formet will be x = { variables like type and conditionals...} fallowed by ','
-var UserDetailsSchema = new Schema({
+const Schema = Mongoose.Schema;
+const UserDetailsSchema = new Schema({
   username: { type: String, default: '' },
   googleId: { type: String },
   location: { type: String, default: '' },
@@ -25,9 +17,6 @@ var UserDetailsSchema = new Schema({
   twitterLink: { type: String, default: '' },
   blogLink: { type: String, default: '' }
 });
+const UserDetails = Mongoose.model('UserDetails', UserDetailsSchema);
 
-// This will creates database collection named "UserDetails" in the Database
-var UserDetails = Mongoose.model('UserDetails', UserDetailsSchema);
-
-// We are making available it to other files
 module.exports = UserDetails;
