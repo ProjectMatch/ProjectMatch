@@ -109,6 +109,27 @@ PROFILE IMAGE
   height: 50px;
   width: 50px;
 }
+/*
+==========================
+PROFILE IMAGE HOVER => show dropdown
+==========================
+*/
+.sub-725:hover {
+  #headerOptionsDropdwn-sub725 {
+    display: block;
+  }
+}
+.header-1080:hover {
+  #headerOptionsDropdwn {
+    display: block;
+  }
+}
+
+.sub-1080:hover {
+  #headerOptionsDropdwn-sub1080 {
+    display: block;
+  }
+}
 
 /*
 ==========================
@@ -122,10 +143,21 @@ SETTINGS DROPDOWN MENU
   position: absolute;
   width: 120px;
   margin-left: -80px;
-  margin-top: 10px;
+  // margin-top: 10px;
   display: none;
   box-shadow: $box-shadow;
   padding: 10px;
+}
+
+.dropdownMask {
+  background-color: black;
+  width: 70px;
+  z-index: $header-dropdown-mask-z;
+  position: absolute;
+  margin-left: -10px;
+  height: 150px;
+  opacity: 0;
+  margin-top: -60px;
 }
 
 .headerOptionsDropdownText {
