@@ -39,6 +39,7 @@ class LoggedInHeaderSub1080 extends React.Component<
                     : require('../assets/blank image.png')
                 }
               />
+              <div className="dropdownMask" />
               <div
                 className="headerOptionsDropdown"
                 id="headerOptionsDropdwn-sub1080"

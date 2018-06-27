@@ -149,6 +149,17 @@ SETTINGS DROPDOWN MENU
   padding: 10px;
 }
 
+.dropdownMask {
+  background-color: black;
+  width: 70px;
+  z-index: $header-dropdown-mask-z;
+  position: absolute;
+  margin-left: -10px;
+  height: 150px;
+  opacity: 0;
+  margin-top: -60px;
+}
+
 .headerOptionsDropdownText {
   color: $dark-grey;
   padding: 10px;

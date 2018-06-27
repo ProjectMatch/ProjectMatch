@@ -42,6 +42,7 @@ class LoggedInHeader1080 extends React.Component<
                     : require('../assets/blank image.png')
                 }
               />
+              <div className="dropdownMask" />
               <div className="headerOptionsDropdown" id="headerOptionsDropdwn">
                 <Link className="headerOptionsDropdownText" to="/user/settings">
                   User Settings
