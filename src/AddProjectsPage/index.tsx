@@ -24,7 +24,7 @@ import { getAllUsers } from '../actions/userActions';
 import { getTags } from '../actions/tagsActions';
 import { getCategories } from '../actions/categoryActions';
 
-class AddProjectsPage extends React.Component<
+export class AddProjectsPage extends React.Component<
   AddProjectProps,
   AddProjectState
 > {
@@ -522,6 +522,7 @@ class AddProjectsPage extends React.Component<
             </div>
 
             <button
+              id="project-submit-btn"
               type="button"
               className="new-project-submit-btn"
               onClick={this.handleSubmit}

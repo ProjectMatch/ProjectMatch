@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { mount, shallow } from 'enzyme';
-import AddProjectsPage from './index';
+import { AddProjectsPage } from './index';
 import * as Enzyme from 'enzyme';
 import * as Adapter from 'enzyme-adapter-react-16';
 
@@ -9,20 +9,44 @@ Enzyme.configure({
 });
 
 // store stub
-describe('>>>AddProjectsPage Container', () => {
-  it('renders without crashing', () => {
-    shallow(<AddProjectsPage />);
+describe('>>>AddProjectsPage Component', () => {
+  let wrapper;
+  const addOrUpdateProjectfn = jest.fn();
+  const getAllUsersfn = jest.fn();
+  const getCategoriesfn = jest.fn();
+  const getTagsfn = jest.fn();
+  const getOneProjectfn = jest.fn();
+  const getProjectsfn = jest.fn();
+
+  beforeEach(() => {
+    wrapper = mount(
+      <AddProjectsPage
+        addOrUpdateProject={addOrUpdateProjectfn}
+        getAllUsers={getAllUsersfn}
+        getCategories={getCategoriesfn}
+        getTags={getTagsfn}
+        getOneProject={getOneProjectfn}
+        getProject={getProjectsfn}
+      />
+    );
   });
 
-  it('should change state.title when typing in input box', () => {
-    const wrapper = mount(<AddProjectsPage />);
-    const nameInput = wrapper.find('#new-project-title');
-
-    nameInput.instance().value = 'New Project Name';
-    nameInput.simulate('change');
-
-    expect(wrapper.state().name).toEqual('New Project Name');
+  it('should call mock submit function', () => {
+    wrapper
+      .find('#project-submit-btn')
+      .simulate('submit', { preventDefault() {} });
+    expect(addOrUpdateProjectfn.mock.calls.length).toBe(1);
   });
+
+  // it('should change state.title when typing in input box', () => {
+  //   const wrapper = mount(<AddProjectsPage />);
+  //   const nameInput = wrapper.find('#new-project-title');
+
+  //   nameInput.instance().value = 'New Project Name';
+  //   nameInput.simulate('change');
+
+  //   expect(wrapper.state().name).toEqual('New Project Name');
+  // });
   // changing inputs / checkboxes
   // gets saved to state correctly
 
