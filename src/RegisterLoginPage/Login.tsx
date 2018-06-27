@@ -75,6 +75,9 @@ class Login extends React.Component<LoginProps, LoginState> {
               value={this.state.password}
               onChange={e => this.handleChange(e)}
               placeholder="Password"
+              autoComplete="on"
+              required={true}
+              minLength={6}
             />
             <br />
             <input

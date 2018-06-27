@@ -129,6 +129,7 @@ class Register extends React.Component<RegisterProps, RegisterState> {
               required={true}
               className="passwordDiv"
               onChange={e => this.handleFormChange(e)}
+              minLength={6}
             />
 
             <br />
