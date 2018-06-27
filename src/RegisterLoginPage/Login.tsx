@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { connect, Dispatch } from 'react-redux';
+import { connect } from 'react-redux';
 // styles
 import './Register-Login.css';
 // component
@@ -7,7 +7,7 @@ import GoogleSignIn from '../GoogleSignIn';
 // types
 import { LoginState } from './Login.d';
 import { LoginProps } from '../types/Redux';
-import { Store, Action } from '../types/Redux';
+import { Store } from '../types/Redux';
 // actions
 import { login } from '../actions/userActions';
 import { showLoginWindow } from '../actions/appActions';
@@ -39,49 +39,52 @@ class Login extends React.Component<LoginProps, LoginState> {
   };
   render() {
     return (
-      <div className="popupScreen">
-        <br />
-        <div className="logo-login_register">project match</div>
-        <button
-          className="login-register-exit-window-btn"
-          onClick={e => this.windowVisibility(e)}
-        >
-          X
-        </button>
-        <br />
-
-        <GoogleSignIn />
-
-        <hr className="horizontalDivider" />
-
-        <form>
-          <label className="form-label">Your Email</label>
-          <input
-            className="emailDiv"
-            type="email"
-            name="email"
-            value={this.state.email}
-            onChange={e => this.handleChange(e)}
-            placeholder="Email"
-          />
+      <div>
+        <div className="popupScreenMask" onClick={this.props.showLoginWindow} />
+        <div className="popupScreen">
           <br />
-          <label className="form-label">Password</label>
-          <input
-            className="passwordDiv"
-            type="password"
-            name="password"
-            value={this.state.password}
-            onChange={e => this.handleChange(e)}
-            placeholder="Password"
-          />
+          <div className="logo-login_register">project match</div>
+          <button
+            className="login-register-exit-window-btn"
+            onClick={e => this.windowVisibility(e)}
+          >
+            X
+          </button>
           <br />
-          <input
-            type="submit"
-            className="loginBtn"
-            value="Log In"
-            onClick={e => this.handleSubmit(e)}
-          />
-        </form>
+
+          <GoogleSignIn />
+
+          <hr className="horizontalDivider" />
+
+          <form>
+            <label className="form-label">Your Email</label>
+            <input
+              className="emailDiv"
+              type="email"
+              name="email"
+              value={this.state.email}
+              onChange={e => this.handleChange(e)}
+              placeholder="Email"
+            />
+            <br />
+            <label className="form-label">Password</label>
+            <input
+              className="passwordDiv"
+              type="password"
+              name="password"
+              value={this.state.password}
+              onChange={e => this.handleChange(e)}
+              placeholder="Password"
+            />
+            <br />
+            <input
+              type="submit"
+              className="loginBtn"
+              value="Log In"
+              onClick={e => this.handleSubmit(e)}
+            />
+          </form>
+        </div>
       </div>
     );
   }
@@ -92,15 +95,6 @@ function mapStateToProps(state: Store) {
   };
 }
 
-function mapDispatchToProps(dispatch: Dispatch<Action>) {
-  return {
-    showLoginWindow: () => {
-      return dispatch(showLoginWindow());
-    },
-    login: (email: string, password: string) => {
-      return dispatch(login(email, password));
-    }
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, { showLoginWindow, login })(
+  Login as any
+);

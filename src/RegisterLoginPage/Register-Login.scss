@@ -10,6 +10,17 @@
   height: 550px;
 }
 
+.popupScreenMask {
+  background-color: black;
+  height: 100%;
+  width: 150%;
+  margin: 0 auto;
+  z-index: $login-register-window-mask-z;
+  position: fixed;
+  margin-left: -50%;
+  opacity: 0.2;
+}
+
 .logo-login_register {
   font-family: $font;
   color: $theme-blue;
