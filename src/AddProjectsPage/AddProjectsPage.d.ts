@@ -5,14 +5,14 @@ export interface AddProjectState {
   name?: string;
   description?: string;
   dueDate?: string;
-  team?: string[];
+  team?: Set<any>;
   githubLink?: string;
   mockupLink?: string;
   liveLink?: string;
-  lookingFor?: string[];
+  lookingFor?: Set<any>;
   status?: boolean;
   category?: string;
-  tags?: string[];
+  tags?: Set<any>;
   images?: any;
   contact?: string;
   createdAt?: string;
