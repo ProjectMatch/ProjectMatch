@@ -82,10 +82,15 @@ FORM INPUTS
   padding: 5px;
 }
 
-.emailDiv:invalid,
-.passwordDiv:invalid {
+.emailDiv:focus:invalid,
+.passwordDiv:focus:invalid {
   border: 1px solid red;
+  background-color: $pale-red;
 }
+// .emailDiv:invalid,
+// .passwordDiv:invalid {
+//   border: 1px solid red;
+// }
 /*
 ==========================
 FORM LABEL
