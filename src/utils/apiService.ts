@@ -56,7 +56,7 @@ function login(email: string, password: string): Promise<User | string> {
             blogLink: userDetails.blogLink
           });
         } else {
-          reject(res.error);
+          reject(res.message);
         }
       });
   });

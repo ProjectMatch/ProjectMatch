@@ -17,20 +17,24 @@ class Login extends React.Component<LoginProps, LoginState> {
     super(props);
     this.state = {
       email: '',
-      password: ''
+      password: '',
+      showError: false
     };
   }
   handleChange = (e: React.FormEvent<HTMLInputElement>): void => {
     var { name, value } = e.currentTarget;
     this.setState({
       [name]: value
-      // tslint:disable-next-line
     } as any);
   };
 
   handleSubmit = (e: React.FormEvent<HTMLInputElement>): void => {
     e.preventDefault();
-    this.props.login(this.state.email, this.state.password);
+    this.props.login(this.state.email, this.state.password).then(() => {
+      if (typeof this.props.user === 'string') {
+        this.setState({ showError: true });
+      }
+    });
   };
 
   windowVisibility = (e: React.MouseEvent<HTMLButtonElement>): void => {
@@ -86,6 +90,9 @@ class Login extends React.Component<LoginProps, LoginState> {
               value="Log In"
               onClick={e => this.handleSubmit(e)}
             />
+            <div className="form-error-message-all">
+              {this.state.showError ? this.props.user : null}
+            </div>
           </form>
         </div>
       </div>
@@ -94,7 +101,8 @@ class Login extends React.Component<LoginProps, LoginState> {
 }
 function mapStateToProps(state: Store) {
   return {
-    visibleLoginWindow: state.registerLoginWindow.visibleLoginWindow
+    visibleLoginWindow: state.registerLoginWindow.visibleLoginWindow,
+    user: state.user
   };
 }
 
