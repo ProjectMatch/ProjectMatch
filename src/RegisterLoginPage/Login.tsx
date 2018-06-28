@@ -33,6 +33,8 @@ class Login extends React.Component<LoginProps, LoginState> {
     this.props.login(this.state.email, this.state.password).then(() => {
       if (typeof this.props.user === 'string') {
         this.setState({ showError: true });
+      } else {
+        this.props.showLoginWindow();
       }
     });
   };
