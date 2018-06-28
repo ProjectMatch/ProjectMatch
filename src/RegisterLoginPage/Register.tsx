@@ -14,6 +14,7 @@ import {
   showRegisterWindow,
   completeRegistration
 } from '../actions/appActions';
+import { getAllUsers } from '../actions/userActions';
 
 class Register extends React.Component<RegisterProps, RegisterState> {
   constructor(props: RegisterProps) {
@@ -24,27 +25,68 @@ class Register extends React.Component<RegisterProps, RegisterState> {
       email: '',
       password: '',
       username: '',
-      shouldRedirect: false
+      shouldRedirect: false,
+      showErrorAllInputRqd: false,
+      showErrorPwLength: false,
+      showErrorDuplicateUsername: false,
+      showErrorDuplicateEmail: false,
+      disableSubmitBtn: false
     };
   }
 
-  public handleFormChange(e: React.FormEvent<HTMLInputElement>): void {
+  componentDidMount() {
+    this.props.getAllUsers();
+  }
+
+  handleFormChange(e: React.FormEvent<HTMLInputElement>): void {
     var { name, value } = e.currentTarget;
     this.setState({
       [name]: value
     } as any);
   }
 
-  public handleSubmit(e: React.FormEvent<HTMLButtonElement>): void {
+  allInputsAreValid = (e: any) => {
     e.preventDefault();
     const { firstName, lastName, username, email, password } = this.state;
+    if (!firstName || !lastName || !username || !email || !password) {
+      this.setState({ showErrorAllInputRqd: true });
+      return;
+    }
 
+    let noDuplicateUsername = this.props.allUsers.every(
+      user => user.username !== username
+    );
+    if (!noDuplicateUsername) {
+      this.setState({ showErrorDuplicateUsername: true });
+      return;
+    }
+
+    let noDuplicateEmail = this.props.allUsers.every(
+      user => user.email !== email
+    );
+    if (!noDuplicateEmail) {
+      this.setState({ showErrorDuplicateEmail: true });
+      return;
+    }
+
+    if (password.length < 6) {
+      this.setState({ showErrorPwLength: true });
+      return;
+    }
+
+    return this.handleSubmit(e);
+  };
+
+  handleSubmit = (e: any) => {
+    e.preventDefault();
+    const { firstName, lastName, username, email, password } = this.state;
     this.props
       .register(firstName, lastName, username, email, password)
       .then(() => {
         this.props.completeRegistration();
       });
-  }
+    this.windowVisibility(e);
+  };
 
   windowVisibility = (e: React.MouseEvent<HTMLButtonElement>): void => {
     e.preventDefault();
@@ -96,6 +138,11 @@ class Register extends React.Component<RegisterProps, RegisterState> {
 
             <br />
 
+            <div className="form-error-message">
+              {this.state.showErrorDuplicateUsername
+                ? '// This username is already being used.'
+                : null}
+            </div>
             <label className="form-label">Username</label>
             <input
               type="text"
@@ -108,6 +155,11 @@ class Register extends React.Component<RegisterProps, RegisterState> {
 
             <br />
 
+            <div className="form-error-message">
+              {this.state.showErrorDuplicateEmail
+                ? '// This email address is already being used.'
+                : null}
+            </div>
             <label className="form-label">Your Email</label>
             <input
               type="email"
@@ -120,6 +172,11 @@ class Register extends React.Component<RegisterProps, RegisterState> {
 
             <br />
 
+            <div className="form-error-message">
+              {this.state.showErrorPwLength
+                ? '// Your password must be at least 6 characters.'
+                : null}
+            </div>
             <label className="form-label">Password</label>
             <input
               id="pasword"
@@ -135,13 +192,18 @@ class Register extends React.Component<RegisterProps, RegisterState> {
             <br />
 
             <button
-              onClick={e => this.handleSubmit(e)}
+              onClick={e => this.allInputsAreValid(e)}
               type="submit"
               className="signUpBtn"
               name="registerBtn"
             >
               Sign Up
             </button>
+            <div className="form-error-message-all">
+              {this.state.showErrorAllInputRqd
+                ? 'All inputs are required.'
+                : null}
+            </div>
           </form>
         </div>
       </div>
@@ -151,12 +213,14 @@ class Register extends React.Component<RegisterProps, RegisterState> {
 
 function mapStateToProps(state: Store) {
   return {
-    visibleRegisterWindow: state.registerLoginWindow.visibleRegisterWindow
+    visibleRegisterWindow: state.registerLoginWindow.visibleRegisterWindow,
+    allUsers: state.allUsers
   };
 }
 
 export default connect(mapStateToProps, {
   register,
   showRegisterWindow,
-  completeRegistration
+  completeRegistration,
+  getAllUsers
 })(Register as any);

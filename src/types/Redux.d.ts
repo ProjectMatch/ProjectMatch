@@ -117,6 +117,8 @@ export interface RegisterProps {
   visibleRegisterWindow: boolean;
   showRegisterWindow: showRegisterWindow_fntype;
   completeRegistration: any;
+  allUsers: Users;
+  getAllUsers: getAllUsers_fntype;
 }
 
 export interface ProjectProps {
