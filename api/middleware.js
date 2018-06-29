@@ -15,7 +15,11 @@ function setupMiddleware(app) {
       optionsSuccessStatus: 200
     })
   );
-  app.use(morgan('dev'));
+
+  if (process.env.NODE_ENV !== 'testing') {
+    app.use(morgan('dev'));
+  }
+
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(cookieParser());
