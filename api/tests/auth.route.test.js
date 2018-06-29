@@ -6,21 +6,33 @@ const expect = chai.expect;
 const chaiHttp = require('chai-http');
 chai.use(chaiHttp);
 
-describe('Authenticaiton Routes', function() {
+describe('Authentication Routes', function() {
   const agent = chai.request.agent(app);
 
+  const dbConfig = {
+    url: 'mongodb://localhost:27017',
+    name: 'project-match-test'
+  };
+
+  const user = {
+    username: 'blackpanther',
+    password: 'tigercheese12',
+    email: 'tchalla@wakanda.gov',
+    firstName: 'tchalla',
+    lastName: 'unknown'
+  };
+
   before(function(done) {
-    MongoClient.connect(
-      'mongodb://localhost:27017',
-      { useNewUrlParser: true },
-      function(err, client) {
-        const db = client.db('project-match-test');
-        db
-          .collection('users')
-          .deleteMany({})
-          .then(err => client.close(done));
-      }
-    );
+    MongoClient.connect(dbConfig.url, { useNewUrlParser: true }, function(
+      err,
+      client
+    ) {
+      const db = client.db(dbConfig.name);
+      db
+        .collection('users')
+        .deleteMany({})
+        .then(err => client.close(done));
+    });
   });
 
   after(function(done) {
@@ -30,13 +42,7 @@ describe('Authenticaiton Routes', function() {
   it('should sign up user', function(done) {
     agent
       .post('/api/auth/signup')
-      .send({
-        username: 'blackpanther',
-        password: 'tigercheese12',
-        email: 'tchalla@wakanda.gov',
-        firstName: 'tchalla',
-        lastName: 'unknown'
-      })
+      .send(user)
       .end(function(err, res) {
         expect(res).to.have.status(200);
         expect(res.body.message).to.equal('Successfully signed up.');
@@ -52,12 +58,14 @@ describe('Authenticaiton Routes', function() {
     });
   });
 
-  it('should not login user', function(done) {
+  it('should not login user with incorrect credentials', function(done) {
+    const wrongPassword = 'this is so wrong';
+
     agent
       .post('/api/auth/login')
       .send({
-        username: 'blackpanther',
-        password: 'tigercheese123'
+        username: user.username,
+        password: wrongPassword
       })
       .end(function(err, res) {
         expect(res).to.have.status(401);
@@ -66,12 +74,12 @@ describe('Authenticaiton Routes', function() {
       });
   });
 
-  it('should login user', function(done) {
+  it('should login user with proper credentials', function(done) {
     agent
       .post('/api/auth/login')
       .send({
-        username: 'blackpanther',
-        password: 'tigercheese12'
+        username: user.username,
+        password: user.password
       })
       .end(function(err, res) {
         expect(res).to.have.status(200);
