@@ -6,9 +6,9 @@ const expect = chai.expect;
 const chaiHttp = require('chai-http');
 chai.use(chaiHttp);
 
-const agent = chai.request.agent(app);
-
 describe('Authenticaiton Routes', function() {
+  const agent = chai.request.agent(app);
+
   before(function(done) {
     MongoClient.connect(
       'mongodb://localhost:27017',
