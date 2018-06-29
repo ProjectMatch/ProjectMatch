@@ -26,7 +26,7 @@ function signup(req, res) {
         });
       }
       if (user) {
-        res.json({
+        res.status(409).json({
           message: 'User already exists with this email or username.'
         });
       } else {

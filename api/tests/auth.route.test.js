@@ -58,6 +58,19 @@ describe('Authentication Routes', function() {
     });
   });
 
+  it('should not sign up user with username taken', function(done) {
+    agent
+      .post('/api/auth/signup')
+      .send(user)
+      .end(function(err, res) {
+        expect(res).to.have.status(409);
+        expect(res.body.message).to.equal(
+          'User already exists with this email or username.'
+        );
+        done();
+      });
+  });
+
   it('should not login user with incorrect credentials', function(done) {
     const wrongPassword = 'this is so wrong';
 
