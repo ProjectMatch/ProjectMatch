@@ -34,6 +34,12 @@ start mongo.exe
 - To runs tests use the command `npm test`.
 - Use [Postman](https://www.getpostman.com/) app as an alternate/concurrent option for tests
 
+
+### API Testing
+API tests uses [mocha](https://mochajs.org/) and [chai](http://www.chaijs.com/) using the `expect` interface. There were some issues using jest with [es6/es7 running on node](https://github.com/facebook/jest/issues/4248). Another benefit of using mocha/chai, is that it assists with the context switching from backend to frontend and vice versa.
+
+To run the tests use the command `npm run test-api`
+
 ## Git Workflow
 1. Work from each developer takes place in their own individual branch
 2. Before pushing your work into `development branch`, merge `development branch` into your own branch first and work out any conflicts
