@@ -6,6 +6,12 @@ const User = require('../../models/Users');
 const config = require('../../utils/config');
 const Tags = require('../../models/Tags');
 
+const {
+  createResponder,
+  createDocHandler,
+  createDataHandler
+} = require('../helpers/dataHandlers');
+
 function saveTag(name) {
   Tags.findOne({ name }, function(err, tag) {
     if (err) {
@@ -15,45 +21,6 @@ function saveTag(name) {
       newTag.save(err => console.log(err));
     }
   });
-}
-
-function sendError(res) {
-  res.json({
-    error: 'Something went wrong'
-  });
-}
-
-function createResponder(successMessage, fieldName, transform) {
-  successMessage = successMessage || 'Success!';
-  return function(doc, res) {
-    res.json({
-      message: successMessage,
-      [fieldName]: transform ? transform(doc) : doc
-    });
-  };
-}
-
-function createDocHandler(errorHandler, responder, res) {
-  return function(err, doc) {
-    if (err || !doc) {
-      !errorHandler ? sendError(res) : errorHandler(err);
-    } else {
-      responder(doc, res);
-    }
-  };
-}
-
-function createDataHandler(res, options) {
-  const {
-    fieldName,
-    transform,
-    successMessage,
-    errorHandler,
-    errorMessage
-  } = options;
-
-  const responder = createResponder(successMessage, fieldName, transform);
-  return createDocHandler(errorHandler, responder, res);
 }
 
 module.exports.getProject = function(req, res) {
