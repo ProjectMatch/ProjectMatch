@@ -13,9 +13,7 @@ router.use('/upload/image', require('./services/image'));
 router.use('/download', require('./services/download'));
 router.use('/email', require('./services/email'));
 router.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
+  res.sendStatus(404);
 });
 
 module.exports = router;
