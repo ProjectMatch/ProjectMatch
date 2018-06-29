@@ -6,492 +6,277 @@ const User = require('../../models/Users');
 const config = require('../../utils/config');
 const Tags = require('../../models/Tags');
 
-function saveTag(tagName) {
-  Tags.findOne({ tagName: tagName }, function(err, tag) {
+function saveTag(name) {
+  Tags.findOne({ name }, function(err, tag) {
     if (err) {
-      console.log('Error in retrieving tag: ' + err);
+      console.log(err);
     } else if (!tag) {
-      const newTag = new Tags({ tagName: tagName });
-      newTag.save(function(err) {
-        if (err) {
-          console.log('Error in saving tag: ' + err);
-        }
-      });
+      const newTag = new Tags({ name });
+      newTag.save(err => console.log(err));
     }
   });
 }
 
-function getProjects(req, res) {
-  const query = req.body.query;
-  const options = req.body.options;
+function sendError(res) {
+  res.json({
+    error: 'Something went wrong'
+  });
+}
 
-  if (query && query.searchTerm) {
-    const queryToRegex = new RegExp(query.searchTerm, 'i');
-    query = delete query.searchTerm;
-    query = Object.assign({}, query, {
-      $or: [
-        {
-          name: {
-            $regex: queryToRegex
-          }
-        },
-        {
-          description: {
-            $regex: queryToRegex
-          }
-        },
-        {
-          category: {
-            $regex: queryToRegex
-          }
-        },
-        {
-          tags: {
-            $regex: queryToRegex
-          }
-        }
-      ]
+function createResponder(successMessage, fieldName, transform) {
+  successMessage = successMessage || 'Success!';
+  return function(doc, res) {
+    res.json({
+      message: successMessage,
+      [fieldName]: transform ? transform(doc) : doc
     });
-  }
-
-  Project.paginate(
-    query === undefined || query === {} ? {} : query,
-    options,
-    function(err, result) {
-      if (err) {
-        return res.json({
-          error: 'Error retrieving project: ' + err
-        });
-      } else {
-        res.json({
-          projects: result,
-          message: 'Succesfully retrieved projects'
-        });
-      }
-    }
-  );
+  };
 }
 
-function getProject(req, res) {
-  Project.findOne(
-    {
-      _id: req.params.id
-    },
-    function(err, project) {
-      if (err || !project) {
-        res.json({
-          error: 'Error in retrieving project: ' + err
-        });
-      } else {
-        res.json({
-          message: 'Successfully retrieved project',
-          project: project
-        });
-      }
-    }
-  );
-}
-
-function getProjectTeamMembers(req, res) {
-  Project.findById(req.params.id, function(err, project) {
-    if (err) {
-      res.send(err);
+function createDocHandler(errorHandler, responder, res) {
+  return function(err, doc) {
+    if (err || !doc) {
+      !errorHandler ? sendError(res) : errorHandler(err);
     } else {
-      const team = project.team;
-      team.push(project.creator);
-      res.json({
-        message: `Successfully retrieved team for ${project._id}`,
-        team
-      });
+      responder(doc, res);
     }
-  });
+  };
 }
 
-function getTeamThumbnails(req, res) {
-  Project.findById(req.params.id, function(err, project) {
-    if (err) {
-      res.send(err);
-    } else {
-      const team = project.team;
-      team.push(project.creator);
-      User.find(
-        {
-          username: {
-            $in: team
-          }
-        },
-        function(err, user) {
-          if (err) {
-            res.send(err);
-          } else {
-            const thumbnailsURLs = user.map(data => {
-              return data.profileImage;
-            });
-            res.json({
-              message: 'Team successfully found for project ' + req.params.id,
-              thumbnailsURLs
-            });
-          }
-        }
-      );
-    }
-  });
+function createDataHandler(res, options) {
+  const {
+    fieldName,
+    transform,
+    successMessage,
+    errorHandler,
+    errorMessage
+  } = options;
+
+  const responder = createResponder(successMessage, fieldName, transform);
+  return createDocHandler(errorHandler, responder, res);
 }
 
-function addCommentToProject(req, res) {
-  const comment = new Comment({
-    creator: req.body.username,
-    comment: req.body.comment,
-    project: req.params.id
-  });
-
-  comment.save(function(err) {
-    if (err) {
-      console.log(err);
-    } else {
-      res.json({
-        message: 'Comment successfully added to project ' + req.params.id,
-        comment
-      });
-    }
-  });
-}
-
-function getCommentsForProject(req, res) {
-  Comment.find(
-    {
-      project: req.params.id
-    },
-    function(err, comments) {
-      if (err) {
-        console.log(err);
-      } else {
-        res.json({
-          message: 'Comment successfully retreived for poject ' + req.params.id,
-          comments
-        });
-      }
-    }
-  );
-}
-
-function addRevisionToProject(req, res) {
-  const revision = new Revision({
-    revisionNumber: req.body.revisionNumber,
-    finalVersion: req.body.finalVersion,
-    imageURL: req.body.imageURL,
-    creator: req.body.creator,
-    description: req.body.description,
-    project: req.params.id
-  });
-
-  revision.save(function(err) {
-    if (err) {
-      console.log(err);
-    } else {
-      res.json({
-        message: 'Revision successfully added to project ' + req.params.id
-      });
-    }
-  });
-}
-
-function getRevisionsForProject(req, res) {
-  Revision.find(
-    {
-      project: req.params.id
-    },
-    function(err, revisions) {
-      if (err) {
-        console.log(err);
-      } else {
-        res.json({
-          message:
-            'Revisions successfully retrieved for project ' + req.params.id,
-          revisions
-        });
-      }
-    }
-  );
-}
-
-function getRevisionForProject(req, res) {
-  Revision.findOne(
-    {
-      _id: req.params.revisionId
-    },
-    function(err, revision) {
-      if (err) {
-        console.log(err);
-      } else {
-        res.json({
-          message:
-            'Revision successfully retrieved for project ' + req.params.id,
-          revision
-        });
-      }
-    }
-  );
-}
-
-function addMarkerToRevision(req, res) {
-  const marker = new Marker({
-    type: req.body.type,
-    creator: req.body.creator,
-    revision: req.params.revisionId,
-    x: req.body.x,
-    y: req.body.y,
-    width: req.body.width,
-    height: req.body.height
-  });
-
-  marker.save(function(err) {
-    if (err) {
-      console.log(err);
-    } else {
-      res.json({
-        message:
-          'Marker successfully added to revision ' + req.params.revisionId,
-        marker
-      });
-    }
-  });
-}
-
-function deleteMarker(req, res) {
-  Marker.findOneAndRemove(
-    {
-      _id: req.params.markerId
-    },
-    function(err, marker) {
-      if (err) {
-        console.log(err);
-      } else {
-        res.json({
-          message: `Marker ${req.params.markerId} successfully deleted`,
-          marker
-        });
-      }
-    }
-  );
-}
-
-function getMarkerForRevision(req, res) {
-  Marker.find(
-    {
-      revision: req.params.revisionId
-    },
-    function(err, markers) {
-      if (err) {
-        console.log(err);
-      } else {
-        res.json({
-          message:
-            'Markers successfully retrieved for revision ' +
-            req.params.revisionId,
-          markers
-        });
-      }
-    }
-  );
-}
-
-function updateMarker(req, res) {
-  Marker.findOneAndUpdate(
-    {
-      _id: req.params.markerId
-    },
-    req.body,
-    { new: true },
-    function(err, marker) {
-      if (err) {
-        console.log(err);
-      } else {
-        res.json({
-          message: `Marker ${req.params.markerId} successfully updated`,
-          marker
-        });
-      }
-    }
-  );
-}
-
-function addCommentToMarker(req, res) {
-  const comment = new Comment({
-    creator: req.body.creator,
-    comment: req.body.comment,
-    marker: req.params.markerId
-  });
-
-  comment.save(function(err) {
-    console.log(req.body);
-    console.log(comment);
-    if (err) {
-      console.log(err);
-    } else {
-      res.json({
-        message: 'Comment successfully added to marker ' + req.params.markerId,
-        comment
-      });
-    }
-  });
-}
-
-function getCommentsForMarker(req, res) {
-  Comment.find(
-    {
-      marker: req.params.markerId
-    },
-    function(err, comments) {
-      if (err) {
-        console.log(err);
-      } else {
-        res.json({
-          message: 'Comment successfully retreived for marker ' + req.params.id,
-          comments
-        });
-      }
-    }
-  );
-}
-
-function addUserToTeam(req, req) {
-  Project.findByIdAndUpdate(
-    req.params.projectId,
-    {
-      $addToSet: {
-        team: req.params.username
-      }
-    },
-    function(err, project) {
-      if (err) {
-        console.log(err);
-        res.status(409);
-      } else {
-        User.findOneAndUpdate(
-          { username: req.params.username },
-          {
-            $push: {
-              projects: mongoose.Types.ObjectId(req.params.prpojectId)
-            }
-          },
-          function(err, user) {
-            if (err) {
-              console.log(err);
-              res.status(409);
-            } else {
-              res.redirect(`${config.host.name}/projects/${project._id}`);
-            }
-          }
-        );
-      }
-    }
-  );
-}
-
-function addProject(req, res) {
-  const newProject = new Project();
-
-  newProject.name = req.body.name;
-  newProject.description = req.body.description;
-  newProject.dueDate = req.body.dueDate;
-  newProject.team = req.body.team;
-  newProject.githubLink = req.body.githubLink;
-  newProject.mockupLink = req.body.mockupLink;
-  newProject.liveLink = req.body.liveLink;
-  newProject.lookingFor = req.body.lookingFor;
-  newProject.status = req.body.status;
-  newProject.category = req.body.category;
-  newProject.tags = req.body.tags;
-  newProject.contact = req.body.contact;
-  newProject.creator = req.body.creator;
-
-  newProject.save(function(err, project) {
-    if (err) {
-      res.json({ error: 'Error in saving project: ' + err });
-    } else {
-      if (project.tags) {
-        project.tags.forEach(tag => {
-          saveTag(tag);
-        });
-      }
-      res.json({
-        message: 'New project saved successfully',
-        newProject: project
-      });
-    }
-  });
-}
-
-function updateProject(req, res) {
+module.exports.getProject = function(req, res) {
   const projectId = req.params.id;
-  const updateBody = req.body;
-  updateBody.modifiedAt = Date.now();
-  delete updateBody._id;
-  delete updateBody.images;
+  const dataHandler = createDataHandler(res, { fieldName: 'project' });
+  Project.findById(projectId, dataHandler);
+};
 
-  Project.findOneAndUpdate(
-    { _id: projectId },
-    updateBody,
-    { new: true },
-    function(err, project) {
-      if (err) {
-        return res.json({ error: err });
-      } else if (!project) {
-        return res.json({ error: 'Project does not exist: ' + err });
-      } else {
-        if (project.tags) {
-          project.tags.forEach(tag => {
-            saveTag(tag);
-          });
-        }
-        res.json({
-          project: project,
-          message: 'Project saved successfully'
-        });
+module.exports.getProjectTeamMembers = function(req, res) {
+  const projectId = req.params.id;
+  const transform = project => {
+    return [project.creator, ...project.team];
+  };
+  const dataHandler = createDataHandler(res, { fieldName: 'team', transform });
+  Project.findById(projectId, dataHandler);
+};
+
+module.exports.getTeamThumbnails = function(req, res) {
+  const projectId = req.params.id;
+
+  const findTeammembers = project => {
+    const team = [project.creator, ...project.team];
+    const conditions = {
+      username: {
+        $in: team
       }
-    }
-  );
-}
+    };
+    const transform = user => {
+      return user.map(data => {
+        return data.profileImage;
+      });
+    };
 
-function deleteProject(req, res) {
-  console.log(req.body.id);
-  Project.findByIdAndRemove(req.body.id, function(err, project) {
-    if (err || !project) {
-      res.json({ error: 'Error in deleting project: ' + err });
-    } else {
-      Project.find({}, function(err, projects) {
-        if (err || !projects) {
-          res.json({ error: 'Error in finding projects: ' + err });
-        } else {
-          res.json({
-            message: 'Project successfully deleted',
-            project: projects
-          });
-        }
+    const dataHandler = createDataHandler(res, {
+      fieldName: 'thumbnailURLs',
+      transform
+    });
+    User.find(conditions, dataHandler);
+  };
+
+  const projectHandler = createDocHandler(null, findTeammembers, res);
+  Project.findById(projectId, projectHandler);
+};
+
+// TODO: Check if user in project first
+module.exports.addCommentToProject = function(req, res) {
+  const comment = new Comment({
+    ...req.body,
+    creator: req.user.username,
+    project: req.params.id
+  });
+  const dataHandler = createDataHandler(res, { fieldName: 'comment' });
+  comment.save(dataHandler);
+};
+
+module.exports.getCommentsForProject = function(req, res) {
+  const conditions = { project: req.params.id };
+  const dataHandler = createDataHandler(res, { fieldName: 'comments' });
+  Comment.find(conditions, dataHandler);
+};
+
+// TODO: Check if user is in project first
+module.exports.addRevisionToProject = function(req, res) {
+  const revision = new Revision({
+    ...req.body,
+    creator: req.user.username,
+    project: req.params.id
+  });
+
+  const dataHandler = createDataHandler(res, { fieldName: 'revision' });
+  revision.save(dataHandler);
+};
+
+module.exports.getRevisionsForProject = function(req, res) {
+  const conditions = { project: req.params.id };
+  const dataHandler = createDataHandler(res, { fieldName: 'revisions' });
+  Revision.find(conditions, dataHandler);
+};
+
+module.exports.getRevisionForProject = function(req, res) {
+  const revisionId = req.params.revisionId;
+  const dataHandler = createDataHandler(res, { fieldName: 'revision' });
+  Revision.findById(revisionId, dataHandler);
+};
+
+// TODO: Check if user is in project first
+module.exports.addMarkerToRevision = function(req, res) {
+  const doc = req.body;
+  doc.revision = req.params.revisionId;
+  const marker = new Marker(doc);
+  const dataHandler = createDataHandler(res, { fieldName: 'marker' });
+  marker.save(dataHandler);
+};
+
+// TODO: Check if user is in project first
+module.exports.deleteMarker = function(req, res) {
+  const markerId = req.params.markerId;
+  const dataHandler = createDataHandler(res, { fieldName: 'marker' });
+
+  Marker.findByIdAndRemove(markerId, dataHandler);
+};
+
+module.exports.getMarkerForRevision = function(req, res) {
+  const conditions = { revision: req.params.revisionId };
+  const dataHandler = createDataHandler(res, { fieldName: 'markers' });
+  Marker.find(conditions, dataHandler);
+};
+
+// TODO: Check if user created the marker
+module.exports.updateMarker = function(req, res) {
+  const markerId = req.params.markerId;
+  const update = req.body;
+  const options = { new: true };
+  const dataHandler = createDataHandler(res, { fieldName: 'marker' });
+  Marker.findByIdAndUpdate(markerId, update, options, dataHandler);
+};
+
+// TODO: Check if user is on team
+module.exports.addCommentToMarker = function(req, res) {
+  const doc = {
+    ...req.body,
+    creator: req.user.username,
+    marker: req.params.markerId
+  };
+  const comment = new Comment(doc);
+  const dataHandler = createDataHandler(res, { fieldName: 'comment' });
+  comment.save(dataHandler);
+};
+
+module.exports.getCommentsForMarker = function(req, res) {
+  const conditions = { marker: req.params.markerId };
+  const dataHandler = createDataHandler(res, { fieldName: 'comments' });
+  Comment.find(conditions, dataHandler);
+};
+
+// TODO: Check if user is the project creator
+module.exports.addUserToTeam = function(req, req) {
+  const projectId = req.params.projectId;
+  const update = { $addToSet: { team: req.params.username } };
+  const findTeammembers = project => {
+    const conditions = { username: req.params.username };
+    const update = {
+      $push: {
+        projects: mongoose.Types.ObjectId(req.params.prpojectId)
+      }
+    };
+    const transform = user => {
+      res.redirect(`${config.host.name}/projects/${project._id}`);
+    };
+
+    const dataHandler = createDataHandler(res, {
+      fieldName: 'team',
+      transform
+    });
+    User.findOneAndUpdate(conditions, update, userHandler);
+  };
+
+  const projectHandler = createDocHandler(null, findTeammembers, res);
+  Project.findByIdAndUpdate(projectId, update, projectHandler);
+};
+
+module.exports.addProject = function(req, res) {
+  const doc = req.body;
+  const newProject = new Project(doc);
+  const transform = project => {
+    if (project.tags) {
+      project.tags.forEach(tag => {
+        saveTag(tag);
       });
     }
-  });
-}
+    return project;
+  };
 
-module.exports = {
-  getProjects,
-  getProject,
-  getProjectTeamMembers,
-  getTeamThumbnails,
-  addCommentToProject,
-  getCommentsForProject,
-  addRevisionToProject,
-  getRevisionsForProject,
-  getRevisionForProject,
-  addMarkerToRevision,
-  deleteMarker,
-  getMarkerForRevision,
-  updateMarker,
-  addCommentToMarker,
-  getCommentsForMarker,
-  addUserToTeam,
-  addProject,
-  updateProject,
-  deleteProject
+  const dataHandler = createDataHandler(res, {
+    fieldName: 'newProject',
+    transform
+  });
+
+  newProject.save(dataHandler);
+};
+
+// TODO: Check if user is project creator
+module.exports.updateProject = function(req, res) {
+  const projectId = req.params.id;
+  const update = { ...req.body, modifiedAt: Date.now() };
+  const options = { new: true };
+  const transform = project => {
+    if (project.tags) {
+      project.tags.forEach(tag => {
+        saveTag(tag);
+      });
+    }
+    return project;
+  };
+  const dataHandler = createDataHandler(res, {
+    fieldName: 'project',
+    transform
+  });
+  Project.findByIdAndUpdate(projectId, update, options, dataHandler);
+};
+
+// TODO: Check if user is project creator
+module.exports.deleteProject = function(req, res) {
+  const projectId = req.body.id;
+  const dataHandler = createDataHandler(res, { fieldName: 'project' });
+  Project.findByIdAndRemove(projectId, dataHandler);
+};
+
+module.exports.getProjects = function(req, res) {
+  const rawQuery = req.body.query;
+  const options = req.body.options;
+  const searchTerm = req.body.searchTerm;
+  const $regex = new RegExp(searchTerm, 'i');
+  const query = {
+    ...rawQuery,
+    $or: [
+      { name: { $regex } },
+      { description: { $regex } },
+      { category: { $regex } },
+      { tags: { $regex } }
+    ]
+  };
+
+  const dataHandler = createDataHandler(res, { fieldName: 'projects' });
+  Project.paginate(query, options, dataHandler);
 };
