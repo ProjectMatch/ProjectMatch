@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const setupMiddlewares = require('./middleware');
 const apiRouter = require('./apiRouter');
