@@ -7,8 +7,7 @@ const SMTP_HOST = 'smtp.sendgrid.net';
 const PORT = 587;
 const SECURE = false;
 const USER = 'apikey';
-const PASS =
-  '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';
+const PASS = process.env.SG_PASS;
 
 const FROM_EMAIL = 'join_request@projectmatch.me';
 const EMAIL_SUBJECT = 'Project Match - Join Request';

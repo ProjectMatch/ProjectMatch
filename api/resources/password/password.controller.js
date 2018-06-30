@@ -61,8 +61,7 @@ function resetPassword(req, res) {
           secure: false, // true for 465, false for other ports
           auth: {
             user: 'apikey', // SendGrid Email api
-            pass:
-              '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' // generated ethereal password
+            pass: process.env.SG_PASS // generated ethereal password
           }
         });
 
