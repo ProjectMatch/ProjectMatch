@@ -11,15 +11,25 @@ Enzyme.configure({
 // store stub
 describe('>>>AddProjectsPage Component', () => {
   let wrapper;
-  const addOrUpdateProjectfn = jest.fn();
+  const addOrUpdateProjectfn = jest.fn().mockResolvedValue({});
   const getAllUsersfn = jest.fn();
   const getCategoriesfn = jest.fn();
   const getTagsfn = jest.fn();
   const getOneProjectfn = jest.fn();
-  const getProjectsfn = jest.fn();
+  const getProjectsfn = jest.fn().mockResolvedValue([]);
 
+  const props = {
+    user: {},
+    projects: [],
+    categories: [],
+    tags: [],
+    allUsers: [],
+    imageLinks: [],
+    currentProject: {},
+    match: { params: {} }
+  };
   beforeEach(() => {
-    wrapper = mount(
+    wrapper = shallow(
       <AddProjectsPage
         addOrUpdateProject={addOrUpdateProjectfn}
         getAllUsers={getAllUsersfn}
@@ -27,15 +37,34 @@ describe('>>>AddProjectsPage Component', () => {
         getTags={getTagsfn}
         getOneProject={getOneProjectfn}
         getProject={getProjectsfn}
+        {...props}
       />
     );
   });
-
   it('should call mock submit function', () => {
     wrapper
+      .find('#new-project-title')
+      .simulate('change', {
+        persist() {},
+        currentTarget: { name: 'name', value: 'New Project Title' }
+      });
+
+    wrapper
+      .find('#new-project-description')
+      .simulate('change', {
+        persist() {},
+        currentTarget: { name: 'description', value: 'Describing the project' }
+      });
+
+    wrapper
       .find('#project-submit-btn')
-      .simulate('submit', { preventDefault() {} });
+      .simulate('click', { preventDefault() {} });
+
     expect(addOrUpdateProjectfn.mock.calls.length).toBe(1);
+    expect(addOrUpdateProjectfn.mock.calls[0][0]).toMatchObject({
+      name: 'New Project Title',
+      description: 'Describing the project'
+    });
   });
 
   // it('should change state.title when typing in input box', () => {
