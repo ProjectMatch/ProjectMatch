@@ -29,7 +29,7 @@ describe('>>>AddProjectsPage Component', () => {
     match: { params: {} }
   };
   beforeEach(() => {
-    wrapper = shallow(
+    wrapper = mount(
       <AddProjectsPage
         addOrUpdateProject={addOrUpdateProjectfn}
         getAllUsers={getAllUsersfn}
@@ -42,19 +42,25 @@ describe('>>>AddProjectsPage Component', () => {
     );
   });
   it('should call mock submit function', () => {
-    wrapper
-      .find('#new-project-title')
-      .simulate('change', {
-        persist() {},
-        currentTarget: { name: 'name', value: 'New Project Title' }
-      });
+    wrapper.find('#new-project-title').simulate('change', {
+      persist() {},
+      currentTarget: { name: 'name', value: 'New Project Title' }
+    });
 
-    wrapper
-      .find('#new-project-description')
-      .simulate('change', {
-        persist() {},
-        currentTarget: { name: 'description', value: 'Describing the project' }
-      });
+    wrapper.find('#new-project-description').simulate('change', {
+      persist() {},
+      currentTarget: { name: 'description', value: 'Describing the project' }
+    });
+
+    wrapper.find('#new-project-role-p').simulate('change', {
+      persist() {},
+      currentTarget: { name: 'roles', value: 'Programmer' }
+    });
+
+    wrapper.find('#new-project-role-d').simulate('change', {
+      persist() {},
+      currentTarget: { name: 'roles', value: 'Designer' }
+    });
 
     wrapper
       .find('#project-submit-btn')
@@ -63,7 +69,8 @@ describe('>>>AddProjectsPage Component', () => {
     expect(addOrUpdateProjectfn.mock.calls.length).toBe(1);
     expect(addOrUpdateProjectfn.mock.calls[0][0]).toMatchObject({
       name: 'New Project Title',
-      description: 'Describing the project'
+      description: 'Describing the project',
+      lookingFor: ['Programmer', 'Designer']
     });
   });
 
