@@ -38,28 +38,13 @@ class Project extends React.Component<Props> {
 }
 
 class Projects extends React.Component<ProjectsInheritedProps, ProjectsState> {
-  constructor(props: ProjectsInheritedProps) {
-    super(props);
-  }
-
-  render() {
+  renderProject = () => {
     var projectComponent;
     var projectArray = this.props.projects;
 
     if (projectArray === undefined) {
       projectComponent = null;
-    } else if (
-      projectArray.length === 1 ||
-      Array.isArray(projectArray) === false
-    ) {
-      projectComponent = (
-        <Project
-          projId={projectArray[0]._id}
-          key={'projects_1'}
-          project={projectArray[0]}
-        />
-      );
-    } else if (projectArray) {
+    } else {
       projectComponent = projectArray.map(function(
         projectData: any,
         index: number
@@ -73,8 +58,10 @@ class Projects extends React.Component<ProjectsInheritedProps, ProjectsState> {
         );
       });
     }
-
     return <div className="projects-container">{projectComponent}</div>;
+  };
+  render() {
+    return <React.Fragment>{this.renderProject()}</React.Fragment>;
   }
 }
 
