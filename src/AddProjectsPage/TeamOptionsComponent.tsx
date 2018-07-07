@@ -12,7 +12,7 @@ class TeamOptionsComponent extends React.Component<{
     let username = this.props.user.username;
     if (usersFromStore instanceof Array) {
       usersFromStore = usersFromStore.filter(
-        user => user.username !== username
+        (user: any) => user.username !== username
       );
       teamOptionsComponent = usersFromStore.map((users: any, index: number) => {
         return (

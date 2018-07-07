@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
 // styles
-import './ProjectsFilter';
+import './ProjectsFilter.css';
 // components
 import FilterByCategoriesComponent from './FilterByCategoriesComponent';
 import FilterByTagsComponent from './FilterByTagsComponent';
