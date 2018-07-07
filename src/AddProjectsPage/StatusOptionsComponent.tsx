@@ -3,7 +3,7 @@ import * as React from 'react';
 class StatusOptionsComponent extends React.Component<{
   onFormChange: any;
 }> {
-  render() {
+  renderStatusOptions = () => {
     let statusOptionsArray = ['Active', 'Completed'];
 
     var statusComponent = statusOptionsArray.map(
@@ -20,8 +20,10 @@ class StatusOptionsComponent extends React.Component<{
         );
       }
     );
-
     return statusComponent;
+  };
+  render() {
+    return <React.Fragment>{this.renderStatusOptions()}</React.Fragment>;
   }
 }
 export default StatusOptionsComponent;
