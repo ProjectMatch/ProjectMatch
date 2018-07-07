@@ -94,6 +94,7 @@
     "testRegex": "/*.test.(ts|tsx|js)$",
     "moduleNameMapper": {
       "^.+\\.css$": "identity-obj-proxy"
-    }
+    },
+    "setupTestFrameworkScriptFile": "<rootDir>src/setupTests.js"
   }
 }
