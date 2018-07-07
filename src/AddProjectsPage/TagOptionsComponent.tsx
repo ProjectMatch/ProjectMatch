@@ -5,7 +5,7 @@ class TagOptionsComponent extends React.Component<{
   tags: any;
   tagFilter: any;
 }> {
-  render() {
+  renderTagOptions = () => {
     let tagOptionsComponent: JSX.Element[];
     let tagsFromStore = this.props.tags!;
     if (tagsFromStore instanceof Array) {
@@ -23,7 +23,13 @@ class TagOptionsComponent extends React.Component<{
           );
         }
       );
+      return tagOptionsComponent;
+    } else {
+      return null;
     }
+  };
+  render() {
+    let tagOptionsComponent = this.renderTagOptions();
     return (
       <div>
         <input
