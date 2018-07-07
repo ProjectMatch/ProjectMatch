@@ -25,6 +25,12 @@ class HeaderContainer extends React.Component<
       this.setState({ isUserLoggedIn: true });
     }
   }
+
+  componentDidUpdate(prevProps: any) {
+    if (this.props.user !== prevProps.user) {
+      this.setState({ isUserLoggedIn: !this.state.isUserLoggedIn });
+    }
+  }
   render() {
     if (this.props.justRegistered) {
       this.props.completeRegistration();
