@@ -16,19 +16,17 @@ class ProjectForPublicProfile extends React.Component<
 > {
   render() {
     var data = this.props.data;
+    var projId = this.props.projId;
 
     return (
-      <div id={this.props.projId} className="project-edit-box">
+      <div id={projId} className="project-edit-box">
         <div className="project-edit-container">
-          <EditImageContainer project={data} projId={this.props.projId} />
+          <EditImageContainer project={data} projId={projId} />
           <div className="project-edit-info-forPublicProfile">
             <div className="project-name">{data.name}</div>
             <div className="project-description">{data.description}</div>
-            <TagCategoryContainer project={this.props.data} />
-            <div className="project-roles-needed">
-              looking for
-              <RolesContainer project={this.props.data} />
-            </div>
+            <TagCategoryContainer project={data} />
+            <RolesContainer project={data} />
             <a>
               <img
                 className="project-save"
