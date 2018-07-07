@@ -13,23 +13,24 @@ describe('>>>AddProjectsPage Component', () => {
   let wrapper;
   const addOrUpdateProjectfn = jest.fn().mockResolvedValue({});
   const getAllUsersfn = jest.fn();
-  const getCategoriesfn = jest.fn();
-  const getTagsfn = jest.fn();
+  const getCategoriesfn = jest.fn().mockResolvedValue(['Developer Tools']);
+  const getTagsfn = jest.fn().mockResolvedValue(['chingu']);
   const getOneProjectfn = jest.fn();
   const getProjectsfn = jest.fn().mockResolvedValue([]);
 
   const props = {
     user: {},
     projects: [],
-    categories: [],
-    tags: [],
+    categories: ['Developer Tools'],
+    tags: ['chingu'],
     allUsers: [],
     imageLinks: [],
     currentProject: {},
     match: { params: {} }
   };
+
   beforeEach(() => {
-    wrapper = mount(
+    wrapper = shallow(
       <AddProjectsPage
         addOrUpdateProject={addOrUpdateProjectfn}
         getAllUsers={getAllUsersfn}
@@ -62,6 +63,12 @@ describe('>>>AddProjectsPage Component', () => {
       currentTarget: { name: 'roles', value: 'Designer' }
     });
 
+    // wrapper.findWhere(n => n.props().value === 'category')
+    // .simulate('change', {
+    //   persist() {},
+    //   currentTarget: { name: 'category', value: 'Developer Tools' }
+    // });
+
     wrapper
       .find('#project-submit-btn')
       .simulate('click', { preventDefault() {} });
@@ -71,37 +78,94 @@ describe('>>>AddProjectsPage Component', () => {
       name: 'New Project Title',
       description: 'Describing the project',
       lookingFor: ['Programmer', 'Designer']
+      // category: 'Developer Tools'
     });
   });
-
-  // it('should change state.title when typing in input box', () => {
-  //   const wrapper = mount(<AddProjectsPage />);
-  //   const nameInput = wrapper.find('#new-project-title');
-
-  //   nameInput.instance().value = 'New Project Name';
-  //   nameInput.simulate('change');
-
-  //   expect(wrapper.state().name).toEqual('New Project Name');
-  // });
-  // changing inputs / checkboxes
-  // gets saved to state correctly
-
-  // when the link has an ID, pre-load inputs and checkboxes
-  // status of project
-  // looking for
-  // teammates pre-loaded
-  // tags pre-loaded
-  // category pre-loaded
-
-  // when project data gets submitted
-  // gets re-routed to project portal
-  // with correct project data
-
-  // image preview is correct when uploading
-  // a cover photo
-
-  // adding tags will render the new tags, but not duplicated
-  // pressing enter will add a new tag to the list
-
-  // same as above for teams, except pressing enter will not add a new team
 });
+
+describe('>>>UpdateProjectsPage Component', () => {
+  let wrapper;
+  const addOrUpdateProjectfn = jest.fn().mockResolvedValue({});
+  const getAllUsersfn = jest.fn();
+  const getCategoriesfn = jest.fn();
+  const getTagsfn = jest.fn();
+  const getOneProjectfn = jest.fn().mockResolvedValue({
+    name: 'Mock Project',
+    description: 'Testing project description',
+    team: ['fs'],
+    category: 'Developer Tools',
+    tags: ['chingu']
+  });
+  const getProjectsfn = jest.fn().mockResolvedValue([]);
+
+  const existingProps = {
+    user: {},
+    projects: [],
+    categories: [],
+    tags: [],
+    allUsers: [],
+    imageLinks: [],
+    currentProject: {
+      name: 'Mock Project',
+      description: 'Testing project description',
+      team: ['fs'],
+      category: 'Developer Tools',
+      tags: ['chingu']
+    },
+    match: { params: { id: '123456789' } }
+  };
+
+  beforeEach(() => {
+    wrapper = mount(
+      <AddProjectsPage
+        addOrUpdateProject={addOrUpdateProjectfn}
+        getAllUsers={getAllUsersfn}
+        getCategories={getCategoriesfn}
+        getTags={getTagsfn}
+        getOneProject={getOneProjectfn}
+        getProject={getProjectsfn}
+        {...existingProps}
+      />
+    );
+  });
+  it('should have existing project stats in state', () => {
+    expect(wrapper.state()).toMatchObject({
+      name: 'Mock Project',
+      description: 'Testing project description',
+      team: ['fs'],
+      category: 'Developer Tools',
+      tags: ['chingu']
+    });
+  });
+});
+
+// it('should change state.title when typing in input box', () => {
+//   const wrapper = mount(<AddProjectsPage />);
+//   const nameInput = wrapper.find('#new-project-title');
+
+//   nameInput.instance().value = 'New Project Name';
+//   nameInput.simulate('change');
+
+//   expect(wrapper.state().name).toEqual('New Project Name');
+// });
+// changing inputs / checkboxes
+// gets saved to state correctly
+
+// when the link has an ID, pre-load inputs and checkboxes
+// status of project
+// looking for
+// teammates pre-loaded
+// tags pre-loaded
+// category pre-loaded
+
+// when project data gets submitted
+// gets re-routed to project portal
+// with correct project data
+
+// image preview is correct when uploading
+// a cover photo
+
+// adding tags will render the new tags, but not duplicated
+// pressing enter will add a new tag to the list
+
+// same as above for teams, except pressing enter will not add a new team
