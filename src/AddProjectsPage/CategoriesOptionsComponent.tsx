@@ -5,7 +5,7 @@ class CategoriesOptionsComponent extends React.Component<{
   onFormChange: any;
   categoryFilter: any;
 }> {
-  render() {
+  renderCategoryOptions = () => {
     let categoryOptionsComponent: JSX.Element[];
     let categoriesFromStore = this.props.categories!;
     if (categoriesFromStore instanceof Array) {
@@ -23,7 +23,14 @@ class CategoriesOptionsComponent extends React.Component<{
           );
         }
       );
+      return categoryOptionsComponent;
+    } else {
+      return null;
     }
+  };
+
+  render() {
+    let categoryOptionsComponent = this.renderCategoryOptions();
     return (
       <div>
         <input
