@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { connect, Dispatch } from 'react-redux';
+import { connect } from 'react-redux';
 // styles
 import './Project.css';
 // component
@@ -7,34 +7,25 @@ import TagCategoryContainer from './TagContainer';
 import RolesContainer from './RolesContainer';
 import { EditImageContainer } from './ImageContainer';
 // types
-import { State } from '../types/Projects.d';
-import { Store, ProjectForPublicProfileProps, Action } from '../types/Redux';
-// actions
-import { getProjects } from '../actions/projectActions';
+import { Store, ProjectForPublicProfileProps } from '../types/Redux';
 
 class ProjectForPublicProfile extends React.Component<
   ProjectForPublicProfileProps,
-  State
+  {}
 > {
-  constructor(props: ProjectForPublicProfileProps) {
-    super(props);
-  }
-
   render() {
     var data = this.props.data;
+    var projId = this.props.projId;
 
     return (
-      <div id={this.props.projId} className="project-edit-box">
+      <div id={projId} className="project-edit-box">
         <div className="project-edit-container">
-          <EditImageContainer project={data} projId={this.props.projId} />
+          <EditImageContainer project={data} projId={projId} />
           <div className="project-edit-info-forPublicProfile">
             <div className="project-name">{data.name}</div>
             <div className="project-description">{data.description}</div>
-            <TagCategoryContainer project={this.props.data} />
-            <div className="project-roles-needed">
-              looking for
-              <RolesContainer project={this.props.data} />
-            </div>
+            <TagCategoryContainer project={data} />
+            <RolesContainer project={data} />
             <a>
               <img
                 className="project-save"
@@ -55,14 +46,4 @@ const mapStateToProps = (state: Store) => {
   };
 };
 
-function mapDispatchToProps(dispatch: Dispatch<Action>) {
-  return {
-    getProjects: (options: object, query: object | null) => {
-      return dispatch(getProjects(options, query));
-    }
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(
-  ProjectForPublicProfile
-);
+export default connect(mapStateToProps, {})(ProjectForPublicProfile);

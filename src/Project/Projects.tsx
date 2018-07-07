@@ -3,17 +3,14 @@ import { connect } from 'react-redux';
 // styles
 import './Project.css';
 // types
-import { State, Props, ProjectsState } from '../types/Projects.d';
+import { Props, ProjectsState } from '../types/Projects.d';
 import { Store, ProjectsInheritedProps } from '../types/Redux';
 // components
 import { ImageContainer } from './ImageContainer';
 import TagCategoryContainer from './TagContainer';
 import RolesContainer from './RolesContainer';
 
-class Project extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-  }
+class Project extends React.Component<Props> {
   render() {
     var data = this.props.project;
 
@@ -41,28 +38,13 @@ class Project extends React.Component<Props, State> {
 }
 
 class Projects extends React.Component<ProjectsInheritedProps, ProjectsState> {
-  constructor(props: ProjectsInheritedProps) {
-    super(props);
-  }
-
-  render() {
+  renderProject = () => {
     var projectComponent;
     var projectArray = this.props.projects;
 
     if (projectArray === undefined) {
       projectComponent = null;
-    } else if (
-      projectArray.length === 1 ||
-      Array.isArray(projectArray) === false
-    ) {
-      projectComponent = (
-        <Project
-          projId={projectArray[0]._id}
-          key={'projects_1'}
-          project={projectArray[0]}
-        />
-      );
-    } else if (projectArray) {
+    } else {
       projectComponent = projectArray.map(function(
         projectData: any,
         index: number
@@ -76,8 +58,10 @@ class Projects extends React.Component<ProjectsInheritedProps, ProjectsState> {
         );
       });
     }
-
     return <div className="projects-container">{projectComponent}</div>;
+  };
+  render() {
+    return <React.Fragment>{this.renderProject()}</React.Fragment>;
   }
 }
 
