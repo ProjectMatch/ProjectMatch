@@ -207,11 +207,10 @@ export interface ProjectSettingsProps {
 }
 
 export interface ProjectForPublicProfileProps {
-  projects: Project;
-  user: User;
   projId: string;
   data: Project;
-  getProjects: getProjects_fntype;
+  projects: Project;
+  user: User;
 }
 
 export interface ProjectPageProps {

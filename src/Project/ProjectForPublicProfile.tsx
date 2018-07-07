@@ -8,11 +8,10 @@ import RolesContainer from './RolesContainer';
 import { EditImageContainer } from './ImageContainer';
 // types
 import { Store, ProjectForPublicProfileProps } from '../types/Redux';
-// actions
-import { getProjects } from '../actions/projectActions';
 
 class ProjectForPublicProfile extends React.Component<
-  ProjectForPublicProfileProps
+  ProjectForPublicProfileProps,
+  {}
 > {
   render() {
     var data = this.props.data;
@@ -47,6 +46,4 @@ const mapStateToProps = (state: Store) => {
   };
 };
 
-export default connect(mapStateToProps, { getProjects })(
-  ProjectForPublicProfile as any
-);
+export default connect(mapStateToProps, {})(ProjectForPublicProfile);
