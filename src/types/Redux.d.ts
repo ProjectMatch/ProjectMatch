@@ -110,6 +110,7 @@ export interface Store {
 export interface LoginProps {
   visibleLoginWindow: boolean;
   login: login_fntype;
+  user: any;
   showLoginWindow: showLoginWindow_fntype;
 }
 export interface RegisterProps {
@@ -117,6 +118,8 @@ export interface RegisterProps {
   visibleRegisterWindow: boolean;
   showRegisterWindow: showRegisterWindow_fntype;
   completeRegistration: any;
+  allUsers: Users;
+  getAllUsers: getAllUsers_fntype;
 }
 
 export interface ProjectProps {
