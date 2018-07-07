@@ -3,7 +3,7 @@ import ProjectForPublicProfile from '../Project/ProjectForPublicProfile';
 import { Projects } from '../types/Projects';
 
 class UserProjects extends React.Component<{ projects: any }, {}> {
-  render() {
+  renderUserProjects = () => {
     var renderedProjects;
     var projects: any = this.props.projects;
     if (projects === undefined || projects.length === 0) {
@@ -19,7 +19,10 @@ class UserProjects extends React.Component<{ projects: any }, {}> {
         );
       });
     }
-    return <div>{renderedProjects}</div>;
+    return renderedProjects;
+  };
+  render() {
+    return <div>{this.renderUserProjects()}</div>;
   }
 }
 export default UserProjects;

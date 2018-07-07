@@ -1,9 +1,8 @@
 import * as React from 'react';
 
 class UserLinks extends React.Component<{ user: any }, {}> {
-  render() {
+  renderLinks = () => {
     var user = this.props.user;
-    var renderedLinks;
     var imageLinks = {
       linkedInLink: require('../assets/icons8-linkedin-48.png'),
       githubLink: require('../assets/icons8-github-50.png'),
@@ -20,7 +19,7 @@ class UserLinks extends React.Component<{ user: any }, {}> {
       'twitterLink',
       'blogLink'
     ];
-    renderedLinks = linkNames.map((link: string, index: number) => {
+    return linkNames.map((link: string, index: number) => {
       if (user[link] !== '') {
         return (
           <a href={user[link]} key={'user-links-' + index}>
@@ -31,11 +30,12 @@ class UserLinks extends React.Component<{ user: any }, {}> {
         return null;
       }
     });
-
+  };
+  render() {
     return (
       <div className="public-profile-links-container">
         <div className="public-profile-header">Links</div>
-        {renderedLinks}
+        {this.renderLinks()}
       </div>
     );
   }
