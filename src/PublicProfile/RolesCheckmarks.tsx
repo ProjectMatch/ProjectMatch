@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 class RolesCheckmarks extends React.Component<{ roles: any }, {}> {
-  render() {
+  renderRoles = () => {
     var userRoles = this.props.roles;
     var roles;
     if (userRoles === undefined) {
@@ -19,7 +19,12 @@ class RolesCheckmarks extends React.Component<{ roles: any }, {}> {
         );
       });
     }
-    return <div className="public-profile-roles-container">{roles}</div>;
+    return roles;
+  };
+  render() {
+    return (
+      <div className="public-profile-roles-container">{this.renderRoles()}</div>
+    );
   }
 }
 
