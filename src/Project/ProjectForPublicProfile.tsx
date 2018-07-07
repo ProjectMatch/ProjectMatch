@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { connect, Dispatch } from 'react-redux';
+import { connect } from 'react-redux';
 // styles
 import './Project.css';
 // component
@@ -7,19 +7,13 @@ import TagCategoryContainer from './TagContainer';
 import RolesContainer from './RolesContainer';
 import { EditImageContainer } from './ImageContainer';
 // types
-import { State } from '../types/Projects.d';
-import { Store, ProjectForPublicProfileProps, Action } from '../types/Redux';
+import { Store, ProjectForPublicProfileProps } from '../types/Redux';
 // actions
 import { getProjects } from '../actions/projectActions';
 
 class ProjectForPublicProfile extends React.Component<
-  ProjectForPublicProfileProps,
-  State
+  ProjectForPublicProfileProps
 > {
-  constructor(props: ProjectForPublicProfileProps) {
-    super(props);
-  }
-
   render() {
     var data = this.props.data;
 
@@ -55,14 +49,6 @@ const mapStateToProps = (state: Store) => {
   };
 };
 
-function mapDispatchToProps(dispatch: Dispatch<Action>) {
-  return {
-    getProjects: (options: object, query: object | null) => {
-      return dispatch(getProjects(options, query));
-    }
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(
-  ProjectForPublicProfile
+export default connect(mapStateToProps, { getProjects })(
+  ProjectForPublicProfile as any
 );

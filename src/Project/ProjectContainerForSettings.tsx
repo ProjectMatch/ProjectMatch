@@ -8,20 +8,12 @@ import TagCategoryContainer from './TagContainer';
 import RolesContainer from './RolesContainer';
 import { EditImageContainer } from './ImageContainer';
 // types
-import { State } from '../types/Projects.d';
 import { Store, ProjectForEditProps } from '../types/Redux';
 // actions
 import { deleteProject } from '../actions/projectActions';
 
-class ProjectForEdit extends React.Component<ProjectForEditProps, State> {
-  constructor(props: ProjectForEditProps) {
-    super(props);
-  }
-
-  public deleteProject(
-    e: React.MouseEvent<HTMLButtonElement>,
-    projId: string
-  ): void {
+class ProjectForEdit extends React.Component<ProjectForEditProps> {
+  deleteProject(e: React.MouseEvent<HTMLButtonElement>, projId: string): void {
     this.props.deleteProject(projId);
   }
 

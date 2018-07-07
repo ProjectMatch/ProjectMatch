@@ -1,7 +1,7 @@
 import * as React from 'react';
 import './Project.css';
 
-class RolesContainer extends React.Component<{ project: any }, {}> {
+class RolesContainer extends React.Component<{ project: any }> {
   render() {
     var data = this.props.project;
     var roles;

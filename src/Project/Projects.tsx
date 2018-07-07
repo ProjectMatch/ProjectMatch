@@ -3,17 +3,14 @@ import { connect } from 'react-redux';
 // styles
 import './Project.css';
 // types
-import { State, Props, ProjectsState } from '../types/Projects.d';
+import { Props, ProjectsState } from '../types/Projects.d';
 import { Store, ProjectsInheritedProps } from '../types/Redux';
 // components
 import { ImageContainer } from './ImageContainer';
 import TagCategoryContainer from './TagContainer';
 import RolesContainer from './RolesContainer';
 
-class Project extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-  }
+class Project extends React.Component<Props> {
   render() {
     var data = this.props.project;
 
