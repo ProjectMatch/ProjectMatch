@@ -2,7 +2,7 @@ import * as React from 'react';
 import './Project.css';
 
 class TagCategoryContainer extends React.Component<{ project: any }> {
-  render() {
+  renderTagsAndCategory = () => {
     var data = this.props.project;
     var tags;
     if (data.tags !== undefined && data.tags.length > 0) {
@@ -22,6 +22,9 @@ class TagCategoryContainer extends React.Component<{ project: any }> {
         {data.tags ? tags : null}
       </div>
     );
+  };
+  render() {
+    return <React.Fragment>{this.renderTagsAndCategory()}</React.Fragment>;
   }
 }
 

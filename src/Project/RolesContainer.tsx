@@ -2,7 +2,7 @@ import * as React from 'react';
 import './Project.css';
 
 class RolesContainer extends React.Component<{ project: any }> {
-  render() {
+  renderRoles = () => {
     var data = this.props.project;
     var roles;
     if (data.lookingFor && data.lookingFor.length > 1) {
@@ -12,7 +12,16 @@ class RolesContainer extends React.Component<{ project: any }> {
     } else {
       roles = 'None';
     }
-    return <div className="project-roles">{roles}</div>;
+    return roles;
+  };
+
+  render() {
+    return (
+      <div className="project-roles-needed">
+        looking for
+        <div className="project-roles">{this.renderRoles()}</div>
+      </div>
+    );
   }
 }
 
