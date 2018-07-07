@@ -14,6 +14,7 @@ $pale-grey: #f7f7f7;
 $black-grey: #2b353d;
 $attention-red: #f37070;
 $light-red: #f5cbcb;
+$pale-red: #fff3f3;
 $edit-orange: #f3a070;
 /*
 ==========================
@@ -35,8 +36,8 @@ FILE SETUP
 Z-INDEX
 ==========================
 */
-
-$login-register-window-z: 5;
+$login-register-window-mask-z: 7;
+$login-register-window-z: 8;
 $redline-image-container-z: 10;
 $header-dropdown-mask-z: 19;
 $header-dropdown-z: 20;

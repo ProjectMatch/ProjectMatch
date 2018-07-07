@@ -2,12 +2,23 @@
 
 .popupScreen {
   @include login-register-container;
-  height: 400px;
+  height: 420px;
 }
 
 .registerPopupScreen {
   @include login-register-container;
-  height: 550px;
+  height: 570px;
+}
+
+.popupScreenMask {
+  background-color: black;
+  height: 100%;
+  width: 150%;
+  margin: 0 auto;
+  z-index: $login-register-window-mask-z;
+  position: fixed;
+  margin-left: -50%;
+  opacity: 0.2;
 }
 
 .logo-login_register {
@@ -71,10 +82,15 @@ FORM INPUTS
   padding: 5px;
 }
 
-.emailDiv:invalid,
-.passwordDiv:invalid {
+.emailDiv:focus:invalid,
+.passwordDiv:focus:invalid {
   border: 1px solid red;
+  background-color: $pale-red;
 }
+// .emailDiv:invalid,
+// .passwordDiv:invalid {
+//   border: 1px solid red;
+// }
 /*
 ==========================
 FORM LABEL
@@ -88,6 +104,7 @@ FORM LABEL
   margin-left: 11px;
   margin-top: 5px;
   position: absolute;
+  display: inline-block;
 }
 /*
 ==========================
@@ -101,14 +118,18 @@ LOGIN & SIGNUP BUTTONS
 }
 
 .signUpBtn {
-  margin-top: 10px;
+  margin-top: 20px;
   left: 37%;
+}
+
+.signUpBtn:disabled {
+  background-color: $light-blue;
 }
 
 .loginBtn {
   width: 100px;
   left: 36%;
-  margin-top: 10px;
+  margin-top: 20px;
 }
 /*
 ==========================
@@ -137,4 +158,29 @@ EXIT BUTTON
   float: right;
   margin: auto;
   margin-right: 11px;
+}
+/*
+==========================
+ERROR HANDLING
+==========================
+*/
+.form-error-message,
+.form-error-message-all {
+  font-size: 10px;
+  color: $attention-red;
+  position: absolute;
+}
+
+.form-error-message {
+  margin-left: 80px;
+  margin-top: 5px;
+  margin-bottom: -30px;
+}
+
+.form-error-message-all {
+  width: 100%;
+  margin: 0 auto;
+  display: block;
+  text-align: center;
+  margin-bottom: 20px;
 }

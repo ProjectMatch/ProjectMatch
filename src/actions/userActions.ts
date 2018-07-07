@@ -2,6 +2,7 @@ import {
   GOOGLE_LOGIN,
   GOOGLE_LOGIN_ERROR,
   LOGIN,
+  LOGIN_ERROR,
   REGISTER,
   LOGOUT,
   LOGOUT_ERROR,
@@ -26,18 +27,30 @@ async function loginWithDispatchAsync(
   password: string
 ): Promise<void> {
   var user = await apiService.login(email, password);
+  console.log('in userActions=' + user);
   localStorage.setItem('user', JSON.stringify(user));
   dispatch({ type: dispatchType, data: user });
 }
 
-export type login_fntype = (email: string, password: string) => Promise<void>;
+export type login_fntype = (
+  email: string,
+  password: string
+) => Promise<void | string>;
 
 export function login(
   email: string,
   password: string
-): (dispatch: Dispatch<UserAction>) => Promise<void> {
+): (dispatch: Dispatch<UserAction>) => Promise<void> | any {
   return dispatch => {
-    return loginWithDispatchAsync(LOGIN, dispatch, email, password);
+    return loginWithDispatchAsync(LOGIN, dispatch, email, password).catch(
+      error => {
+        console.log(error);
+        return dispatch({
+          type: LOGIN_ERROR,
+          error: error
+        });
+      }
+    );
   };
 }
 /*
