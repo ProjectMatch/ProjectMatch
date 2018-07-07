@@ -211,6 +211,7 @@ export interface ProjectForPublicProfileProps {
   data: Project;
   projects: Project;
   user: User;
+  getProjects: getProjects_fntype;
 }
 
 export interface ProjectPageProps {
