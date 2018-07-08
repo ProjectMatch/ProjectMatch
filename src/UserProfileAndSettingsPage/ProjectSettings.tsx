@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 // components
-import ProjectForEdit from '../Project/ProjectContainerForSettings';
+import ProjectForEdit from '../Project/ProjectForEdit';
 // types
 import { Store, ProjectSettingsProps } from '../types/Redux';
 import { ProjectSettingsState } from './ProjectSettings.d';
