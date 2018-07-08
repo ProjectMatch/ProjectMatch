@@ -6,7 +6,7 @@ import '../Project/Project.css';
 // components
 import Footer from '../Footer/Footer';
 import Projects from '../Project/Projects';
-import ProjectsFilter from '../ProjectFilter/ProjectsFilter';
+import ProjectsFilter from '../ProjectFilter';
 // types
 import { ProjectPageState } from './ProjectsPage.d';
 import { Store, ProjectPageProps, Action } from '../types/Redux';
