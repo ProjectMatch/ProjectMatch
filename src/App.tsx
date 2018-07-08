@@ -16,7 +16,7 @@ import ProjectPortalPage from './ProjectPortalPage';
 import { HYDRATE_USER } from './actions/actionTypes';
 import ErrorPage from './404Page/ErrorPage';
 import AboutPage from './AboutPage/AboutPage';
-import HeaderContainer from './Header/HeaderContainer';
+import HeaderContainer from './Header';
 import config from './.config';
 
 if (config.env !== 'production') {
