@@ -47,6 +47,7 @@ const mapStateToProps = (state: Store) => {
   };
 };
 
-export default connect(mapStateToProps, { getProjects })(
-  ProjectForPublicProfile as any
-);
+export default connect<any, any, ProjectForPublicProfileProps>(
+  mapStateToProps,
+  { getProjects }
+)(ProjectForPublicProfile);
