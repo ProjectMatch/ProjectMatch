@@ -4,15 +4,10 @@ class FilterByTagsComponent extends React.Component<{
   tags: any;
   tagFilter: any;
 }> {
-  render() {
+  renderTags = () => {
     var tagsFromStore = this.props.tags!;
-    var filterByTags;
     if (tagsFromStore instanceof Array) {
-      filterByTags = tagsFromStore.map(function(
-        // tslint:disable-next-line
-        tag: any,
-        index: number
-      ) {
+      var filterByTags = tagsFromStore.map(function(tag: any, index: number) {
         return (
           <div className="checkboxContainer" key={'tags_filter_' + index}>
             <label htmlFor={'tags_filter_id_' + index}>
@@ -29,9 +24,14 @@ class FilterByTagsComponent extends React.Component<{
           </div>
         );
       });
+      return filterByTags;
+    } else {
+      return null;
     }
+  };
+  render() {
     return (
-      <div>
+      <React.Fragment>
         <input
           className="project-filter-search-input-box"
           type="text"
@@ -39,8 +39,8 @@ class FilterByTagsComponent extends React.Component<{
           id="tagFilter"
           onKeyUp={this.props.tagFilter}
         />
-        {filterByTags}
-      </div>
+        {this.renderTags()}
+      </React.Fragment>
     );
   }
 }
