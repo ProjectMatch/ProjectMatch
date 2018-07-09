@@ -127,7 +127,7 @@ export interface AddProjectProps {
   user: User;
   projects: Project | Array<Project>;
   categories: Categories | any;
-  tags: Tags | any;
+  allTags: Tags | any;
   allUsers: Users;
   imageLinks: string[];
   currentProject: Project;

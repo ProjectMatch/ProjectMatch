@@ -28,6 +28,7 @@ export interface UpdateProject extends BaseProject {
 }
 
 export interface CompleteProject extends BaseProject {
+  _id: string;
   createdAt?: number;
   modifiedAt?: number;
   comments?: string | Array<string>; // Need to update all dependents
