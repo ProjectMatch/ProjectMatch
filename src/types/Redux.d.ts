@@ -208,8 +208,8 @@ export interface ProjectSettingsProps {
 
 export interface ProjectForPublicProfileProps {
   projId: string;
-  data: Project;
-  projects: Project;
+  data: CompleteProject;
+  projects: CompleteProject;
   user: User;
 }
 
