@@ -1,29 +1,46 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+// components
 import Header from './Header';
 import LoggedInHeader from './LoggedInHeader';
-import { HeaderContainerProps } from '../types/HeaderContainer.d';
-import { Store, State } from '../types/Redux';
-import { Redirect } from 'react-router-dom';
+// types
+import { HeaderContainerProps } from './HeaderContainer.d';
+import { Store } from '../types/Redux';
+// actions
 import { completeRegistration } from '../actions/appActions';
 
-class HeaderContainer extends React.Component<HeaderContainerProps, State> {
+class HeaderContainer extends React.Component<
+  HeaderContainerProps,
+  { isUserLoggedIn: boolean }
+> {
   constructor(props: HeaderContainerProps) {
     super(props);
+    this.state = {
+      isUserLoggedIn: false
+    };
+  }
+  componentDidMount() {
+    if (this.props.user.email) {
+      this.setState({ isUserLoggedIn: true });
+    }
+  }
+
+  componentDidUpdate(prevProps: any) {
+    if (this.props.user !== prevProps.user) {
+      this.setState({ isUserLoggedIn: !this.state.isUserLoggedIn });
+    }
   }
   render() {
-    let isUserLoggedIn = false;
-    if (this.props.user.email) {
-      isUserLoggedIn = true;
-    }
     if (this.props.justRegistered) {
       this.props.completeRegistration();
       return <Redirect to="/user/settings" />;
-    } else {
-      return (
-        <div>{isUserLoggedIn === true ? <LoggedInHeader /> : <Header />}</div>
-      );
     }
+    return (
+      <div>
+        {this.state.isUserLoggedIn === true ? <LoggedInHeader /> : <Header />}
+      </div>
+    );
   }
 }
 

@@ -1,9 +1,9 @@
-var express = require('express');
-var router = express.Router();
-var async = require('async');
-var crypto = require('crypto');
-var nodemailer = require('nodemailer');
-var User = require('../models/Users');
+const express = require('express');
+const router = express.Router();
+const async = require('async');
+const crypto = require('crypto');
+const nodemailer = require('nodemailer');
+const User = require('../models/Users');
 
 // TODO: Should be implemented
 router.get('/', function(req, res) {
@@ -17,7 +17,7 @@ router.post('/', function(req, res) {
       // this first method will create 20 char token
       function(done) {
         crypto.randomBytes(20, function(err, buff) {
-          var token = buff.toString('hex');
+          const token = buff.toString('hex');
           done(err, token);
         });
       },
@@ -59,7 +59,7 @@ router.post('/', function(req, res) {
         /**
          * NOTE: Change the text later
          */
-        var mailOptions = {
+        const mailOptions = {
           to: user.email,
           from: 'password@projectmatch.com',
           subject: 'Password Reset',

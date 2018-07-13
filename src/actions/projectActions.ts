@@ -12,6 +12,7 @@ import {
 import { Dispatch } from 'react-redux';
 import apiService from '../utils/apiService';
 import { Action } from '../types/Redux';
+import { CompleteProject } from '../types/Projects';
 
 /*
 ==========================
@@ -120,23 +121,24 @@ async function addOrUpdateProjectWithDispatchAsync(
   dispatch: Dispatch<Action>,
   project: any,
   files: FileList
-): Promise<void> {
+): Promise<CompleteProject> {
   var newProject = await apiService.addOrUpdateProject(project);
   if (files) {
-    await apiService.uploadProjectImage(files, newProject._id);
+    await apiService.uploadProjectImage(files, newProject._id as string);
   }
   dispatch({ type: dispatchType, data: newProject });
+  return newProject;
 }
 
 export type addOrUpdateProject_fntype = (
   project: any,
   files: FileList
-) => Promise<void>;
+) => Promise<CompleteProject>;
 
 export function addOrUpdateProject(
   project: any,
   files: FileList
-): (dispatch: Dispatch<Action>) => Promise<void> {
+): (dispatch: Dispatch<Action>) => Promise<CompleteProject> {
   return dispatch => {
     var dispatchType = project.hasOwnProperty('_id')
       ? UPDATE_PROJECT

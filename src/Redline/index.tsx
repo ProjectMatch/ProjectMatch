@@ -1,13 +1,14 @@
 /* tslint:disable */
 import * as React from 'react';
-import '../styles/Redlines.css';
+import axios from 'axios';
+import { connect } from 'react-redux';
+import config from '../.config';
+// styles
+import './Redlines.css';
+// components
 import Toolbar from './Toolbar';
 import ImageLayer from './ImageLayer';
 import AnnotationLayer from './AnnotationLayer';
-import axios from 'axios';
-import HeaderContainer from '../Header/HeaderContainer';
-import { connect } from 'react-redux';
-import config from '../.config';
 
 interface RedlineProps {
   imageLink: string;
@@ -74,7 +75,6 @@ class Redline extends React.Component<RedlineProps, RedlineState> {
   render() {
     return (
       <React.Fragment>
-        <HeaderContainer />
         <div className="redline-container">
           <Toolbar
             isDisabled={this.shouldDisableToolBar()}

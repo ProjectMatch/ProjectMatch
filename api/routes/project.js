@@ -1,24 +1,24 @@
-var express = require('express');
-var router = express.Router();
-var isAuthenticated = require('../utils/authentication');
-var mongoose = require('mongoose');
-var mongoosePaginate = require('mongoose-paginate');
-var Project = require('../models/Projects');
-var UserDetails = require('../models/UserDetails');
-var Comment = require('../models/Comments');
-var Revision = require('../models/Revisions');
-var Marker = require('../models/Markers');
-var User = require('../models/Users');
-var config = require('../utils/config');
+const express = require('express');
+const router = express.Router();
+const isAuthenticated = require('../utils/authentication');
+const mongoose = require('mongoose');
+const mongoosePaginate = require('mongoose-paginate');
+const Project = require('../models/Projects');
+const UserDetails = require('../models/UserDetails');
+const Comment = require('../models/Comments');
+const Revision = require('../models/Revisions');
+const Marker = require('../models/Markers');
+const User = require('../models/Users');
+const config = require('../utils/config');
 
 module.exports = function(passport) {
   // retrieves all projects
   router.post('/', function(req, res) {
-    var query = req.body.query;
-    var options = req.body.options;
+    const query = req.body.query;
+    const options = req.body.options;
 
     if (query && query.searchTerm) {
-      var queryToRegex = new RegExp(query.searchTerm, 'i');
+      const queryToRegex = new RegExp(query.searchTerm, 'i');
       query = delete query.searchTerm;
       query = Object.assign({}, query, {
         $or: [
@@ -93,7 +93,7 @@ module.exports = function(passport) {
       if (err) {
         res.send(err);
       } else {
-        var team = project.team;
+        const team = project.team;
         team.push(project.creator);
         res.json({
           message: `Successfully retrieved team for ${project._id}`,
@@ -109,7 +109,7 @@ module.exports = function(passport) {
       if (err) {
         res.send(err);
       } else {
-        var team = project.team;
+        const team = project.team;
         team.push(project.creator);
         User.find(
           {
@@ -121,7 +121,7 @@ module.exports = function(passport) {
             if (err) {
               res.send(err);
             } else {
-              var thumbnailsURLs = user.map(data => {
+              const thumbnailsURLs = user.map(data => {
                 return data.profileImage;
               });
               res.json({
@@ -138,7 +138,7 @@ module.exports = function(passport) {
   // TODO: Add authorization and validation
   // add comment to a project
   router.post('/:id/comment', function(req, res) {
-    var comment = new Comment({
+    const comment = new Comment({
       creator: req.body.username,
       comment: req.body.comment,
       project: req.params.id
@@ -179,7 +179,7 @@ module.exports = function(passport) {
   // TODO: Add authorization and validation
   // add revision to project
   router.post('/:id/revision', function(req, res) {
-    var revision = new Revision({
+    const revision = new Revision({
       revisionNumber: req.body.revisionNumber,
       finalVersion: req.body.finalVersion,
       imageURL: req.body.imageURL,
@@ -242,7 +242,7 @@ module.exports = function(passport) {
   // TODO: Add authorization and validation
   // add marker to a revision
   router.post('/revision/:revisionId/marker', function(req, res) {
-    var marker = new Marker({
+    const marker = new Marker({
       type: req.body.type,
       creator: req.body.creator,
       revision: req.params.revisionId,
@@ -333,7 +333,7 @@ module.exports = function(passport) {
   // TODO: Add authorization and validation
   // add comment to marker
   router.post('/revision/marker/:markerId/comment', function(req, res) {
-    var comment = new Comment({
+    const comment = new Comment({
       creator: req.body.creator,
       comment: req.body.comment,
       marker: req.params.markerId

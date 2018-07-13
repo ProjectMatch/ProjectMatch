@@ -1,15 +1,13 @@
-/* 
- * SignUp functionality to the user using Local Strategy
- * First checks if the email or username already regestered in the DB,
- * Creates an user in the DB with user credentials 
- * We are hashig password using bcrypt-nodejs to make it secure
-*/
-var LocalStrategy = require('passport-local').Strategy;
-var User = require('../models/Users');
-var bCrypt = require('bcrypt-nodejs');
-var UserDetails = require('../models/UserDetails');
+const LocalStrategy = require('passport-local').Strategy;
+const User = require('../models/Users');
+const bCrypt = require('bcrypt-nodejs');
+const UserDetails = require('../models/UserDetails');
 
 module.exports = function(passport) {
+  const createHash = function(password) {
+    return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
+  };
+
   passport.use(
     'signup',
     new LocalStrategy(
@@ -33,7 +31,7 @@ module.exports = function(passport) {
                   message: 'User already exists with this email or username'
                 });
               } else {
-                var newUser = new User();
+                const newUser = new User();
 
                 newUser.username = req.body.username;
                 newUser.password = createHash(password);
@@ -55,15 +53,8 @@ module.exports = function(passport) {
             }
           );
         };
-        // Delay the execution of findOrCreateUser and execute the method
-        // in the next tick of the event loop
         process.nextTick(findOrCreateUser);
       }
     )
   );
-
-  // Generates hash using bCrypt
-  var createHash = function(password) {
-    return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
-  };
 };

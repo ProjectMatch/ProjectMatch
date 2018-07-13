@@ -1,0 +1,46 @@
+@import '../styles/_variables.scss';
+/*
+==========================
+TITLE
+==========================
+*/
+.projects-header-text {
+  color: $theme-blue;
+  font-size: 45px;
+  font-weight: 700;
+  text-align: center;
+  padding-top: 60px;
+  padding-bottom: 30px;
+}
+/*
+==========================
+SEARCH
+==========================
+*/
+.projects-search-form {
+  text-align: center;
+  padding-bottom: 60px;
+}
+
+.projects-search-box {
+  border: 1px solid $theme-blue;
+  width: 350px;
+  height: 50px;
+  color: $dark-grey;
+  padding: 5px;
+}
+
+.projects-search-box::placeholder {
+  color: $theme-blue;
+  padding: 5px;
+}
+
+.projects-search-btn {
+  border: none;
+  background-color: $theme-blue;
+  color: white;
+  width: 100px;
+  height: 50px;
+  font-weight: 700;
+  text-transform: uppercase;
+}

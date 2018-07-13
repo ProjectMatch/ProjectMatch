@@ -1,13 +1,16 @@
 import * as React from 'react';
-import HeaderContainer from '../Header/HeaderContainer';
+import { connect, Dispatch } from 'react-redux';
+// styles
+import './ProjectsPage.css';
+import '../Project/Project.css';
+// components
 import Footer from '../Footer/Footer';
 import Projects from '../Project/Projects';
-import ProjectsFilter from './ProjectsFilter';
-import '../styles/ProjectsPage.css';
-import '../styles/Project.css';
-import { ProjectPageState } from '../types/ProjectsPage.d';
+import ProjectsFilter from '../ProjectFilter';
+// types
+import { ProjectPageState } from './ProjectsPage.d';
 import { Store, ProjectPageProps, Action } from '../types/Redux';
-import { connect, Dispatch } from 'react-redux';
+// actions
 import { getProjects, searchProjects } from '../actions/projectActions';
 
 class ProjectsPage extends React.Component<ProjectPageProps, ProjectPageState> {
@@ -74,8 +77,6 @@ class ProjectsPage extends React.Component<ProjectPageProps, ProjectPageState> {
   render() {
     return (
       <div onClick={e => this.closeAllDropDown(e)}>
-        <HeaderContainer />
-
         <br />
 
         <div className="projects-header-text">Explore Projects</div>

@@ -1,9 +1,13 @@
 import * as React from 'react';
-import '../styles/RecentProjects.css';
-import Projects from '../Project/Projects';
 import { Link } from 'react-router-dom';
-import { Store, RecentProjectsProps, Action } from '../types/Redux';
 import { connect, Dispatch } from 'react-redux';
+// styles
+import './RecentProjects.css';
+// components
+import Projects from '../Project/Projects';
+// types
+import { Store, RecentProjectsProps, Action } from '../types/Redux';
+// actions
 import { getProjects } from '../actions/projectActions';
 class RecentProjects extends React.Component<RecentProjectsProps, {}> {
   constructor(props: RecentProjectsProps) {

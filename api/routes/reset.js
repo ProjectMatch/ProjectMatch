@@ -1,9 +1,9 @@
-var express = require('express');
-var router = express.Router();
-var async = require('async');
-var crypto = require('crypto');
-var nodemailer = require('nodemailer');
-var User = require('../models/Users');
+const express = require('express');
+const router = express.Router();
+const async = require('async');
+const crypto = require('crypto');
+const nodemailer = require('nodemailer');
+const User = require('../models/Users');
 
 // This method will trigged after the user clicked the email link
 router.get('/:token', function(req, res) {
@@ -70,7 +70,7 @@ router.post('/:token', function(req, res) {
               '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' // generated ethereal password
           }
         });
-        var mailOptions = {
+        const mailOptions = {
           to: user.email,
           from: 'passwordreset@demo.com',
           subject: 'Your password has been changed',

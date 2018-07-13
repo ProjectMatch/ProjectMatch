@@ -1,8 +1,8 @@
-var express = require('express');
-var router = express.Router();
-var isAuthenticated = require('../utils/authentication');
-var User = require('../models/Users');
-var UserDetails = require('../models/UserDetails');
+const express = require('express');
+const router = express.Router();
+const isAuthenticated = require('../utils/authentication');
+const User = require('../models/Users');
+const UserDetails = require('../models/UserDetails');
 const { OAuth2Client } = require('google-auth-library');
 
 module.exports = function(passport) {
@@ -26,7 +26,7 @@ module.exports = function(passport) {
           if (err) {
             return next(err);
           }
-          var newUserDetails = new UserDetails({
+          const newUserDetails = new UserDetails({
             _id: user._id,
             username: user.username
           });
@@ -157,7 +157,7 @@ module.exports = function(passport) {
               );
             } else {
               // user not found, make new user and userDetails collection
-              var newUser = new User();
+              const newUser = new User();
               newUser.firstName = googlePayload.given_name;
               newUser.lastName = googlePayload.family_name;
               newUser.email = googlePayload.email;
@@ -171,7 +171,7 @@ module.exports = function(passport) {
                 if (err) {
                   throw err;
                 } else {
-                  var newUserDetails = new UserDetails({
+                  const newUserDetails = new UserDetails({
                     googleId: googlePayload.userid,
                     username: newUser.username,
                     _id: newUser._id

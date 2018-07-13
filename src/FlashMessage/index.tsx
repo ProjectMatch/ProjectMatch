@@ -1,5 +1,5 @@
 import * as React from 'react';
-import '../styles/FlashMessage.css';
+import './FlashMessage.css';
 
 class FlashMessage extends React.Component<
   { title?: string; message?: string },

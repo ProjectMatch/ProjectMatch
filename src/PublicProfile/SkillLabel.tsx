@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 class SkillLabel extends React.Component<{ skills: any }, {}> {
-  render() {
+  renderSkills = () => {
     var skills = this.props.skills;
     var renderedSkills;
     if (skills === undefined || skills.length === 0) {
@@ -15,10 +15,13 @@ class SkillLabel extends React.Component<{ skills: any }, {}> {
         );
       });
     }
+    return renderedSkills;
+  };
+  render() {
     return (
       <div className="public-profile-skill-container">
         <div className="public-profile-header">Skills</div>
-        {renderedSkills}
+        {this.renderSkills()}
       </div>
     );
   }

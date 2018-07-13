@@ -1,4 +1,4 @@
-import { Project } from '../types/Projects.d';
+import { CompleteProject } from '../types/Projects.d';
 import { User } from '../types/User.d';
 import { Marker } from '../types/Marker.d';
 import { Categories } from '../types/Category';
@@ -56,7 +56,7 @@ function login(email: string, password: string): Promise<User | string> {
             blogLink: userDetails.blogLink
           });
         } else {
-          reject(res.error);
+          reject(res.message);
         }
       });
   });
@@ -420,7 +420,7 @@ function getAllUsers(): Promise<Array<User>> {
 function getProjects(
   options: object,
   query: object | null
-): Promise<Array<Project>> {
+): Promise<Array<CompleteProject>> {
   return new Promise((resolve, reject) => {
     const endpoint = config.host.name + '/api/projects';
     var bodyData;
@@ -461,7 +461,7 @@ function getProject(projectId: string) {
     .then(response => response.data.project);
 }
 
-async function addOrUpdateProject(project: Project): Promise<Project> {
+async function addOrUpdateProject(project: any): Promise<CompleteProject> {
   const endpoint = project.hasOwnProperty('_id')
     ? config.host.name + '/api/projects/update/' + project._id
     : config.host.name + '/api/projects/add';
@@ -504,7 +504,7 @@ async function addOrUpdateProject(project: Project): Promise<Project> {
 function uploadProjectImage(
   file: FileList,
   projectId: string
-): Promise<Project> {
+): Promise<CompleteProject> {
   return new Promise((resolve, reject) => {
     const endpoint =
       config.host.name + '/api/upload/image/project?projectId=' + projectId;
@@ -652,7 +652,7 @@ function downloadProjectImageURLS(projectId: string): Promise<string[]> {
       });
   });
 }
-function getOneProject(id: string): Promise<Project> {
+function getOneProject(id: string): Promise<CompleteProject> {
   return new Promise((resolve, reject) => {
     const endpoint = config.host.name + '/api/projects/' + id;
 
@@ -678,7 +678,7 @@ function getOneProject(id: string): Promise<Project> {
   });
 }
 
-function deleteProject(id: string): Promise<Project> {
+function deleteProject(id: string): Promise<CompleteProject> {
   return new Promise((resolve, reject) => {
     const endpoint = config.host.name + '/api/projects/delete';
 

@@ -1,8 +1,8 @@
-var express = require('express');
-var router = express.Router();
-var isAuthenticated = require('../utils/authentication');
-var User = require('../models/Users');
-var UserDetail = require('../models/UserDetails');
+const express = require('express');
+const router = express.Router();
+const isAuthenticated = require('../utils/authentication');
+const User = require('../models/Users');
+const UserDetail = require('../models/UserDetails');
 
 module.exports = function(passport) {
   router.get('/:username/profile/picture', function(req, res) {

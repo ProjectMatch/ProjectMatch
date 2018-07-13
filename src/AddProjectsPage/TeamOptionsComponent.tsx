@@ -6,13 +6,13 @@ class TeamOptionsComponent extends React.Component<{
   onFormChange: any;
   teamFilter: any;
 }> {
-  render() {
+  renderTeamOptions = () => {
     let teamOptionsComponent: JSX.Element[];
     let usersFromStore = this.props.allUsers!;
     let username = this.props.user.username;
     if (usersFromStore instanceof Array) {
       usersFromStore = usersFromStore.filter(
-        user => user.username !== username
+        (user: any) => user.username !== username
       );
       teamOptionsComponent = usersFromStore.map((users: any, index: number) => {
         return (
@@ -26,7 +26,13 @@ class TeamOptionsComponent extends React.Component<{
           />
         );
       });
+      return teamOptionsComponent;
+    } else {
+      return null;
     }
+  };
+  render() {
+    let teamOptionsComponent = this.renderTeamOptions();
     return (
       <div>
         <input

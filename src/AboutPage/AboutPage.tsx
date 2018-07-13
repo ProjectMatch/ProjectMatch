@@ -1,7 +1,6 @@
 import * as React from 'react';
-import HeaderContainer from '../Header/HeaderContainer';
 import Footer from '../Footer/Footer';
-import '../styles/AboutPage.css';
+import './AboutPage.css';
 
 class TeamContainer extends React.Component {
   render() {
@@ -78,7 +77,6 @@ class AboutPage extends React.Component {
   render() {
     return (
       <div>
-        <HeaderContainer />
         <TeamContainer />
         <Footer />
       </div>

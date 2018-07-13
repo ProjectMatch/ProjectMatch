@@ -1,9 +1,12 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
+// components
+import ProjectForEdit from '../Project/ProjectForEdit';
+// types
 import { Store, ProjectSettingsProps } from '../types/Redux';
-import { ProjectSettingsState } from '../types/ProjectSettings';
+import { ProjectSettingsState } from './ProjectSettings.d';
+// actions
 import { getUserProjects, deleteProject } from '../actions/projectActions';
-import ProjectForEdit from '../Project/ProjectContainerForSettings';
 
 class ProjectSettings extends React.Component<
   ProjectSettingsProps,

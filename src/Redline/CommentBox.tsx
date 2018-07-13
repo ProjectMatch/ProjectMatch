@@ -1,12 +1,15 @@
 /* tslint:disable */
 import * as React from 'react';
-import Comment from './Comment';
 import { connect } from 'react-redux';
-import { Store } from '../types/Redux';
-import { User } from '../types/User';
-import { addComment, getComments } from '../actions/markerActions';
 import axios from 'axios';
 import config from '../.config';
+// components
+import Comment from './Comment';
+// types
+import { Store } from '../types/Redux';
+import { User } from '../types/User';
+// actions
+import { addComment, getComments } from '../actions/markerActions';
 
 interface CommentBoxProps {
   revisionId: string;

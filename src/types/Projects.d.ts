@@ -1,8 +1,8 @@
 import { User } from './User';
 import { Dispatch } from 'react-redux';
 import { Action } from './Redux';
-export interface Projects {
-  _id: string;
+
+export interface BaseProject {
   name?: string;
   creator?: string;
   images?: string[] | null[];
@@ -10,36 +10,37 @@ export interface Projects {
   description?: string;
   contact?: string;
   lookingFor?: string[];
-  comments?: string | Array<string>; // Need to update all dependents
-  createdAt?: number;
-  modifiedAt?: number;
   dueDate?: number | any;
-  views?: number;
   category?: string;
   status?: boolean;
-  upVotes?: number;
   githubLink?: string;
   mockupLink?: string;
   liveLink?: string;
   tags?: string[];
-  files?: any;
-  mockups?: Array<string>;
 }
 
-export type Project = Projects;
-// State is used to declare any types in the this.state object
-export interface State {}
+export interface NewProject extends BaseProject {
+  files?: any;
+}
+
+export interface UpdateProject extends BaseProject {
+  _id: string;
+}
+
+export interface CompleteProject extends BaseProject {
+  _id: string;
+  createdAt?: number;
+  modifiedAt?: number;
+  comments?: string | Array<string>; // Need to update all dependents
+  mockups?: Array<string>;
+  upVotes?: number;
+  views?: number;
+}
 
 // Props is to declare any types of props passed in from parent react container
 // In this case, there are no props passed in, so its an empty object
 export interface Props {
-  project: Project;
+  project: BaseProject;
   index?: number;
   projId: string;
 }
-
-export interface EmptyProp {}
-
-export interface ProjectsProps {}
-
-export interface ProjectsState {}

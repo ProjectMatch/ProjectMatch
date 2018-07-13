@@ -1,0 +1,186 @@
+@import '../styles/_variables.scss';
+
+.popupScreen {
+  @include login-register-container;
+  height: 420px;
+}
+
+.registerPopupScreen {
+  @include login-register-container;
+  height: 570px;
+}
+
+.popupScreenMask {
+  background-color: black;
+  height: 100%;
+  width: 150%;
+  margin: 0 auto;
+  z-index: $login-register-window-mask-z;
+  position: fixed;
+  margin-left: -50%;
+  opacity: 0.2;
+}
+
+.logo-login_register {
+  font-family: $font;
+  color: $theme-blue;
+  font-size: $logo-font-size;
+  font-weight: 700;
+  margin: auto;
+  text-align: left;
+  margin-left: 11px;
+  display: inline-block;
+  padding-bottom: 17px;
+}
+/*
+==========================
+FORM INPUTS
+==========================
+*/
+
+.emailDiv,
+.passwordDiv,
+.usernameDiv,
+.nameDiv {
+  height: 35px;
+  margin: 11px;
+  text-align: left;
+  background-color: white;
+  border: 1px solid $light-grey;
+  font-size: 11px;
+  color: $dark-grey;
+  padding: auto;
+  display: inline-block;
+}
+
+.extAuthBtn {
+  margin: 11px;
+  margin-bottom: 30px;
+}
+.emailDiv,
+.passwordDiv,
+.usernameDiv {
+  width: 325px;
+}
+.emailDiv,
+.passwordDiv,
+.usernameDiv,
+.nameDiv {
+  margin-top: 25px;
+}
+
+.nameDiv {
+  width: 149px;
+  display: inline-block;
+}
+
+.emailDiv::placeholder,
+.passwordDiv::placeholder,
+.usernameDiv::placeholder,
+.nameDiv::placeholder {
+  color: $light-grey;
+  padding: 5px;
+}
+
+.emailDiv:focus:invalid,
+.passwordDiv:focus:invalid {
+  border: 1px solid red;
+  background-color: $pale-red;
+}
+// .emailDiv:invalid,
+// .passwordDiv:invalid {
+//   border: 1px solid red;
+// }
+/*
+==========================
+FORM LABEL
+==========================
+*/
+.form-label {
+  color: $dark-grey;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 700;
+  margin-left: 11px;
+  margin-top: 5px;
+  position: absolute;
+  display: inline-block;
+}
+/*
+==========================
+LOGIN & SIGNUP BUTTONS
+==========================
+*/
+.signUpBtn,
+.loginBtn {
+  @include white-text-blue-background-button;
+  position: absolute;
+}
+
+.signUpBtn {
+  margin-top: 20px;
+  left: 37%;
+}
+
+.signUpBtn:disabled {
+  background-color: $light-blue;
+}
+
+.loginBtn {
+  width: 100px;
+  left: 36%;
+  margin-top: 20px;
+}
+/*
+==========================
+HORIZONTAL LINE
+==========================
+*/
+.horizontalDivider {
+  border-top: 1px solid $light-grey;
+  width: 320px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+/*
+==========================
+EXIT BUTTON
+==========================
+*/
+.login-register-exit-window-btn {
+  border: none;
+  color: $theme-blue;
+  background-color: white;
+  border-radius: 50%;
+  display: inline-block;
+  font-size: 20px;
+  font-weight: 900;
+  float: right;
+  margin: auto;
+  margin-right: 11px;
+}
+/*
+==========================
+ERROR HANDLING
+==========================
+*/
+.form-error-message,
+.form-error-message-all {
+  font-size: 10px;
+  color: $attention-red;
+  position: absolute;
+}
+
+.form-error-message {
+  margin-left: 80px;
+  margin-top: 5px;
+  margin-bottom: -30px;
+}
+
+.form-error-message-all {
+  width: 100%;
+  margin: 0 auto;
+  display: block;
+  text-align: center;
+  margin-bottom: 20px;
+}

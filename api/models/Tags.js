@@ -1,16 +1,9 @@
-// Require Mongose ORM
-var Mongoose = require('mongoose');
-// Require Mongoose Schema to Make Mongoose Object
-var Schema = Mongoose.Schema;
+const Mongoose = require('mongoose');
 
-// Lets create Schema Object
-// The formet will be x = { variables like type and conditionals...} fallowed by ','
-var TagSchema = new Schema({
+const Schema = Mongoose.Schema;
+const TagSchema = new Schema({
   tagName: { type: String }
 });
+const Tags = Mongoose.model('Tags', TagSchema);
 
-// This will creates database named "Categories" in the Database
-var Tags = Mongoose.model('Tags', TagSchema);
-
-// We are making available it to other files
 module.exports = Tags;
