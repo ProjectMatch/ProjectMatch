@@ -4,12 +4,10 @@ class FilterByCategoriesComponent extends React.Component<{
   categories: any;
   categoryFilter: any;
 }> {
-  render() {
+  renderCategories = () => {
     var categoriesFromStore = this.props.categories!;
-    var filterByCategories;
     if (categoriesFromStore instanceof Array) {
-      filterByCategories = categoriesFromStore.map(function(
-        // tslint:disable-next-line
+      var filterByCategories = categoriesFromStore.map(function(
         category: any,
         index: number
       ) {
@@ -29,9 +27,14 @@ class FilterByCategoriesComponent extends React.Component<{
           </div>
         );
       });
+      return filterByCategories;
+    } else {
+      return null;
     }
+  };
+  render() {
     return (
-      <div>
+      <React.Fragment>
         <input
           className="project-filter-search-input-box"
           type="text"
@@ -39,8 +42,8 @@ class FilterByCategoriesComponent extends React.Component<{
           id="categoryFilter"
           onKeyUp={this.props.categoryFilter}
         />
-        {filterByCategories}
-      </div>
+        {this.renderCategories}
+      </React.Fragment>
     );
   }
 }
