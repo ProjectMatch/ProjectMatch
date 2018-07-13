@@ -19,6 +19,7 @@ class ProjectsFilter extends React.Component<
 > {
   constructor(props: ProjectPageFilterProps) {
     super(props);
+
     this.state = {
       sortBy: '',
       roles: '',
@@ -34,7 +35,7 @@ class ProjectsFilter extends React.Component<
     this.props.getTags();
   }
 
-  public toggleDropDown(
+  toggleDropDown(
     e: React.FormEvent<HTMLButtonElement> | React.FormEvent<HTMLInputElement>,
     elemById: string
   ): void {
@@ -43,7 +44,7 @@ class ProjectsFilter extends React.Component<
     doc.classList.toggle('new-project-show');
   }
 
-  public handleOptionRemoval(
+  handleOptionRemoval(
     e: React.MouseEvent<HTMLButtonElement>,
     changedState: string,
     copyOfArray: string[]
@@ -54,7 +55,7 @@ class ProjectsFilter extends React.Component<
     this.setState({ [changedState]: copyOfArray });
   }
 
-  public filter = (filterId: string, elemByName: string) => {
+  filter = (filterId: string, elemByName: string) => {
     var filter, inputOptions;
     filter = (document.getElementById(
       filterId
@@ -72,15 +73,15 @@ class ProjectsFilter extends React.Component<
     }
   };
 
-  public categoryFilter = () => {
+  categoryFilter = () => {
     this.filter('categoryFilter', 'category');
   };
 
-  public tagFilter = () => {
+  tagFilter = () => {
     this.filter('tagFilter', 'tag');
   };
 
-  public clearFilters(e: React.MouseEvent<HTMLButtonElement>): void {
+  clearFilters(e: React.MouseEvent<HTMLButtonElement>): void {
     e.preventDefault();
     this.setState({
       sortBy: '',
@@ -104,7 +105,7 @@ class ProjectsFilter extends React.Component<
     }
   }
 
-  public submitFilters(e: React.MouseEvent<HTMLButtonElement>): void {
+  submitFilters(e: React.MouseEvent<HTMLButtonElement>): void {
     e.preventDefault();
 
     const saveToState = (name: string) => {
@@ -131,6 +132,8 @@ class ProjectsFilter extends React.Component<
       var options = {};
       var query: object | null = {};
 
+      // turn all these diff if/else conditions into its own
+      // function, and then u can chain them
       if (this.state.categories!.length > 0) {
         var category;
         if (this.state.categories!.length === 1) {
@@ -158,17 +161,12 @@ class ProjectsFilter extends React.Component<
             tags: { $all: this.state.tags }
           };
         }
-        query = Object.assign({}, query, tags);
+        query = { ...query, ...tags };
       }
 
       if (this.state.sortBy !== '') {
         if (this.state.sortBy === 'Most Viewed') {
-          options = Object.assign(
-            {},
-            {
-              sort: { views: 'desc' }
-            }
-          );
+          options = { sort: { views: 'desc' } };
         } else if (this.state.sortBy === 'Newest') {
           options = Object.assign(
             {},
@@ -229,7 +227,6 @@ class ProjectsFilter extends React.Component<
       });
       callNewProjects();
     }
-
     saveFiltersThenSubmit();
   }
 
@@ -330,10 +327,12 @@ class ProjectsFilter extends React.Component<
             id="project-filter-category-id"
             className="project-filter-dropdown-hide project-filter-dropdown-box"
           >
-            <FilterByCategoriesComponent
-              categories={this.props.categories}
-              categoryFilter={this.categoryFilter}
-            />
+            {this.props.categories.length > 0 ? (
+              <FilterByCategoriesComponent
+                categories={this.props.categories}
+                categoryFilter={this.categoryFilter}
+              />
+            ) : null}
           </div>
         </div>
 
@@ -349,10 +348,12 @@ class ProjectsFilter extends React.Component<
             id="project-filter-tag-id"
             className="project-filter-dropdown-hide project-filter-dropdown-box"
           >
-            <FilterByTagsComponent
-              tags={this.props.tags}
-              tagFilter={this.tagFilter}
-            />
+            {this.state.tags!.length > 0 ? (
+              <FilterByTagsComponent
+                tags={this.props.tags}
+                tagFilter={this.tagFilter}
+              />
+            ) : null}
           </div>
         </div>
 

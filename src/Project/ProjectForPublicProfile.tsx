@@ -7,19 +7,13 @@ import TagCategoryContainer from './TagContainer';
 import RolesContainer from './RolesContainer';
 import { EditImageContainer } from './ImageContainer';
 // types
-import { State } from '../types/Projects.d';
 import { Store, ProjectForPublicProfileProps, Action } from '../types/Redux';
 // actions
 import { getProjects } from '../actions/projectActions';
 
 class ProjectForPublicProfile extends React.Component<
-  ProjectForPublicProfileProps,
-  State
+  ProjectForPublicProfileProps
 > {
-  constructor(props: ProjectForPublicProfileProps) {
-    super(props);
-  }
-
   render() {
     var data = this.props.data;
 

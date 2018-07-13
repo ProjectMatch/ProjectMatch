@@ -4,34 +4,29 @@ class FilterByTagsComponent extends React.Component<{
   tags: any;
   tagFilter: any;
 }> {
+  renderTags = () => {
+    const tagsFromStore = this.props.tags!;
+    return tagsFromStore.map((tag: any, index: number) => {
+      return (
+        <div className="checkboxContainer" key={'tags_filter_' + index}>
+          <label htmlFor={'tags_filter_id_' + index}>
+            {tag.tagName}
+            <input
+              type="checkbox"
+              name="tag"
+              id={'tags_filter_id_' + index}
+              value={tag.tagName}
+              className="filterOptions-tags"
+            />
+            <span className="checkmark" />
+          </label>
+        </div>
+      );
+    });
+  };
   render() {
-    var tagsFromStore = this.props.tags!;
-    var filterByTags;
-    if (tagsFromStore instanceof Array) {
-      filterByTags = tagsFromStore.map(function(
-        // tslint:disable-next-line
-        tag: any,
-        index: number
-      ) {
-        return (
-          <div className="checkboxContainer" key={'tags_filter_' + index}>
-            <label htmlFor={'tags_filter_id_' + index}>
-              {tag.tagName}
-              <input
-                type="checkbox"
-                name="tag"
-                id={'tags_filter_id_' + index}
-                value={tag.tagName}
-                className="filterOptions-tags"
-              />
-              <span className="checkmark" />
-            </label>
-          </div>
-        );
-      });
-    }
     return (
-      <div>
+      <React.Fragment>
         <input
           className="project-filter-search-input-box"
           type="text"
@@ -39,8 +34,8 @@ class FilterByTagsComponent extends React.Component<{
           id="tagFilter"
           onKeyUp={this.props.tagFilter}
         />
-        {filterByTags}
-      </div>
+        {this.renderTags()}
+      </React.Fragment>
     );
   }
 }

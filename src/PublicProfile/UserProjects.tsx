@@ -2,15 +2,11 @@ import * as React from 'react';
 import ProjectForPublicProfile from '../Project/ProjectForPublicProfile';
 
 class UserProjects extends React.Component<{ projects: any }, {}> {
-  render() {
+  renderUserProjects = () => {
     var renderedProjects;
     var projects: any = this.props.projects;
     if (projects === undefined || projects.length === 0) {
       renderedProjects = null;
-    } else if (projects.length === 1) {
-      renderedProjects = (
-        <ProjectForPublicProfile projId={projects[0]._id} data={projects[0]} />
-      );
     } else {
       renderedProjects = projects.map((project: any, index: number) => {
         return (
@@ -22,7 +18,10 @@ class UserProjects extends React.Component<{ projects: any }, {}> {
         );
       });
     }
-    return <div>{renderedProjects}</div>;
+    return renderedProjects;
+  };
+  render() {
+    return <React.Fragment>{this.renderUserProjects()}</React.Fragment>;
   }
 }
 export default UserProjects;

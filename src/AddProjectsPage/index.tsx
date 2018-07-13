@@ -88,7 +88,7 @@ export class AddProjectsPage extends React.Component<
           dueDate: project.dueDate !== null ? project.dueDate.slice(0, 10) : '',
           tags: new Set(project.tags),
           images: new Set(project.images)
-        });
+        } as AddProjectState);
       });
   }
 
