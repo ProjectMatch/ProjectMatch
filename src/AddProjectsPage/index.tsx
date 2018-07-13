@@ -13,7 +13,11 @@ import TeamOptionsComponent from './TeamOptionsComponent';
 import ImagePreview from './ImagePreview';
 // types
 import { AddProjectState } from './AddProjectsPage.d';
-import { Store, AddProjectProps } from '../types/Redux';
+import { Store, AddProjectProps, Users } from '../types/Redux';
+import { Tags } from '../types/Tags';
+import { Categories } from '../types/Category';
+import { NewProject, UpdateProject, CompleteProject } from '../types/Projects';
+import { User } from '../types/User';
 // actions
 import {
   addOrUpdateProject,
@@ -61,39 +65,31 @@ export class AddProjectsPage extends React.Component<
     this.props.getTags();
     this.props.getAllUsers();
 
-    // if there was an ID passed in with the url link
+    /*
+      if prefill form url has ID like below
+      http://localhost:3000/projects/update/5ae2d77c9b979d4cf8b40c22      
+    */
     if (this.props.match.params.hasOwnProperty('id')) {
-      // call data of that one project
-      this.props
-        .getOneProject(this.props.match.params.id)
-        // then update state with requested project data
-        .then(() => {
-          var project = this.props.currentProject!;
-          this.setState({
-            name: project.name,
-            description: project.description,
-            dueDate:
-              project.dueDate !== null ? project.dueDate.slice(0, 10) : '',
-            team: new Set(project.team),
-            githubLink: project.githubLink,
-            mockupLink: project.mockupLink,
-            liveLink: project.liveLink,
-            lookingFor: new Set(project.lookingFor),
-            status: project.status,
-            category: project.category,
-            tags: new Set(project.tags),
-            images: new Set(project.images),
-            contact: project.contact,
-            creator: project.creator,
-            categoryPlaceholder: 'Choose A Category',
-            tagPlaceholder: 'Choose Some Tags',
-            teamPlaceholder: 'Add Teammates',
-            statusPlaceholder: 'Status of Project',
-            preview: null,
-            files: null
-          });
-        });
+      this.prefillForm();
     }
+  }
+
+  prefillForm() {
+    // call data of that one project
+    this.props
+      .getOneProject(this.props.match.params.id)
+      // then update state with requested project data
+      .then(() => {
+        const project = this.props.currentProject!;
+        this.setState({
+          ...project,
+          team: new Set(project.team),
+          lookingFor: new Set(project.lookingFor),
+          dueDate: project.dueDate !== null ? project.dueDate.slice(0, 10) : '',
+          tags: new Set(project.tags),
+          images: new Set(project.images)
+        } as AddProjectState);
+      });
   }
 
   // adds value to array only if it doesnt already include it
@@ -101,37 +97,27 @@ export class AddProjectsPage extends React.Component<
     this.setState({ [setName]: this.state[setName].add(value) } as any);
   };
 
-  onFormChange = (e: React.FormEvent<HTMLInputElement>): void | null => {
+  onFormChange = (
+    e: React.FormEvent<HTMLInputElement> | React.FormEvent<HTMLTextAreaElement>
+  ): void | null => {
     e.persist();
-    var { name, value } = e.currentTarget;
+    let { name, value } = e.currentTarget;
 
     switch (name) {
       case 'category':
-        this.setState({
-          category: value,
-          categoryPlaceholder: value
-        } as any);
+        this.updateCategory(value);
         break;
       case 'tags':
-        this.addValueToSet('tags', value);
+        this.updateTags(value);
         break;
       case 'team':
-        this.addValueToSet('team', value);
+        this.updateTeam(value);
         break;
       case 'status':
-        var newStatus = value === 'Active' ? true : false;
-        this.setState({ status: newStatus, statusPlaceholder: value });
+        this.updateStatus(value);
         break;
       case 'roles':
-        var rolesSet = this.state.lookingFor;
-        var updatedRolesArray;
-        if (rolesSet!.has(value)) {
-          rolesSet!.delete(value);
-          updatedRolesArray = rolesSet;
-        } else {
-          updatedRolesArray = rolesSet!.add(value);
-        }
-        this.setState({ lookingFor: updatedRolesArray });
+        this.updateRoles(value);
         break;
       default:
         this.setState({ [name]: value } as any);
@@ -139,8 +125,34 @@ export class AddProjectsPage extends React.Component<
     }
   };
 
-  // removes items such as tags or team members from the state array
-  handleItemRemoval = (
+  updateCategory = (value: string) => {
+    this.setState({
+      category: value,
+      categoryPlaceholder: value
+    } as any);
+  };
+
+  updateTags = (value: string) => {
+    this.addValueToSet('tags', value);
+  };
+
+  updateTeam = (value: string) => {
+    this.addValueToSet('team', value);
+  };
+
+  updateStatus = (value: string) => {
+    let newStatus = value === 'Active' ? true : false;
+    this.setState({ status: newStatus, statusPlaceholder: value });
+  };
+
+  updateRoles = (value: string) => {
+    let role = this.state.lookingFor!;
+    role.has(value) ? role.delete(value) : role.add(value);
+    this.setState({ lookingFor: role });
+  };
+
+  // removes items such as tags or team members from the state set
+  removeItemFromSet = (
     e: React.MouseEvent<HTMLButtonElement>,
     stateName: any
   ): void => {
@@ -149,18 +161,8 @@ export class AddProjectsPage extends React.Component<
     this.setState({ [stateName]: this.state[stateName] } as any);
   };
 
-  onTextAreaFormChange(e: React.FormEvent<HTMLTextAreaElement>): void {
-    var { name, value } = e.currentTarget;
-    this.setState({ [name]: value } as any);
-  }
-
-  handleSubmit = (e: React.FormEvent<HTMLButtonElement>): void => {
-    if (this.state.name === '' && this.state.description === '') {
-      alert('Project Name & Description are required 😉');
-      return;
-    }
-
-    var projectToCreateOrUpdate = {
+  createProject = () => {
+    let project = {
       name: this.state.name,
       description: this.state.description,
       dueDate: this.state.dueDate,
@@ -174,31 +176,43 @@ export class AddProjectsPage extends React.Component<
       tags: Array.from(this.state.tags!),
       contact: this.state.contact,
       creator: this.props.user.username
-    };
-    // if this is an existing project, passes in the corresponding _id
-    // the api will check to update or add the project according to whether
-    // an _id is passed in
+    } as NewProject;
+
+    // if this is an existing project, pass in the corresponding _id
     if (this.props.match.params.hasOwnProperty('id')) {
-      projectToCreateOrUpdate = Object.assign({}, projectToCreateOrUpdate, {
+      project = {
+        ...project,
         _id: this.props.currentProject._id
-      });
+      } as UpdateProject;
     }
+    return project;
+  };
+
+  handleSubmit = (e: React.FormEvent<HTMLButtonElement>): void => {
+    if (this.state.name === '' && this.state.description === '') {
+      alert('Project Name & Description are required 😉');
+      return;
+    }
+
+    let project = this.createProject();
 
     // passes in the project object with any images (files)
     this.props
-      .addOrUpdateProject(projectToCreateOrUpdate, this.state.files)
-      .then(() => {
-        // retrieves all projects, sorted by newest modified
-        this.props.getProjects({ sort: { modifiedAt: -1 } }, null).then(() => {
-          // redirects to the project portal
-          this.setState({
-            shouldRedirect: true,
-            projIdRedirect: this.props.projects[0]._id
-          });
+      .addOrUpdateProject(project, this.state.files)
+      // returns new project with IDs
+      .then((newProject: CompleteProject) => {
+        // redirects to the project portal
+        this.setState({
+          shouldRedirect: true,
+          projIdRedirect: newProject._id
         });
       });
   };
 
+  /* --------------------- FILTER --------------------- */
+  /* -------------------------------------------------- */
+  /* -------------------------------------------------- */
+  // TODO: No DOM please, should be in the state
   // filter search from a dropdown
   filter = (filterId: string, elemByName: string) => {
     var filter, inputOptions;
@@ -227,6 +241,7 @@ export class AddProjectsPage extends React.Component<
     const ENTER_KEY = 13;
     // on 'enter', adds new tag to array in state if it doesnt already exist
     if (e.keyCode === ENTER_KEY) {
+      // try not to do it with DOM? use State
       var value = (document.getElementById('tagSearch')! as HTMLInputElement)
         .value;
       this.addValueToSet('tags', value);
@@ -237,11 +252,15 @@ export class AddProjectsPage extends React.Component<
     this.filter('categorySearch', 'category');
   };
 
+  /* -------------------------------------------------- */
+  /* -------------------------------------------------- */
+  /* -------------------------------------------------- */
+
   // opens initial file window to select images from local computer
   // saves files to state
   selectLocalImages = (e: React.FormEvent<HTMLInputElement>): void => {
-    let files = e.currentTarget.files! as FileList;
-    this.setState({ files: files } as any);
+    const imageFiles = e.currentTarget.files! as FileList;
+    this.setState({ files: imageFiles } as any);
   };
 
   // clears images from image preview section and state
@@ -265,272 +284,29 @@ export class AddProjectsPage extends React.Component<
       <div className="new-project-body">
         <form className="new-project-container">
           <div className="box-1">
-            <div className="box-1-a">
-              <label className="newProjectSubText" htmlFor="new-project-title">
-                Project Title
-              </label>
-              <input
-                type="text"
-                name="name"
-                id="new-project-title"
-                className="new-project-input"
-                value={this.state.name}
-                onChange={e => this.onFormChange(e)}
-              />
-
-              <label
-                className="newProjectSubText"
-                htmlFor="new-project-description"
-              >
-                Description
-              </label>
-              <textarea
-                name="description"
-                id="new-project-description"
-                className="new-project-textarea"
-                maxLength={360}
-                value={this.state.description}
-                onChange={e => this.onTextAreaFormChange(e)}
-              />
-
-              <label
-                className="newProjectSubText"
-                htmlFor="new-project-dueDate"
-              >
-                Due Date
-              </label>
-              <input
-                type="date"
-                name="dueDate"
-                id="new-project-dueDate"
-                className="new-project-input"
-                value={this.state.dueDate}
-                onChange={e => this.onFormChange(e)}
-              />
-              <div className="new-project-team">
-                <label className="newProjectSubText" htmlFor="new-project-team">
-                  Team
-                </label>
-                <div className="new-project-team-dropdown-btn">
-                  {this.state.teamPlaceholder}
-                  <div
-                    id="new-team-dropdown"
-                    className="new-project-category-content"
-                  >
-                    <TeamOptionsComponent
-                      allUsers={this.props.allUsers}
-                      user={this.props.user}
-                      onFormChange={this.onFormChange}
-                      teamFilter={this.teamFilter}
-                    />
-                  </div>
-                </div>
-
-                <ChosenTeam
-                  team={this.state.team}
-                  handleItemRemoval={this.handleItemRemoval}
-                />
-              </div>
-            </div>
-            {/* end of box 1 A */}
-            <div className="box-1-b">
-              <label
-                className="newProjectSubText"
-                htmlFor="new-project-githubLink"
-              >
-                Github Link
-              </label>
-              <input
-                type="text"
-                name="githubLink"
-                id="new-project-githubLink"
-                className="new-project-input"
-                value={this.state.githubLink}
-                onChange={this.onFormChange}
-              />
-
-              <label
-                className="newProjectSubText"
-                htmlFor="new-project-mockupLink"
-              >
-                Mockup Link
-              </label>
-              <input
-                type="text"
-                name="mockupLink"
-                id="new-project-mockupLink"
-                className="new-project-input"
-                value={this.state.mockupLink}
-                onChange={e => this.onFormChange(e)}
-              />
-
-              <label
-                className="newProjectSubText"
-                htmlFor="new-project-liveLink"
-              >
-                Live Link
-              </label>
-              <input
-                type="text"
-                name="liveLink"
-                id="new-project-liveLink"
-                className="new-project-input"
-                value={this.state.liveLink}
-                onChange={e => this.onFormChange(e)}
-              />
-
-              <div className="new-project-category">
-                <label
-                  className="newProjectSubText"
-                  htmlFor="new-project-dropdown"
-                >
-                  Category
-                </label>
-                <div className="new-project-category-dropdown-btn">
-                  {this.state.category !== ''
-                    ? this.state.category
-                    : this.state.categoryPlaceholder}
-                  <div
-                    id="new-project-dropdown"
-                    className="new-project-category-content"
-                  >
-                    <CategoriesOptionsComponent
-                      categories={this.props.categories}
-                      onFormChange={this.onFormChange}
-                      categoryFilter={this.categoryFilter}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="new-project-tags">
-                <label
-                  className="newProjectSubText"
-                  htmlFor="new-tags-dropdown"
-                >
-                  Tags
-                </label>
-                <div className="new-project-tags-dropdown-btn">
-                  {this.state.tagPlaceholder}
-                  <div
-                    id="new-tags-dropdown"
-                    className="new-project-category-content"
-                  >
-                    <TagOptionsComponent
-                      formChange={this.onFormChange}
-                      tags={this.props.tags}
-                      tagFilter={this.tagFilter}
-                    />
-                  </div>
-                </div>
-                <ChosenTags
-                  tags={this.state.tags}
-                  handleItemRemoval={this.handleItemRemoval}
-                />
-              </div>
-            </div>
-            {/* end of box 1 B */}
+            {box1a(
+              this.onFormChange,
+              this.teamFilter,
+              this.removeItemFromSet,
+              this.state,
+              this.props
+            )}
+            {box1b(
+              this.onFormChange,
+              this.categoryFilter,
+              this.tagFilter,
+              this.removeItemFromSet,
+              this.state,
+              this.props
+            )}
           </div>
-          {/* end of box 1 */}
-
-          <div className="box-2">
-            <div className="new-project-max-width new-project-lookingFor">
-              <label
-                className="newProjectSubText"
-                htmlFor="new-project-lookingFor"
-              >
-                Looking For
-              </label>
-
-              <div className="new-project-checkbox-container">
-                <div className="checkboxContainer">
-                  <label
-                    className="new-project-text"
-                    htmlFor="new-project-role-p"
-                  >
-                    Programmer
-                    <input
-                      className="new-project-roles"
-                      type="checkbox"
-                      name="roles"
-                      value="Programmer"
-                      id="new-project-role-p"
-                      checked={this.state.lookingFor!.has('Programmer')}
-                      onChange={e => this.onFormChange(e)}
-                    />
-                    <span className="checkmark" />
-                  </label>
-                </div>
-
-                <div className="checkboxContainer">
-                  <label
-                    className="new-project-text"
-                    htmlFor="new-project-role-d"
-                  >
-                    Designer
-                    <input
-                      className="new-project-roles"
-                      type="checkbox"
-                      name="roles"
-                      value="Designer"
-                      id="new-project-role-d"
-                      checked={this.state.lookingFor!.has('Designer')}
-                      onChange={e => this.onFormChange(e)}
-                    />
-                    <span className="checkmark" />
-                  </label>
-                </div>
-              </div>
-            </div>
-
-            <div className="new-project-max-width new-project-upload">
-              <label className="newProjectSubText" htmlFor="uploadImage">
-                Cover Photo
-              </label>
-              <input
-                type="file"
-                id="uploadImage"
-                accept="image/png, image/jpeg, image/gif"
-                name="projectImages"
-                className="uploadImageBtn"
-                multiple={false}
-                onChange={this.selectLocalImages}
-              />
-              <button
-                className="upload-img-delete-btn"
-                type="submit"
-                onClick={this.clearImages}
-              >
-                Clear Image
-              </button>
-              <ImagePreview files={this.state.files} />
-            </div>
-
-            <div className="new-project-status">
-              <label className="newProjectSubText" htmlFor="new-project-status">
-                Status
-              </label>
-              <div className="new-project-status-dropdown-btn">
-                {this.state.statusPlaceholder}
-                <div
-                  id="new-status-dropdown"
-                  className="new-project-category-content"
-                >
-                  <StatusOptionsComponent onFormChange={this.onFormChange} />
-                </div>
-              </div>
-            </div>
-
-            <button
-              id="project-submit-btn"
-              type="button"
-              className="new-project-submit-btn"
-              onClick={this.handleSubmit}
-            >
-              Save Project
-            </button>
-          </div>
-          {/* end of box 2 */}
+          {box2(
+            this.onFormChange,
+            this.selectLocalImages,
+            this.clearImages,
+            this.handleSubmit,
+            this.state
+          )}
         </form>
       </div>
     );
@@ -542,7 +318,7 @@ function mapStateToProps(state: Store) {
     user: state.user,
     projects: state.projects,
     categories: state.categories,
-    tags: state.tags,
+    allTags: state.tags,
     allUsers: state.allUsers,
     imageLinks: state.imageLinks,
     currentProject: state.addOrUpdateProject
@@ -557,3 +333,301 @@ export default connect(mapStateToProps, {
   getOneProject,
   getProjects
 })(AddProjectsPage as any);
+
+/*
+======================================================
+PRESENTATIONAL COMPONENTS
+======================================================
+*/
+
+interface Box1aState {
+  name: string;
+  description: string;
+  dueDate: string;
+  teamPlaceholder: string | string[];
+  team: Set<any>;
+}
+interface Box1aProps {
+  allUsers: Users;
+  user: User;
+}
+// box1a PRESENTATIONAL COMPONENT
+function box1a(
+  onFormChange: any,
+  teamFilter: any,
+  removeItemFromSet: any,
+  { name, description, dueDate, teamPlaceholder, team }: Box1aState,
+  { allUsers, user }: Box1aProps
+) {
+  return (
+    <div className="box-1-a">
+      <label className="newProjectSubText" htmlFor="new-project-title">
+        Project Title
+      </label>
+      <input
+        type="text"
+        name="name"
+        id="new-project-title"
+        className="new-project-input"
+        value={name}
+        onChange={e => onFormChange(e)}
+      />
+
+      <label className="newProjectSubText" htmlFor="new-project-description">
+        Descriptions
+      </label>
+      <textarea
+        name="description"
+        id="new-project-description"
+        className="new-project-textarea"
+        maxLength={360}
+        value={description}
+        onChange={e => onFormChange(e)}
+      />
+
+      <label className="newProjectSubText" htmlFor="new-project-dueDate">
+        Due Date
+      </label>
+      <input
+        type="date"
+        name="dueDate"
+        id="new-project-dueDate"
+        className="new-project-input"
+        value={dueDate}
+        onChange={e => onFormChange(e)}
+      />
+      <div className="new-project-team">
+        <label className="newProjectSubText" htmlFor="new-project-team">
+          Team
+        </label>
+        <div className="new-project-team-dropdown-btn">
+          {teamPlaceholder}
+          <div id="new-team-dropdown" className="new-project-category-content">
+            <TeamOptionsComponent
+              allUsers={allUsers}
+              user={user}
+              onFormChange={onFormChange}
+              teamFilter={teamFilter}
+            />
+          </div>
+        </div>
+
+        {team!.size !== 0 ? (
+          <ChosenTeam team={team} removeItemFromSet={removeItemFromSet} />
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
+interface Box1bState {
+  githubLink: string | undefined;
+  mockupLink: string;
+  liveLink: string;
+  category: string | undefined;
+  categoryPlaceholder: string;
+  tagPlaceholder: string | string[];
+  tags: Set<any>;
+}
+interface Box1bProps {
+  categories: Categories | any;
+  allTags: Tags | any;
+}
+// box1a PRESENTATIONAL COMPONENT
+function box1b(
+  onFormChange: any,
+  categoryFilter: any,
+  tagFilter: any,
+  removeItemFromSet: any,
+  {
+    githubLink,
+    mockupLink,
+    liveLink,
+    category,
+    categoryPlaceholder,
+    tagPlaceholder,
+    tags
+  }: Box1bState,
+  { categories, allTags }: Box1bProps
+) {
+  return (
+    <div className="box-1-b">
+      <label className="newProjectSubText" htmlFor="new-project-githubLink">
+        Github Link
+      </label>
+      <input
+        type="text"
+        name="githubLink"
+        id="new-project-githubLink"
+        className="new-project-input"
+        value={githubLink}
+        onChange={onFormChange}
+      />
+
+      <label className="newProjectSubText" htmlFor="new-project-mockupLink">
+        Mockup Link
+      </label>
+      <input
+        type="text"
+        name="mockupLink"
+        id="new-project-mockupLink"
+        className="new-project-input"
+        value={mockupLink}
+        onChange={e => onFormChange(e)}
+      />
+
+      <label className="newProjectSubText" htmlFor="new-project-liveLink">
+        Live Link
+      </label>
+      <input
+        type="text"
+        name="liveLink"
+        id="new-project-liveLink"
+        className="new-project-input"
+        value={liveLink}
+        onChange={e => onFormChange(e)}
+      />
+
+      <div className="new-project-category">
+        <label className="newProjectSubText" htmlFor="new-project-dropdown">
+          Category
+        </label>
+        <div className="new-project-category-dropdown-btn">
+          {category !== '' ? category : categoryPlaceholder}
+          <div
+            id="new-project-dropdown"
+            className="new-project-category-content"
+          >
+            <CategoriesOptionsComponent
+              categories={categories}
+              onFormChange={onFormChange}
+              categoryFilter={categoryFilter}
+            />
+          </div>
+        </div>
+      </div>
+
+      <div className="new-project-tags">
+        <label className="newProjectSubText" htmlFor="new-tags-dropdown">
+          Tags
+        </label>
+        <div className="new-project-tags-dropdown-btn">
+          {tagPlaceholder}
+          <div id="new-tags-dropdown" className="new-project-category-content">
+            <TagOptionsComponent
+              formChange={onFormChange}
+              tags={allTags}
+              tagFilter={tagFilter}
+            />
+          </div>
+        </div>
+        <ChosenTags tags={tags} removeItemFromSet={removeItemFromSet} />
+      </div>
+    </div>
+  );
+}
+
+interface Box2State {
+  lookingFor: Set<any>;
+  files: any;
+  statusPlaceholder: string;
+}
+
+function box2(
+  onFormChange: any,
+  selectLocalImages: any,
+  clearImages: any,
+  handleSubmit: any,
+  { lookingFor, files, statusPlaceholder }: Box2State
+) {
+  return (
+    <div className="box-2">
+      <div className="new-project-max-width new-project-lookingFor">
+        <label className="newProjectSubText" htmlFor="new-project-lookingFor">
+          Looking For
+        </label>
+
+        <div className="new-project-checkbox-container">
+          <div className="checkboxContainer">
+            <label className="new-project-text" htmlFor="new-project-role-p">
+              Programmer
+              <input
+                className="new-project-roles"
+                type="checkbox"
+                name="roles"
+                value="Programmer"
+                id="new-project-role-p"
+                checked={lookingFor!.has('Programmer')}
+                onChange={e => onFormChange(e)}
+              />
+              <span className="checkmark" />
+            </label>
+          </div>
+
+          <div className="checkboxContainer">
+            <label className="new-project-text" htmlFor="new-project-role-d">
+              Designer
+              <input
+                className="new-project-roles"
+                type="checkbox"
+                name="roles"
+                value="Designer"
+                id="new-project-role-d"
+                checked={lookingFor!.has('Designer')}
+                onChange={e => onFormChange(e)}
+              />
+              <span className="checkmark" />
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div className="new-project-max-width new-project-upload">
+        <label className="newProjectSubText" htmlFor="uploadImage">
+          Cover Photo
+        </label>
+        <input
+          type="file"
+          id="uploadImage"
+          accept="image/png, image/jpeg, image/gif"
+          name="projectImages"
+          className="uploadImageBtn"
+          multiple={false}
+          onChange={selectLocalImages}
+        />
+        <button
+          className="upload-img-delete-btn"
+          type="submit"
+          onClick={clearImages}
+        >
+          Clear Image
+        </button>
+        <ImagePreview files={files} />
+      </div>
+
+      <div className="new-project-status">
+        <label className="newProjectSubText" htmlFor="new-project-status">
+          Status
+        </label>
+        <div className="new-project-status-dropdown-btn">
+          {statusPlaceholder}
+          <div
+            id="new-status-dropdown"
+            className="new-project-category-content"
+          >
+            <StatusOptionsComponent onFormChange={onFormChange} />
+          </div>
+        </div>
+      </div>
+
+      <button
+        id="project-submit-btn"
+        type="button"
+        className="new-project-submit-btn"
+        onClick={handleSubmit}
+      >
+        Save Project
+      </button>
+    </div>
+  );
+}

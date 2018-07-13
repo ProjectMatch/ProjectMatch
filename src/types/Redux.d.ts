@@ -1,5 +1,5 @@
 import { Dispatch } from 'react-redux';
-import { Project } from './Projects.d';
+import { CompleteProject } from './Projects.d';
 import { User } from './User.d';
 import { Marker } from './Marker.d';
 import { Tags, Tag } from './Tags.d';
@@ -54,7 +54,7 @@ export interface AppAction extends Action {
   visible?: boolean;
 }
 export interface ProjectAction extends Action {
-  data: Project | Project[];
+  data: CompleteProject | CompleteProject[];
 }
 
 export interface UsersAction extends Action {
@@ -77,10 +77,10 @@ export type Users = Array<User>;
 // Reducers
 export type UserState = User | {};
 
-export type ProjectState = Array<Project>;
+export type ProjectState = Array<CompleteProject>;
 
 // ReduxTextPage Component
-export type CurrentProjectState = Project;
+export type CurrentProjectState = CompleteProject;
 
 export type UsersState = Users | {};
 
@@ -92,19 +92,19 @@ export type CategoriesState = Categories | {};
 
 export interface Store {
   user: User;
-  projects: Array<Project> | Project;
+  projects: Array<CompleteProject> | CompleteProject;
   categories: Array<Category>;
   tags: Array<Tag>;
   registerLoginWindow: RegisterLoginWindow;
   allUsers: Users;
   imageLinks: string[];
-  addOrUpdateProject: Project;
+  addOrUpdateProject: CompleteProject;
   searchResults: string | null;
-  currentProject: Project;
+  currentProject: CompleteProject;
   markers: Array<Marker>;
   dispatch: Dispatch<Action>;
   justRegistered: boolean;
-  userProjects: Array<Project> | Project;
+  userProjects: Array<CompleteProject> | CompleteProject;
 }
 
 export interface LoginProps {
@@ -128,12 +128,12 @@ export interface ProjectProps {
 
 export interface AddProjectProps {
   user: User;
-  projects: Project | Array<Project>;
+  projects: CompleteProject | Array<CompleteProject>;
   categories: Categories | any;
-  tags: Tags | any;
+  allTags: Tags | any;
   allUsers: Users;
   imageLinks: string[];
-  currentProject: Project;
+  currentProject: CompleteProject;
   match: { params: { id: string } };
   addOrUpdateProject: addOrUpdateProject_fntype;
   getAllUsers: getAllUsers_fntype;
@@ -144,7 +144,7 @@ export interface AddProjectProps {
 }
 
 export interface ProjectPageFilterProps {
-  projects: Array<Project> | Project;
+  projects: Array<CompleteProject> | CompleteProject;
   categories: Categories | any;
   tags: Tags | any;
   searchResults: string | null;
@@ -166,7 +166,7 @@ export interface HeaderProps {
 }
 
 export interface RecentProjectsProps {
-  projects: Array<Project>;
+  projects: Array<CompleteProject>;
   getProjects: getProjects_fntype;
 }
 
@@ -176,24 +176,24 @@ export interface LandingPageProps {
 
 export interface LoggedInHeaderProps {
   user: User;
-  projects: Array<Project>;
+  projects: Array<CompleteProject>;
   logout: logout_fntype;
   getProjects: getProjects_fntype;
-  userProjects: Array<Project> | Project;
+  userProjects: Array<CompleteProject> | CompleteProject;
   getUserProjects: getUserProjects_fntype;
 }
 
 export interface State {}
 
 export interface ProjectForEditProps {
-  projects: Project;
+  projects: CompleteProject;
   projId: string;
   data: any;
   deleteProject: deleteProject_fntype;
 }
 
 export interface ProjectsInheritedProps {
-  projects: Array<Project>;
+  projects: Array<CompleteProject>;
   arrayOfProjects: string;
   user: User;
   searchResults: string | null;
@@ -201,21 +201,21 @@ export interface ProjectsInheritedProps {
 
 export interface ProjectSettingsProps {
   user: User;
-  userProjects: Array<Project> | Project;
+  userProjects: Array<CompleteProject> | CompleteProject;
   deleteProject: deleteProject_fntype;
   getUserProjects: getUserProjects_fntype;
 }
 
 export interface ProjectForPublicProfileProps {
   projId: string;
-  data: Project;
-  projects: Project;
+  data: CompleteProject;
+  projects: CompleteProject;
   user: User;
 }
 
 export interface ProjectPageProps {
   user: User;
-  projects: Array<Project>;
+  projects: Array<CompleteProject>;
   searchResults: string | null;
   searchProjects: searchProjects_fntype;
   getProjects: getProjects_fntype;
@@ -233,8 +233,8 @@ export interface SettingsPageProps {
 
 export interface UserProfileProps {
   user: User;
-  projects: Array<Project> | Project;
-  userProjects: Array<Project> | Project;
+  projects: Array<CompleteProject> | CompleteProject;
+  userProjects: Array<CompleteProject> | CompleteProject;
   getProjects: getProjects_fntype;
   match: any;
 }
@@ -250,6 +250,6 @@ export interface PersonalDetailsProps {
 }
 
 export interface TagPageProps {
-  projects: Array<Project> | Project;
+  projects: Array<CompleteProject> | CompleteProject;
   getProjects: getProjects_fntype;
 }

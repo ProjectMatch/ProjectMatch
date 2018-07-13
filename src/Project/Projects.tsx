@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 // styles
 import './Project.css';
 // types
-import { Props, ProjectsState } from '../types/Projects.d';
+import { Props } from '../types/Projects.d';
 import { Store, ProjectsInheritedProps } from '../types/Redux';
 // components
 import { ImageContainer } from './ImageContainer';
@@ -21,10 +21,7 @@ class Project extends React.Component<Props> {
           <div className="project-name">{data.name}</div>
           <div className="project-description">{data.description}</div>
           <TagCategoryContainer project={this.props.project} />
-          <div className="project-roles-needed">
-            looking for
-            <RolesContainer project={this.props.project} />
-          </div>
+          <RolesContainer project={this.props.project} />
           <a>
             <img
               className="project-save"
@@ -37,7 +34,7 @@ class Project extends React.Component<Props> {
   }
 }
 
-class Projects extends React.Component<ProjectsInheritedProps, ProjectsState> {
+class Projects extends React.Component<ProjectsInheritedProps> {
   renderProject = () => {
     var projectComponent;
     var projectArray = this.props.projects;

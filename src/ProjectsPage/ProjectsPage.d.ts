@@ -1,4 +1,4 @@
-import { Project } from '../types/Projects.d';
+import { CompleteProject } from '../types/Projects.d';
 export interface State {}
 
 // Action
@@ -7,7 +7,7 @@ export interface Action {
 }
 
 export interface ProjectAction extends Action {
-  data: Project;
+  data: CompleteProject;
 }
 
 export interface ProjectPageState {
