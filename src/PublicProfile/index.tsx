@@ -12,6 +12,7 @@ import UserProjects from './UserProjects';
 import UserLinks from './UserLinks';
 // types
 import { Store, UserProfileProps } from '../types/Redux';
+import { CompleteProject } from '../types/Projects';
 // actions
 import { getProjects } from '../actions/projectActions';
 
@@ -103,8 +104,8 @@ class PublicProfile extends React.Component<
             <UserProjects
               projects={
                 this.props.match.params.username
-                  ? this.props.projects
-                  : this.props.userProjects
+                  ? (this.props.projects as CompleteProject[])
+                  : (this.props.userProjects as CompleteProject[])
               }
             />
           </div>

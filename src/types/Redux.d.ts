@@ -233,7 +233,7 @@ export interface SettingsPageProps {
 
 export interface UserProfileProps {
   user: User;
-  projects: Array<CompleteProject> | CompleteProject;
+  projects: Array<CompleteProject>;
   userProjects: Array<CompleteProject> | CompleteProject;
   getProjects: getProjects_fntype;
   match: any;
