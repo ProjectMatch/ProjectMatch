@@ -2,6 +2,7 @@ import {
   LOGIN,
   REGISTER,
   LOGOUT,
+  LOGIN_ERROR,
   GOOGLE_LOGIN,
   UPLOAD_PROFILE_IMAGE,
   USER_SETTINGS_UPDATE,
@@ -16,6 +17,8 @@ function userReducer(state: UserState = {}, action: UserAction): UserState {
       return action.data as User;
     case LOGIN:
       return action.data as User;
+    case LOGIN_ERROR:
+      return action.error as any;
     case REGISTER:
       return action.data as User;
     case USER_SETTINGS_UPDATE:

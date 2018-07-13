@@ -1,22 +1,28 @@
 import * as React from 'react';
 import ProjectForPublicProfile from '../Project/ProjectForPublicProfile';
+import { CompleteProject } from '../types/Projects';
 
-class UserProjects extends React.Component<{ projects: any }, {}> {
+class UserProjects extends React.Component<
+  { projects: Array<CompleteProject> },
+  {}
+> {
   renderUserProjects = () => {
     var renderedProjects;
     var projects: any = this.props.projects;
     if (projects === undefined || projects.length === 0) {
       renderedProjects = null;
     } else {
-      renderedProjects = projects.map((project: any, index: number) => {
-        return (
-          <ProjectForPublicProfile
-            key={'projects_Edit_' + index}
-            projId={project._id}
-            data={project}
-          />
-        );
-      });
+      renderedProjects = projects.map(
+        (project: CompleteProject, index: number) => {
+          return (
+            <ProjectForPublicProfile
+              projId={project._id}
+              data={project}
+              key={'projects_user_' + index}
+            />
+          );
+        }
+      );
     }
     return renderedProjects;
   };

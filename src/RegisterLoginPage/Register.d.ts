@@ -5,4 +5,9 @@ export interface RegisterState {
   password: string;
   username: string;
   shouldRedirect: boolean;
+  showErrorPwLength: boolean;
+  showErrorDuplicateUsername: boolean;
+  showErrorDuplicateEmail: boolean;
+  disableSubmitBtn: boolean;
+  showErrorAllInputRqd: boolean;
 }

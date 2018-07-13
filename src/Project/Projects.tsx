@@ -35,7 +35,7 @@ class Project extends React.Component<Props> {
 }
 
 class Projects extends React.Component<ProjectsInheritedProps> {
-  render() {
+  renderProject = () => {
     var projectComponent;
     var projectArray = this.props.projects;
 
@@ -55,8 +55,10 @@ class Projects extends React.Component<ProjectsInheritedProps> {
         );
       });
     }
-
     return <div className="projects-container">{projectComponent}</div>;
+  };
+  render() {
+    return <React.Fragment>{this.renderProject()}</React.Fragment>;
   }
 }
 
